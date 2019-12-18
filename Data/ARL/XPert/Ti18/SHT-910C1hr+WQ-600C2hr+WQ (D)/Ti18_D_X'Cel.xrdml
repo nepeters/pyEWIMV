@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xrdMeasurements xmlns="http://www.xrdml.com/XRDMeasurement/1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xrdml.com/XRDMeasurement/1.5 http://www.xrdml.com/XRDMeasurement/1.5/XRDMeasurement.xsd" status="Completed">
+	<comment>
+		<entry>Configuration=Open Eulerian Cradle, Owner=User-1, Creation date=6/5/2018 4:51:53 PM</entry>
+		<entry>Goniometer=PW3050/60 (Theta/Theta); Minimum step size 2Theta:0.001; Minimum step size Omega:0.001</entry>
+		<entry>Sample stage=Open Eulerian Cradle (manual Z); Minimum step size Phi:0.01; Minimum step size Chi:0.01</entry>
+		<entry>Diffractometer system=XPERT-PRO</entry>
+		<entry>Measurement program=Manual, Owner=User-1, Creation date=6/11/2018 9:58:26 AM</entry>
+	</comment>
+	<sample type="To be analyzed">
+		<id></id>
+		<name></name>
+		<preparedBy></preparedBy>
+	</sample>
+	<xrdMeasurement measurementType="Scan" status="Completed" sampleMode="Reflection">
+		<comment>
+			<entry/>
+		</comment>
+		<usedWavelength intended="K-Alpha 1">
+			<kAlpha1 unit="Angstrom">1.5405980</kAlpha1>
+			<kAlpha2 unit="Angstrom">1.5444260</kAlpha2>
+			<kBeta unit="Angstrom">1.3922500</kBeta>
+			<ratioKAlpha2KAlpha1>0.5000</ratioKAlpha2KAlpha1>
+		</usedWavelength>
+		<incidentBeamPath>
+			<radius unit="mm">240.00</radius>
+			<xRayTube id="1010048" name="Empyrean XRD tube Cu LFF HR DK302959">
+				<tension unit="kV">45</tension>
+				<current unit="mA">40</current>
+				<anodeMaterial>Cu</anodeMaterial>
+				<focus type="Point">
+					<length unit="mm">12.0</length>
+					<width unit="mm">0.4</width>
+					<takeOffAngle unit="deg">6.0</takeOffAngle>
+				</focus>
+			</xRayTube>
+		</incidentBeamPath>
+		<diffractedBeamPath>
+			<radius unit="mm">240.00</radius>
+			<antiScatterSlit id="22060009" name="Programmable anti-scatter slit" xsi:type="automaticAntiScatterSlitType">
+				<observedLength unit="mm">0.5</observedLength>
+				<offset unit="mm">0.00</offset>
+			</antiScatterSlit>
+			<sollerSlit id="21010002" name="Soller slits 0.04 rad.">
+				<opening unit="rad">0.0400</opening>
+			</sollerSlit>
+			<filter id="20010004" name="Beta-filter Nickel">
+				<material>Ni</material>
+				<thickness unit="mm">0.020</thickness>
+			</filter>
+			<detector id="7010013" name="X'Celerator detector" xsi:type="rtmsDetectorType">
+				<phd>
+					<lowerLevel unit="%">41.5</lowerLevel>
+					<upperLevel unit="%">80.0</upperLevel>
+				</phd>
+				<mode>Receiving slit</mode>
+				<activeLength unit="mm">2.17</activeLength>
+			</detector>
+		</diffractedBeamPath>
+		<scan appendNumber="0" mode="Pre-set time" scanAxis="Gonio" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-11T09:59:06-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-11T10:13:51-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<scanAxisCenter>
+				<position axis="2Theta" unit="deg">37.500</position>
+				<position axis="Omega" unit="deg">18.750</position>
+			</scanAxisCenter>
+			<reflection>
+				<hkl>
+					<h>0</h>
+					<k>0</k>
+					<l>0</l>
+				</hkl>
+			</reflection>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<startPosition>30.000</startPosition>
+					<endPosition>45.000</endPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<startPosition>15.000</startPosition>
+					<endPosition>22.500</endPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">5.00</commonCountingTime>
+				<intensities unit="counts">271 284 256 285 285 263 282 306 274 275 263 279 280 273 276 294 286 304 293 309 274 324 246 298 279 283 292 313 266 292 267 268 247 312 261 295 252 298 277 329 294 309 325 324 344 319 333 332 339 409 545 915 1659 2738 3767 4159 3841 2691 1500 759 438 381 329 325 308 322 323 321 283 294 274 312 289 278 266 308 282 322 314 308 268 317 301 280 313 341 340 372 317 291 324 301 314 302 323 337 342 359 376 342 367 402 568 966 1333 1617 1581 1399 1127 685 446 334 307 295 329 292 295 258 279 293 264 293 255 257 281 268 255 234 249 254 283 299 266 240 263 220 280 244 298 247 257 272 280 280 249 236 263 243 250 235 235</intensities>
+			</dataPoints>
+		</scan>
+	</xrdMeasurement>
+</xrdMeasurements>

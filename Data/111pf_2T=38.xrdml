@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xrdMeasurements xmlns="http://www.xrdml.com/XRDMeasurement/1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xrdml.com/XRDMeasurement/1.5 http://www.xrdml.com/XRDMeasurement/1.5/XRDMeasurement.xsd" status="Completed">
+	<comment>
+		<entry>Configuration=Open Eulerian Cradle (manual Z), Owner=User-1, Creation date=4/3/2012 1:39:10 PM</entry>
+		<entry>Goniometer=PW3050/60 (Theta/Theta); Minimum step size 2Theta:0.001; Minimum step size Omega:0.001</entry>
+		<entry>Sample stage=Open Eulerian Cradle (manual Z); Minimum step size Phi:0.01; Minimum step size Chi:0.01</entry>
+		<entry>Diffractometer system=XPERT-PRO</entry>
+		<entry>Measurement program=jk_texture, Owner=User-1, Creation date=6/29/2012 4:00:19 PM</entry>
+		<entry>Batch program=Jishnu_batch_3PFs_Al_alloys, Owner=User-1, Creation date=7/10/2014 2:18:35 PM</entry>
+	</comment>
+	<sample type="To be analyzed">
+		<id></id>
+		<name></name>
+		<preparedBy></preparedBy>
+	</sample>
+	<xrdMeasurement measurementType="Texture pole figure" status="Completed" measurementStepAxis="Chi" sampleMode="Reflection">
+		<comment>
+			<entry/>
+		</comment>
+		<usedWavelength intended="K-Alpha">
+			<kAlpha1 unit="Angstrom">1.5405980</kAlpha1>
+			<kAlpha2 unit="Angstrom">1.5444260</kAlpha2>
+			<kBeta unit="Angstrom">1.3922500</kBeta>
+			<ratioKAlpha2KAlpha1>0.5000</ratioKAlpha2KAlpha1>
+		</usedWavelength>
+		<incidentBeamPath>
+			<radius unit="mm">240.00</radius>
+			<xRayTube id="1010048" name="Empyrean XRD tube Cu LFF HR DK302959">
+				<tension unit="kV">45</tension>
+				<current unit="mA">40</current>
+				<anodeMaterial>Cu</anodeMaterial>
+				<focus type="Point">
+					<length unit="mm">12.0</length>
+					<width unit="mm">0.4</width>
+					<takeOffAngle unit="deg">6.0</takeOffAngle>
+				</focus>
+			</xRayTube>
+			<mask id="22030009" name="Fixed mask 10 mm">
+				<width unit="mm">10.00</width>
+			</mask>
+		</incidentBeamPath>
+		<diffractedBeamPath>
+			<radius unit="mm">240.00</radius>
+			<sollerSlit id="21010002" name="Soller slits 0.04 rad.">
+				<opening unit="rad">0.0400</opening>
+			</sollerSlit>
+			<parallelPlateCollimator id="25010002" name="Parallel plate collimator 0.18°">
+				<opening unit="deg">0.18</opening>
+			</parallelPlateCollimator>
+			<detector id="7010011" name="Proportional detector Xe" xsi:type="pointDetectorType">
+				<phd>
+					<lowerLevel unit="%">20.0</lowerLevel>
+					<upperLevel unit="%">80.0</upperLevel>
+				</phd>
+			</detector>
+		</diffractedBeamPath>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T13:58:54-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:00:07-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">479 483 505 477 522 499 534 519 494 495 601 529 528 549 521 518 527 512 514 517 551 504 512 523 509 517 537 502 519 494 495 490 459 478 527 470 476 483 487 501 481 501 463 490 489 452 506 500 503 504 467 484 480 502 463 428 481 481 465 473 453 440 435 437 449 489 463 468 507 477 483 481</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:00:17-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:01:29-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>5.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">487 455 497 507 492 502 476 486 486 482 489 447 498 517 513 538 541 556 473 517 484 526 518 514 507 482 489 477 500 466 517 492 483 465 495 482 481 527 488 502 513 470 518 490 491 488 499 528 470 503 469 476 470 482 476 474 501 468 472 437 439 455 476 419 488 459 446 458 443 460 435 451</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:01:38-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:02:51-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>10.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">447 463 438 455 477 479 454 460 495 463 486 509 512 476 492 546 464 492 542 490 549 496 488 489 746 780 504 427 472 435 442 497 449 462 485 465 473 486 483 473 452 446 467 447 472 425 457 466 454 469 499 482 461 491 480 470 468 451 437 433 475 479 439 443 448 426 450 455 428 466 436 465</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:03:00-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:04:12-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>15.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">898 3456 513 546 449 463 438 462 470 463 470 477 471 483 552 537 497 539 521 536 492 524 487 558 536 1118 2291 480 512 441 507 800 500 512 512 1117 830 520 517 513 492 479 442 491 449 381 456 400 445 443 462 493 457 492 457 484 442 466 453 483 413 437 451 468 455 490 429 465 469 576 502 462</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:04:21-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:05:34-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>20.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1273 5340 563 569 548 565 495 464 450 455 457 489 462 528 559 577 499 518 495 486 476 516 1081 911 807 869 707 725 661 529 1030 2400 3046 7132 10016 12045 10666 6024 3038 1379 785 659 481 484 449 479 490 456 443 434 979 713 2393 1408 555 499 484 472 458 398 427 483 448 432 484 460 528 663 532 533 689 932</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:05:43-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:06:56-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>25.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">7851 12072 10856 6855 4531 2351 700 552 528 1062 505 524 701 623 764 1509 584 535 546 574 517 567 1359 1225 1150 1138 1119 2308 2253 6764 16457 17866 24269 30083 31232 38912 37211 27171 21983 15727 10924 6122 3921 1303 1487 1002 531 636 492 479 1365 984 513 463 484 460 485 465 446 456 483 465 1063 527 696 836 1096 2633 4148 8335 16159 9246</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:07:05-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:08:18-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>30.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">19879 19918 28380 22804 16773 13771 5325 1603 850 734 550 618 719 535 532 615 563 854 777 568 563 674 722 921 1150 1417 2140 8935 8936 25518 24767 17424 14816 10030 8957 14219 13799 10094 13353 19040 20463 20848 20011 14823 8453 3682 1601 1356 907 598 2391 1005 506 471 498 479 504 485 447 478 528 543 1245 2897 4070 8895 11378 14006 17550 21777 23890 17282</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:08:27-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:09:40-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>35.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">7365 6943 6594 9559 11663 17163 16657 12877 4457 1956 1098 1319 645 594 567 855 507 792 725 597 724 1264 1010 977 1623 5927 9186 13426 13511 16895 12185 7775 7934 7398 3636 6793 8164 3412 4854 5862 7750 11546 19065 20930 14239 7808 4181 3438 1232 709 972 520 506 503 568 520 516 544 573 639 725 1315 2165 6975 11531 16818 15073 11846 10523 8380 7561 5562</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:09:49-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:11:02-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>40.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1891 2284 3500 3518 5286 6267 14166 25552 23776 4310 1812 1553 1454 1593 1353 763 561 584 555 588 589 1059 1356 1811 4186 13598 14765 11466 13079 8483 8907 4183 3881 1553 927 3898 2153 705 3586 3976 7119 8252 7752 8250 10000 10514 6571 3120 1933 1750 1354 908 583 565 552 606 651 679 781 3840 788 1697 5531 13889 18808 12071 9057 8305 4225 2795 2511 1809</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:11:11-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:12:24-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>45.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1317 1148 715 2519 2284 3567 7647 16332 23815 12166 3046 1432 1073 825 564 622 686 676 599 634 894 1166 1514 4054 6898 13423 15174 10353 11525 6443 4777 968 999 554 527 1081 551 1758 2121 1142 2418 3530 5958 7089 7802 9301 10834 5194 3062 1172 1197 872 564 585 662 712 797 735 706 3933 1741 6107 15534 22922 15795 6942 6492 3932 1068 590 1016 662</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:12:33-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:13:46-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>50.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1063 611 1006 661 614 1469 2885 10791 18201 16383 6364 2634 1328 2028 882 851 843 965 722 706 955 1444 3529 9963 8719 6368 8793 9258 8619 3564 860 532 522 1946 485 486 516 1991 515 557 1769 971 3332 8070 11774 8300 10461 8964 4237 2824 1626 2591 698 1639 855 965 2068 844 1137 2352 5175 21262 22350 12754 10376 5642 1943 723 524 1296 489 570</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:13:55-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:15:07-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>55.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">429 453 1759 800 658 836 1278 5492 13996 18721 8603 4648 3325 3106 2038 2435 1464 1650 1490 2257 1514 3537 12414 13082 3950 4924 7669 5508 2895 1680 769 732 588 1120 578 498 546 533 619 612 525 1049 1303 3354 8512 10048 6367 7537 5178 4106 2796 2996 1196 1969 1372 1438 2515 1322 2803 6058 9451 15958 12783 8159 4180 1632 848 490 481 693 465 573</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:15:13-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:16:26-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>60.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">436 557 609 1334 680 758 1297 2518 6629 10342 5724 4574 4875 2974 3828 4507 4696 3190 2154 3334 3120 6108 9495 5560 3117 4298 3878 3401 2522 992 1214 624 507 639 603 465 527 493 520 629 607 712 906 1247 3566 7748 5004 3935 3854 7712 6368 4562 2499 2035 2086 2036 1637 1950 4042 4896 6024 3362 5009 5315 2014 1243 865 546 464 707 489 506</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:16:32-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:17:44-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>65.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">510 501 478 498 532 551 2066 1822 3285 4416 3604 3082 3018 3032 3617 4160 4435 4240 4411 4697 3081 3069 4147 2075 2008 3062 2828 2359 1964 1028 713 1262 797 681 646 423 468 475 521 527 654 624 870 1027 1560 3189 2922 1957 2018 3868 5578 6145 3525 2451 4131 4834 2933 3035 3489 3697 4860 2786 2513 2434 1703 2045 739 485 744 643 517 455</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:17:53-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:19:06-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>70.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">481 656 1484 1745 560 744 1026 2709 2744 2776 2456 1339 1910 2107 2382 4375 7983 5676 6258 7754 2950 1743 2149 1276 1570 1789 1541 1288 1718 1242 785 953 1224 621 547 824 499 500 575 1703 953 710 1089 1063 1218 1438 1526 1342 1047 1407 2703 4624 4595 5346 4784 5196 4046 2976 2067 2118 1790 1974 2125 2193 1241 1438 717 479 933 502 420 406</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:19:16-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:20:28-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>75.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">498 600 831 1164 746 966 1359 1620 1944 2118 2515 947 945 987 1720 3178 9047 8648 9892 4761 1870 1379 1293 1016 1589 1590 1233 1364 2455 1088 846 1209 1020 861 717 1102 577 467 609 1294 1146 974 1326 1681 1263 1271 1055 996 849 1112 1478 2850 5074 9390 9227 6313 5245 2414 1135 1685 1118 1310 1259 1381 1416 1470 1080 713 664 575 478 422</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2015-06-26T14:20:34-04:00</startTimeStamp>
+				<endTimeStamp>2015-06-26T14:21:47-04:00</endTimeStamp>
+				<author>
+					<name>ms5c</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.660</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.330</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>80.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">573 740 1365 858 1254 858 1232 1903 1455 1485 1438 856 738 1060 1225 2591 5334 9769 11089 4622 1582 1189 1968 898 722 939 983 1193 2264 2209 1577 2131 2594 2633 2607 2255 2618 2066 1532 2111 4278 2500 1620 2304 1330 1277 960 940 790 758 1226 2012 6082 11044 11322 4439 3264 1407 996 1035 1215 1488 993 981 1794 1936 1299 2070 962 912 592 428</intensities>
+			</dataPoints>
+		</scan>
+	</xrdMeasurement>
+</xrdMeasurements>

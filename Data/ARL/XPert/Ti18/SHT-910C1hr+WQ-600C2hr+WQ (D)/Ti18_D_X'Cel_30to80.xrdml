@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xrdMeasurements xmlns="http://www.xrdml.com/XRDMeasurement/1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xrdml.com/XRDMeasurement/1.5 http://www.xrdml.com/XRDMeasurement/1.5/XRDMeasurement.xsd" status="Completed">
+	<comment>
+		<entry>Configuration=Open Eulerian Cradle, Owner=User-1, Creation date=6/5/2018 4:51:53 PM</entry>
+		<entry>Goniometer=PW3050/60 (Theta/Theta); Minimum step size 2Theta:0.001; Minimum step size Omega:0.001</entry>
+		<entry>Sample stage=Open Eulerian Cradle (manual Z); Minimum step size Phi:0.01; Minimum step size Chi:0.01</entry>
+		<entry>Diffractometer system=XPERT-PRO</entry>
+		<entry>Measurement program=Ti, Owner=User-1, Creation date=6/20/2018 3:47:14 PM</entry>
+	</comment>
+	<sample type="To be analyzed">
+		<id></id>
+		<name></name>
+		<preparedBy></preparedBy>
+	</sample>
+	<xrdMeasurement measurementType="Scan" status="Completed" sampleMode="Reflection">
+		<comment>
+			<entry/>
+		</comment>
+		<usedWavelength intended="K-Alpha 1">
+			<kAlpha1 unit="Angstrom">1.5405980</kAlpha1>
+			<kAlpha2 unit="Angstrom">1.5444260</kAlpha2>
+			<kBeta unit="Angstrom">1.3922500</kBeta>
+			<ratioKAlpha2KAlpha1>0.5000</ratioKAlpha2KAlpha1>
+		</usedWavelength>
+		<incidentBeamPath>
+			<radius unit="mm">240.00</radius>
+			<xRayTube id="1010048" name="Empyrean XRD tube Cu LFF HR DK302959">
+				<tension unit="kV">45</tension>
+				<current unit="mA">40</current>
+				<anodeMaterial>Cu</anodeMaterial>
+				<focus type="Point">
+					<length unit="mm">12.0</length>
+					<width unit="mm">0.4</width>
+					<takeOffAngle unit="deg">6.0</takeOffAngle>
+				</focus>
+			</xRayTube>
+			<filter id="20010004" name="Beta-filter Nickel">
+				<material>Ni</material>
+				<thickness unit="mm">0.020</thickness>
+			</filter>
+		</incidentBeamPath>
+		<diffractedBeamPath>
+			<radius unit="mm">240.00</radius>
+			<parallelPlateCollimator id="25010002" name="Parallel plate collimator 0.18°">
+				<opening unit="deg">0.18</opening>
+			</parallelPlateCollimator>
+			<detector id="7010013" name="X'Celerator detector" xsi:type="rtmsDetectorType">
+				<phd>
+					<lowerLevel unit="%">41.5</lowerLevel>
+					<upperLevel unit="%">98.0</upperLevel>
+				</phd>
+				<mode>Receiving slit</mode>
+				<activeLength unit="mm">8.89</activeLength>
+			</detector>
+		</diffractedBeamPath>
+		<scan appendNumber="0" mode="Pre-set time" scanAxis="Gonio" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-21T12:25:20-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-21T13:13:03-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<startPosition>30.000</startPosition>
+					<endPosition>80.000</endPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<startPosition>15.000</startPosition>
+					<endPosition>40.000</endPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">2.00</commonCountingTime>
+				<intensities unit="counts">70 98 106 117 91 118 109 114 96 120 111 111 103 102 113 108 95 109 102 121 94 109 104 120 110 105 88 101 87 77 111 92 100 102 130 124 112 106 110 89 90 105 96 122 108 97 111 119 84 87 77 94 118 121 123 143 101 99 91 110 130 103 92 92 92 83 79 100 88 111 88 108 102 110 91 132 101 104 82 85 109 105 109 105 106 131 92 124 101 127 121 115 135 138 173 208 241 267 349 341 322 347 373 351 340 301 319 319 274 252 225 206 183 162 147 130 99 103 109 99 108 116 108 101 90 97 105 108 104 109 118 99 94 103 79 79 85 105 105 126 109 85 98 106 91 103 96 111 91 97 95 123 95 89 99 100 86 97 114 77 96 106 103 106 121 88 97 101 126 102 114 96 121 87 105 97 120 109 106 106 117 124 93 123 115 107 111 115 108 130 116 138 131 179 152 177 225 265 270 292 335 332 404 435 381 424 401 376 343 321 282 279 226 258 230 200 140 177 133 110 115 117 109 96 115 106 104 102 103 81 104 91 111 104 101 85 89 68 91 101 91 101 112 99 102 81 102 80 88 89 106 87 110 91 79 114 95 98 100 110 99 87 89 92 78 94 94 102 88 98 88 109 83 73 118 82 94 86 88 104 102 103 81 82 104 83 101 81 92 98 74 68 73 92 100 89 90 100 85 94 64 84 95 76 103 83 86 98 97 86 87 91 77 89 103 89 93 92 98 92 94 95 89 85 82 96 103 82 96 94 107 84 95 96 81 79 114 67 104 94 84 72 103 99 81 85 83 67 89 90 93 74 94 80 53 93 95 88 101 88 89 110 82 89 109 94 85 79 93 102 90 84 63 77 79 78 87 88 79 92 81 79 96 85 84 85 79 86 87 89 84 92 73 99 79 90 84 82 86 85 85 73 100 76 105 94 92 90 87 78 83 67 89 72 83 89 92 84 89 81 94 85 93 88 97 102 58 78 79 89 102 76 76 108 86 93 88 100 89 87 75 80 89 109 104 65 87 99 104 97 83 121 126 150 149 157 172 168 174 198 157 197 217 232 226 213 199 207 189 176 167 151 127 111 106 98 119 97 74 82 82 74 79 87 91 81 76 72 101 83 85 81 89 78 74 94 82 87 90 59 67 77 104 73 96 117 84 88 101 86 91 96 91 84 89 74 111 110 86 107 109 98 101 116 96 125 110 136 107 174 172 159 174 223 213 241 284 259 329 330 296 299 265 276 230 199 161 146 136 109 106 100 112 102 79 89 79 93 88 100 91 102 78 79 86 97 72 86 90 80 102 91 68 94 69 80 62 86 84 80 79 75 75 81 87 63 83 85 77 84 88 95 79 90 106 85 80 87 91 75 65 79 88 72 73 96 92 77 87 122 87 96 81 84 84 96 93 71 108 91 87 87 92 74 68 96 87 91 89 80 83 89 124 73 80 79 66 82 84 89 76 92 90 99 69 101 99 88 83 80 90 98 87 115 114 117 123 110 119 142 170 163 187 230 188 225 239 243 227 195 203 182 178 156 125 88 108 103 100 83 75 92 76 81 94 100 85 99 100 77 100 78 84 77 113 86 59 82 92 82 86 64 89 77 90 84 97 106 84 85 76 105 95 87 86 78 71 77 90 80 95 78 80 91 71 70 65 94 63 86 60 79 87 86 86 75 58 86 74 65 77 95 87 79 72 80 80 59 70 106 80 95 77 64 78 71 64 81 77 82 68 95 67 75 101 81 84 71 86 100 95 76 87 77 86 91 86 80 89 98 73 73 108 83 102 75 71 68 104 98 93 81 79 105 81 75 75 85 91 69 87 74 104 97 104 75 97 103 112 140 154 151 131 156 173 230 163 184 206 219 178 205 147 146 158 167 156 157 139 164 138 145 163 179 198 168 256 231 297 279 280 309 249 244 226 223 174 186 140 151 100 122 95 101 94 89 87 98 96 89 77 82 87 87 98 97 73 96 96 76 88 90 93 72 86 83 81 82 78 77 98 83 76 73 98 96 70 94 75 107 80 83 87 83 104 94 93 123 89 101 85 91 101 101 94 82 74 95 74 108 99 94 77 79 92 112 111 95 104 108 108 138 119 189 166 211 201 228 226 217 227 229 185 210 214 128 179 166 135 142 132 119 112 137 120 106 88 75 105 102 86 107 106 110 78 112 78 111 93 95 118 134 98 93 104 115 97 100 89 97 104 85 87 87 70 77 84 70 85 82 109 94 95 80 86 101 96 93 57 91 86 82 78 85 104 79 81 68 91 76 81</intensities>
+			</dataPoints>
+		</scan>
+	</xrdMeasurement>
+</xrdMeasurements>

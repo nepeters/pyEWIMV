@@ -1,0 +1,185 @@
+  Title on CFG file: Tes Ti18 beta Xpert                                                        
+ Crystal and sample symmetry:   7  1
+ Lattice parameters:    3.216   3.216   3.216  90.000  90.000  90.000
+  Iteration control parameters: 
+  itz,abpro,vitpro,peps,izick,irp,r,rfak,ianfsu,rfanf
+   21  1.00  0.30  0.05    1    0 2.000 1.100    1  2.00
+ Number of pole figures:     3
+     CRYSTAL SYMMETRY   IGB =  7  ( O)    NUMBER OF GROUP ELEMENTS  IZGB = 24
+
+  read cfg file
+    1    1    0    1      0.00     80.00
+
+ NPOLEX, h k l , NTmin , NTmax :    1       1   1   0      1 17
+ ******
+                                 MAREF CALCULATION
+  IZOVERI =            1
+   Equivalent HKL-directions :
+   INV = 1, i.e. HKL is of type h*; only the half number
+   of the equivalent HKL-directions is given
+   I =  1  Theta =  90.000 Phi =  45.000 NBEIN =     1
+   I =  2  Theta =  45.000 Phi = 270.000 NBEIN =     2
+   I =  3  Theta =  45.000 Phi =   0.000 NBEIN =     3
+   I =  4  Theta =  90.000 Phi = 135.000 NBEIN =     4
+   I =  5  Theta =  45.000 Phi = 180.000 NBEIN =     5
+   I =  6  Theta =  45.000 Phi =  90.000 NBEIN =     6
+  read cfg file
+    2    0    0    1      0.00     80.00
+
+ NPOLEX, h k l , NTmin , NTmax :    2       2   0   0      1 17
+ ******
+                                 MAREF CALCULATION
+  IZOVERI =            1
+   Equivalent HKL-directions :
+   INV = 1, i.e. HKL is of type h*; only the half number
+   of the equivalent HKL-directions is given
+   I =  1  Theta =  90.000 Phi =   0.000 NBEIN =     7
+   I =  2  Theta =  90.000 Phi =  90.000 NBEIN =     8
+   I =  3  Theta =   0.000 Phi = 180.000 NBEIN =     9
+  read cfg file
+    2    2    0    1      0.00     80.00
+
+ NPOLEX, h k l , NTmin , NTmax :    3       2   2   0      1 17
+ ******
+                                 MAREF CALCULATION
+  IZOVERI =            1
+   Equivalent HKL-directions :
+   INV = 1, i.e. HKL is of type h*; only the half number
+   of the equivalent HKL-directions is given
+   I =  1  Theta =  90.000 Phi =  45.000 NBEIN =    10
+   I =  2  Theta =  45.000 Phi = 270.000 NBEIN =    11
+   I =  3  Theta =  45.000 Phi =   0.000 NBEIN =    12
+   I =  4  Theta =  90.000 Phi = 135.000 NBEIN =    13
+   I =  5  Theta =  45.000 Phi = 180.000 NBEIN =    14
+   I =  6  Theta =  45.000 Phi =  90.000 NBEIN =    15
+
+          RFANF =  0.20000E+01 F2 = 0.16401E+01 ENTROPIE = -0.20602E+00
+       PHONINP =   0.15  PHONSTEPEPS =  0.0050
+
+          RFANF =  0.25000E+01 F2 = 0.23763E+01 ENTROPIE = -0.35260E+00
+       PHONINP =   0.09  PHONSTEPEPS =  0.0050
+
+          RFANF =  0.30000E+01 F2 = 0.38288E+01 ENTROPIE = -0.55594E+00
+       PHONINP =   0.05  PHONSTEPEPS =  0.0050
+
+
+     OPTIMUM RFANF =     2.50
+
+
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  0  ****
+ODF Minimum and Maximum:      0.09     18.49
+Texture Index (F**2)             2.3762
+Entropy                         -0.3526
+Average RP                      46.0307
+Average RP1                     31.0476
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  1  ****
+ODF Minimum and Maximum:      0.02     23.26
+Texture Index (F**2)             2.8005
+Entropy                         -0.4943
+Average RP                      40.7020
+Average RP1                     29.8383
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  2  ****
+ODF Minimum and Maximum:      0.01     27.59
+Texture Index (F**2)             3.2217
+Entropy                         -0.6060
+Average RP                      38.8011
+Average RP1                     30.2232
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  3  ****
+ODF Minimum and Maximum:      0.00     29.72
+Texture Index (F**2)             3.4856
+Entropy                         -0.6794
+Average RP                      37.7629
+Average RP1                     29.7593
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  4  ****
+ODF Minimum and Maximum:      0.00     31.70
+Texture Index (F**2)             3.7433
+Entropy                         -0.7422
+Average RP                      37.1938
+Average RP1                     29.6146
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  5  ****
+ODF Minimum and Maximum:      0.00     38.83
+Texture Index (F**2)             3.9961
+Entropy                         -0.7983
+Average RP                      36.8532
+Average RP1                     29.6475
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  6  ****
+ODF Minimum and Maximum:      0.00     49.45
+Texture Index (F**2)             4.2782
+Entropy                         -0.8524
+Average RP                      36.6869
+Average RP1                     29.5420
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  7  ****
+ODF Minimum and Maximum:      0.00     60.09
+Texture Index (F**2)             4.5681
+Entropy                         -0.9009
+Average RP                      36.6332
+Average RP1                     29.5038
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+ Tes Ti18 beta Xpert                                                        
+ Data file: WIMV.INP                                                                   
+
+  ****  True iteration step #  8  ****
+ODF Minimum and Maximum:      0.00     70.48
+Texture Index (F**2)             4.8743
+Entropy                         -0.9455
+Average RP                      36.6427
+Average RP1                     29.5137
+
+   h   k   l     RP0     RP1     min.    max.   a min.  a max.
+                     (%)           (m.r.d)
+     RP.GE.HRP        36.64272  36.63317
+   STOP AT THE     8-TH ITERATION STEP MEAN RP_VALUE (per cent)  0.366E+02
+
+   1   1   0   31.96   27.28    0.09    8.24     0.0    80.0    Exp.norm.  
+   1   1   0   31.96   27.28    0.19    3.92     0.0    80.0    Recal.norm.
+   2   0   0   30.86   29.84    0.02    4.27     0.0    80.0    Exp.norm.  
+   2   0   0   30.86   29.84    0.03    8.82     0.0    80.0    Recal.norm.
+   2   2   0   47.11   31.42    0.04    6.04     0.0    80.0    Exp.norm.  
+   2   2   0   47.11   31.42    0.19    3.92     0.0    80.0    Recal.norm.

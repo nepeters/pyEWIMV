@@ -1,0 +1,94 @@
+ PCAL: calculates pole figures from ODF
+ -==Version 2017==-
+ Compiled with Force2.0/gfortran
+
+ before SETUP
+ PROGRAM PCAL
+   based on Matthies/Vinel program PFCOMPU
+   calculates any pole figures from ODF
+   for all crystal and sample symmetries
+   Original version for WINDOWS and BEARTEX, 10.14.1993
+
+   -==Version 2017==-
+   Compiled with Force2.0/gfortran
+
+ On cfg file: Tes Ti18 alpha                                                             
+ On cfg file:           11           1           0
+
+  Data on CFG file:
+ Title: Tes Ti18 alpha                                                             
+ File name (Y??): PCAL.INP                                                                   
+ igb, iga:  11  1
+ ifact:   0
+ Lattice parameters:    2.923   2.923   4.671  90.000  90.000 120.000
+ Number of pole figures:     3
+  1  0  0  0  0 0.00
+  0  0  2  0  0 0.00
+  1  0  1  0  0 0.00
+
+ OPEN FNAME: PCAL.INP                                                                   
+ Tes Ti18 alpha                                                             
+ WIMV generated ODF                                                         
+On standard file:    11    1
+ 2.923 2.923 4.67190.00090.000******
+  Data on binary file:
+ Title: Tes Ti18 alpha                                                             
+ Title: WIMV generated ODF                                                         
+ iigb, iiga:  11  1
+ Lattice parameters:    2.923   2.923   4.671  90.000  90.000 120.000
+ OD max,min, index, factor:     25.742     0.000     4.257     1.000
+
+ after SETUP
+     CRYSTAL SYMMETRY   IGB = 11  (D6)    NUMBER OF GROUP ELEMENTS  IZGB = 12
+
+     ELEMENT-CODE MGB(K,J) :  1 1 1 1 1 1 1 1 1 1 1 1
+
+ before LATTICE
+
+  Lattice parameters :
+  SIN(Alpha12) =  0.8660  COS(Alpha12) = -0.5000
+  SIN(Alpha23) =  1.0000  COS(Alpha23) =  0.0000
+  SIN(Alpha31) =  1.0000  COS(Alpha31) =  0.0000
+  c/a =  0.15980E+01  c/b =  0.15980E+01
+
+ after LATTICE
+     SAMPLE SYMMETRY   IGA =  1  (C1)
+
+ before ODFINP
+  HNORMINP =     0.10000E+01
+  F2-INPUT ODF :     0.42568E+01
+
+        MINIMUM =      0.000 ALPHA,BETA,GAMMA :     5.    5.    5.
+        MINIMUM =     90.000 ALPHA,BETA,GAMMA :    10.
+        MAXIMUM =     25.742 ALPHA,BETA,GAMMA :   235.  235.  235.
+        MAXIMUM =     10.000 ALPHA,BETA,GAMMA :    15.
+  90?  0.00  0.00  0.00  0.00  0.00  0.15  0.09  0.00  0.00  0.00  0.00  0.00  0.00  0.00  0.10  0.05  0.10  0.52  0.17
+ after ODFINP
+ before FIOTT
+ after FIOTT
+   Number of pole figures IZPOL to be considered :  3
+
+   Pole figure Nr. =  1  (H K L),IUNRED :   1  0  0     0
+   Equivalent HKL-directions :
+   INV = 1, i.e. HKL is of type h*; only the half number
+   of the equivalent HKL-directions is given
+   I =  1  Theta =  90.000 Phi =  30.000
+   I =  2  Theta =  90.000 Phi = 150.000
+   I =  3  Theta =  90.000 Phi =  90.000
+
+   Pole figure Nr. =  2  (H K L),IUNRED :   0  0  2     0
+   Equivalent HKL-directions :
+   INV = 1, i.e. HKL is of type h*; only the half number
+   of the equivalent HKL-directions is given
+   I =  1  Theta =   0.000 Phi =   0.000
+
+   Pole figure Nr. =  3  (H K L),IUNRED :   1  0  1     0
+   Equivalent HKL-directions :
+   INV = 1, i.e. HKL is of type h*; only the half number
+   of the equivalent HKL-directions is given
+   I =  1  Theta =  61.545 Phi =  30.000
+   I =  2  Theta =  61.545 Phi = 330.000
+   I =  3  Theta =  61.545 Phi = 270.000
+   I =  4  Theta =  61.545 Phi = 210.000
+   I =  5  Theta =  61.545 Phi = 150.000
+   I =  6  Theta =  61.545 Phi =  90.000

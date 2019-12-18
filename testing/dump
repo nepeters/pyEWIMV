@@ -1,0 +1,252 @@
+        sym = {}
+        # 8 three-fold, 4
+        sym[3] = (np.array(((1,1,1),
+                            (-1,1,1),
+                            (-1,-1,1),
+                            (-1,1,-1),
+                            (-1,-1,-1),
+                            (1,-1,-1),
+                            (1,1,-1),
+                            (1,-1,1))),
+                            np.deg2rad(120))
+        
+        sym[4] = (np.array(((1,0,0),
+                            (0,1,0),
+                            (0,0,1),
+                            (0,0,-1),
+                            (0,-1,0),
+                            (-1,0,0))),
+                            np.deg2rad(90))
+
+        sym[2] = (np.array(((1,1,0),
+                            (1,0,1),
+                            (0,1,1),
+                            (-1,1,0),
+                            (1,-1,0),
+                            (-1,-1,0),
+                            (-1,0,1),
+                            (1,0,-1),
+                            (-1,0,-1),
+                            (0,-1,1),
+                            (0,1,-1),
+                            (0,-1,-1))),
+                            np.deg2rad(180)) 
+
+        om = []
+
+        for sf,sop in sym.items():
+
+            # normalize axes
+            ax_n = sop[0] / np.linalg.norm(sop[0],axis=1)[:,np.newaxis]
+            om.append(ax2om_2(ax_n,sop[1]))
+
+        return om
+
+#for hi,h in enumerate(tqdm(hkls)):
+#    
+#    fibre_full_e[hi] = {}
+#    fibre_full_q[hi] = {}
+#    
+#    nn_gridPts_full[hi] = {}
+#    nn_gridDist_full[hi] = {}
+#    
+#    qh_y = quat.vector_vector_rotation(h,xyz_pf)
+#    qh_om = quat.from_axis_angle(h,omega)
+#    
+#    for yi,y in enumerate(xyz_pf):
+#    
+#        qfib = quat.multiply(qh_y[yi,:],qh_om)
+#        
+#        """  reshape for tiling, simplify?? """
+#        
+#        qfib = qfib.T.reshape((1,4,len(omega)),order='F')
+#        qfib = np.tile(qfib,(quatSymOps.shape[1],1,1))
+#        qfib = qfib.transpose((2,0,1))
+#    
+#        """ apply symmetry """
+#    
+#        qfib = quat.multiply(quatSymOps,qfib)
+#        
+#        """ symmetry ops, then filter by given maximum bunge angles """
+#        
+#        phi1, Phi, phi2 = quat2eu(qfib)
+#            
+#        phi1 = np.where(phi1 < 0, phi1 + 2*np.pi, phi1) #brnng back to 0 - 2pi
+#        Phi = np.where(Phi < 0, Phi + np.pi, Phi) #brnng back to 0 - pi
+#        phi2 = np.where(phi2 < 0, phi2 + 2*np.pi, phi2) #brnng back to 0 - 2pi
+#        
+#        eu_fib = np.stack( (phi1, Phi, phi2), axis=2 )
+#        eu_fib = np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) )
+#        
+#        fz = (eu_fib[:,0] < od._phi1max) & (eu_fib[:,1] < od._Phimax) & (eu_fib[:,2] < od._phi2max)
+#        fz_idx = np.nonzero(fz)
+#        
+#        fibre_full_e[hi][yi] = eu_fib[fz]
+#
+#        fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))
+#        
+#        fibre_full_q[hi][yi] = qfib[fib_idx].reshape((len(fz_idx[0]),4))
+#        
+#        """ distance calc """
+#        temp = quatMetricNumba(qgrid,qfib[fib_idx])
+#        """ find tube """
+#        tube = (temp <= rad)
+#        temp = np.column_stack((np.argwhere(tube)[:,0],temp[tube]))
+#        """ sort by min distance """
+#        temp = temp[np.argsort(temp[:,1],axis=0)]
+#        """ return unique pts (first in list) """
+#        uni_pts = np.unique(temp[:,0],return_index=True)
+#
+#        nn_gridPts_full[hi][yi] = uni_pts[0]
+#        nn_gridDist_full[hi][yi] = temp[uni_pts[1],1]
+#
+#nn_gridPts = {}
+#nn_gridDist = {}
+#
+#for hi,h in enumerate(tqdm(hkls)):
+#    
+#    fibre_e[hi] = {}
+#    fibre_q[hi] = {}
+#    
+#    nn_gridPts[hi] = {}
+#    nn_gridDist[hi] = {}
+#    
+#    qh_y = quat.vector_vector_rotation(h,pf.y[hi])
+#    qh_om = quat.from_axis_angle(h,omega)
+#    
+#    for yi,y in enumerate(pf.y[hi]):
+#    
+#        qfib = quat.multiply(qh_y[yi,:],qh_om)
+#        
+#        """  reshape for tiling, simplify?? """
+#        
+#        qfib = qfib.T.reshape((1,4,len(omega)),order='F')
+#        qfib = np.tile(qfib,(quatSymOps.shape[1],1,1))
+#        qfib = qfib.transpose((2,0,1))
+#    
+#        """ apply symmetry """
+#    
+#        qfib = quat.multiply(quatSymOps,qfib)
+#        
+#        """ look for min angle from all applied symOps """
+#        
+##        minAngle = np.argmax(q_fibFZ[:,:,0],axis=1)
+##        minAngle = np.argmin(quat.geometry.angle(q_fibFZ),axis=1)
+#        
+##        fibre[hi][yi] = om2eu(quat.to_matrix(q_fibFZ[sliceIndex,minAngle,:]))
+#        
+#        """ symmetry ops on matricies directly, then to euler """
+#
+##        omfib = quat.to_matrix(qfib)
+##        om_fibFZ = np.zeros_like(omfib)
+##        
+##        for i,om in enumerate(omfib):
+##            
+##            sym_om = symOps @ om
+##            minAngle = np.argmax(0.5 * ( np.trace(sym_om,axis1=1,axis2=2) - 1 ))
+##            om_fibFZ[i,:,:] = sym_om[minAngle]
+##            
+##        fibre[hi][yi] = om2eu(om_fibFZ)
+#        
+#        """ symmetry ops, then filter by given maximum bunge angles """
+#        
+#        phi1, Phi, phi2 = quat2eu(qfib)
+#            
+#        phi1 = np.where(phi1 < 0, phi1 + 2*np.pi, phi1) #brnng back to 0 - 2pi
+#        Phi = np.where(Phi < 0, Phi + np.pi, Phi) #brnng back to 0 - pi
+#        phi2 = np.where(phi2 < 0, phi2 + 2*np.pi, phi2) #brnng back to 0 - 2pi
+#        
+#        eu_fib = np.stack( (phi1, Phi, phi2), axis=2 )
+#        eu_fib = np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) )
+#        
+#        fz = (eu_fib[:,0] < od._phi1max) & (eu_fib[:,1] < od._Phimax) & (eu_fib[:,2] < od._phi2max)
+#        fz_idx = np.nonzero(fz)
+#        
+#        fibre_e[hi][yi] = eu_fib[fz]
+#
+#        fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))
+#        
+#        fibre_q[hi][yi] = qfib[fib_idx].reshape((len(fz_idx[0]),4))
+#        
+#        """ distance calc """
+#        temp = quatMetricNumba(qgrid,qfib[fib_idx])
+#        """ find tube """
+#        tube = (temp <= rad)
+#        temp = np.column_stack((np.argwhere(tube)[:,0],temp[tube]))
+#        """ sort by min distance """
+#        temp = temp[np.argsort(temp[:,1],axis=0)]
+#        """ return unique pts (first in list) """
+#        uni_pts = np.unique(temp[:,0],return_index=True)
+#
+#        nn_gridPts[hi][yi] = uni_pts[0]
+#        nn_gridDist[hi][yi] = temp[uni_pts[1],1]
+
+""" scikit-learn ball_tree """
+
+#from sklearn.neighbors import BallTree
+#from numba import jit
+#import parmap as pm
+#
+#@jit(nopython=True, fastmath=True)
+#def quatMetricNumba(a, b):
+#    
+#    """ from DOI 10.1007/s10851-009-0161-2, #4 """
+#    
+#    return 1 - abs(a[0]*b[0] + a[1]*b[1]+ a[2]*b[2]+ a[3]*b[3])
+
+
+
+ 
+
+#
+#nn_gridPts = {}
+#nn_gridDist = {}
+#
+#nn_gridPts_full = {}
+#nn_gridDist_full = {}
+#
+#""" multi-process with parmap """
+#
+#def para_BallTreeQuery(fibq,rad,tree):
+#    
+#    gridPts = {}
+#    gridDist = {}
+#    
+#    for yi,fib_y in fibq.items():
+#        
+#        gridPts[yi], gridDist[yi] = BallTree.query_radius(tree,fib_y,r=rad,return_distance=True)
+#    
+#    return gridPts, gridDist
+#
+#inputs = []
+#inputs_full = []
+#
+#for hi, h in enumerate(hkls):
+#    
+#    inputs.append((fibre_q[hi],rad))
+#    inputs_full.append((fibre_full_q[hi],rad))
+#    
+#outputs = pm.starmap(para_BallTreeQuery, inputs, tree, pm_pbar=True, pm_processes=6)
+#outputs_full = pm.starmap(para_BallTreeQuery, inputs_full, tree, pm_pbar=True, pm_processes=6)
+#
+#for hi,i in enumerate(outputs):
+#    
+#    nn_gridPts[hi] = i[0]
+#    nn_gridDist[hi] = i[1]
+#    
+#    nn_gridPts_full[hi] = outputs_full[hi][0]
+#    nn_gridDist_full[hi] = outputs_full[hi][1]
+#
+#""" single process """
+#
+##for hi,h in enumerate(hkls):
+##
+##    nn_gridPts[hi] = {}
+##    nn_gridDist[hi] = {}
+##    
+##    for yi in tqdm(range(len(pf.y[hi]))):
+##        
+##        nn_gridPts[hi][yi], nn_gridDist[hi][yi] = tree.query_radius(fibre_q[hi][yi],
+##                                                                    r=rad,
+##                                                                    return_distance=True)
+

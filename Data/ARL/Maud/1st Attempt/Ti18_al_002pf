@@ -1,0 +1,2455 @@
+data_global
+_audit_creation_date 'Tue Jul 10 10:12:26 EDT 2018'
+_audit_creation_method 'Maud, version 2.8'
+_audit_update_record 'Tue Jul 10 11:17:33 EDT 2018'
+_computing_structure_refinement 'Maud, version 2.8'
+_refine_ls_R_factor_all 0
+_refine_ls_wR_factor_all 0
+_refine_ls_goodness_of_fit_all 0
+_publ_contact_author_name 'Luca Lutterotti'
+_publ_section_title 'Put a title here'
+_pd_proc_ls_extract_int 'end of iteration'
+_pd_proc_ls_texture_comp 'end of iteration'
+_computing_reduce_memory_occ true
+_pd_proc_ls_theoretical_weight false
+_pd_proc_ls_extract_pos 'end of iteration'
+_pd_proc_ls_strain_comp 'end of iteration'
+_pd_proc_ls_extract_Fhkl 'end of iteration'
+_pd_proc_ls_Fhkl_comp 'end of iteration'
+_pd_proc_ls_weight_scheme sqrt
+_refine_ls_weighting_scheme WgtSS
+_refine_ls_WSS_factor 0
+_maud_store_spectra_with_analysis true
+_riet_remove_phases_under 0.001
+_riet_refine_cell_over 0.1
+_riet_refine_sizestrain_over 0.1
+_riet_refine_crystal_structure_over 0.1
+_riet_refine_texture_over 0.15
+_riet_refine_strain_over 0.25
+_pd_proc_ls_interpolation_comp 'end of iteration'
+_maud_analysis_name Ti18_al_002pf
+_maud_analysis_prog_number 0
+_maud_store_structure_factors_with_analysis true
+_maud_store_texture_factors_with_analysis true
+
+#subordinateObject_Marqardt Least Squares
+
+_computing_refinement_algorithm 'Marqardt Least Squares'
+
+_refine_ls_number_iteration 5
+_riet_refine_ls_precision 0.00000001
+_riet_refine_ls_derivative_step 0.0001
+_riet_refine_ls_lambda 0.01
+_riet_refine_ls_double_derivative false
+
+#end_subordinateObject_Marqardt Least Squares
+
+
+
+data_sample_Sample_x
+_pd_spec_description 'Sample description'
+_riet_thin_film_phase_refinement films
+_reflectivity_layer_qc_from_phases false
+_pd_spec_orientation_omega 0 #min 0.0 #max 0.0
+_pd_spec_orientation_chi 0 #min 0.0 #max 0.0
+_pd_spec_orientation_phi 0 #min 0.0 #max 0.0
+_riet_par_spec_displac_x 0 #min 0.0 #max 0.0
+_riet_par_spec_displac_y 0 #min 0.0 #max 0.0
+_riet_par_spec_displac_z 0 #min 0.0 #max 0.0
+_pd_spec_size_axial 0 #min 0.0 #max 100.0
+_pd_spec_size_equat 0 #min 0.0 #max 100.0
+_pd_spec_size_thick 0 #min 0.0 #max 100.0
+_pd_spec_size_radius 0 #min 0.0 #max 100.0
+_pd_spec_size_radius_y 0 #positive #min 0.0 #max 100.0
+
+#subordinateObject_No shape
+
+_pd_spec_shape 'No shape'
+
+
+#end_subordinateObject_No shape
+
+
+#subordinateObject_None Layer workout
+
+_riet_layer_solution_method 'None Layer workout'
+
+
+#end_subordinateObject_None Layer workout
+
+
+#subordinateObject_No precession
+
+_riet_spec_precession_error 'No precession'
+
+
+#end_subordinateObject_No precession
+
+
+#subordinateObject_layer1
+
+_riet_spec_layer_id 'layer1'
+
+_reflectivity_layer_qc_from_phases false
+_riet_par_spec_layer_thickness 1.0E7 #positive #min 0.1 #max 1.0E8
+_reflectivity_layer_critical_qc 0.04 #positive #min 0.0010 #max 0.5
+_reflectivity_layer_absorption 2.0E-7 #positive #min 1.0E-8 #max 1.0E-5
+_reflectivity_layer_roughness 2.0 #positive #min 0.01 #max 100.0
+
+
+#end_subordinateObject_layer1
+
+
+#subordinateObject_DataFileSet_x
+
+_pd_meas_dataset_id 'DataFileSet_x'
+
+_pd_meas_datetime_initiated 'Date/time meas'
+_pd_meas_info_author_name ?
+_riet_meas_datafile_format ?
+_pd_proc_ls_background_function ?
+_pd_proc_ls_profile_function ?
+_pd_proc_ls_peak_cutoff 30
+_pd_proc_2theta_range_min 0
+_pd_proc_2theta_range_max 0
+_pd_proc_2theta_range_inc ?
+_diffrn_ambient_pressure ?
+_diffrn_ambient_temperature ?
+_riet_lorentz_restricted true
+_riet_par_background_interpolated false
+_riet_par_background_interpolation_range 10
+_riet_meas_dataset_compute true
+_riet_meas_datafile_replace false
+_riet_meas_dataset_random_texture false
+_maud_background_add_automatic false
+_maud_interpolated_background_iterations 10
+_pd_proc_ls_datafile_weight 1.0
+_riet_meas_dataset_no_strain false
+_riet_par_background_exp_shift 0 #min 0.0 #max 0.0
+_riet_par_background_exp_thermal_shift 0 #min 0.0 #max 0.0
+_pd_spec_orientation_omega 0 #min 0.0 #max 0.0
+_pd_spec_orientation_chi 0 #min 0.0 #max 0.0
+_pd_spec_orientation_phi 0 #min 0.0 #max 0.0
+_pd_meas_orientation_omega_offset 0 #min 0.0 #max 0.0
+_pd_meas_orientation_chi_offset 0 #min 0.0 #max 0.0
+_pd_meas_orientation_phi_offset 0 #min 0.0 #max 0.0
+_pd_meas_orientation_eta_offset 0 #min 0.0 #max 0.0
+_riet_par_spec_displac_x 0 #min 0.0 #max 0.0
+_riet_par_spec_displac_y 0 #min 0.0 #max 0.0
+_riet_par_spec_displac_z 0 #min 0.0 #max 0.0
+
+loop_
+_riet_par_background_pol
+  0 #min 10000.0 #max -10000.0
+  0 #min -77.26483 #max 0.0
+  0 #min -77.26483 #max 0.0
+  0 #min -86.82664 #max 71.03998
+  0 #min -86.82664 #max 71.03998
+
+
+#subordinateObject_Le Bail
+
+_riet_intensity_extraction 'Le Bail'
+
+_riet_lebail_iteration_max 5
+_riet_lebail_error_max 0.0050
+_riet_lebail_range_factor 0.05
+_riet_lebail_use_bkg true
+_riet_lebail_use_hkl true
+_riet_lebail_summation_delta 1.0E-4
+
+#end_subordinateObject_Le Bail
+
+
+#subordinateObject_none pe
+
+_riet_position_extraction 'none pe'
+
+
+#end_subordinateObject_none pe
+
+
+#subordinateObject_none reflectivity
+
+_reflectivity_model_type 'none reflectivity'
+
+
+#end_subordinateObject_none reflectivity
+
+
+#subordinateObject_Diffraction Instrument
+
+_diffrn_measurement_device 'Diffraction Instrument'
+
+_diffrn_measurement_device_type 'Diffraction Instrument'
+_maud_optional_intensity_factor 1.0
+_pd_proc_intensity_incident 2.0 #positive #min 0.0 #max 10000.0
+
+
+#subordinateObject_none cal
+
+_inst_intensity_calibration 'none cal'
+
+
+#end_subordinateObject_none cal
+
+
+#subordinateObject_Instrument disalignment
+
+_inst_angular_calibration 'Instrument disalignment'
+
+
+loop_
+_riet_par_2-theta_offset
+  0 #min -2.09 #max 0.07223146
+
+
+#end_subordinateObject_Instrument disalignment
+
+
+#subordinateObject_Bragg-Brentano
+
+_pd_instr_geometry 'Bragg-Brentano'
+
+_diffrn_radiation_monochromator filtered
+_pd_instr_2theta_monochr_post 0
+_pd_instr_dist_src/samp 175.0
+_pd_instr_monochr_pre_spec filtered
+_pd_instr_2theta_monochr_pre 0
+_pd_instr_divg_eq_src/samp 0.0
+_pd_instr_divg_slit_auto false
+_pd_instr_divg_ax_src/samp 0.0
+_diffrn_radiation_polarisn_norm 0 #min 0.0 #max 360.0
+_diffrn_radiation_polarisn_ratio 0 #min 0.0 #max 1.0
+
+#end_subordinateObject_Bragg-Brentano
+
+
+#subordinateObject_Theta-2Theta
+
+_diffrn_measurement_method 'Theta-2Theta'
+
+
+#end_subordinateObject_Theta-2Theta
+
+
+#subordinateObject_X-ray tube
+
+_diffrn_radiation_type 'X-ray tube'
+
+_diffrn_dynamical_scattering_correction true
+_diffrn_dynamical_scattering_correction_crystallite false
+
+#subordinateObject_1
+
+_diffrn_radiation_wavelength_id '1'
+
+_diffrn_radiation_wavelength 1.5405982 #min 0.1 #max 10.0
+_diffrn_radiation_wavelength_wt 1.0 #min 0.0 #max 1.01
+
+#end_subordinateObject_1
+
+
+#subordinateObject_2
+
+_diffrn_radiation_wavelength_id '2'
+
+_diffrn_radiation_wavelength 1.544497 #min 0.1 #max 10.0
+_diffrn_radiation_wavelength_wt 0.5 #min 0.0 #max 1.01
+
+#end_subordinateObject_2
+
+
+#end_subordinateObject_X-ray tube
+
+
+#subordinateObject_Scintillation
+
+_diffrn_radiation_detector 'Scintillation'
+
+
+#end_subordinateObject_Scintillation
+
+
+#subordinateObject_Caglioti PV
+
+_diffrn_inst_broadening 'Caglioti PV'
+
+_riet_caglioti_d_dep true
+_riet_asymmetry_tan_dep true
+_riet_omega/chi_broadening_convoluted false
+_riet_par_asymmetry_truncation 0.4
+_riet_par_asymmetry_reciprocal false
+
+loop_
+_riet_par_asymmetry_value
+  72.17134 #min 5.0 #max 1000.0
+  -0.229337 #min -10.0 #max 10.0
+
+loop_
+_riet_par_caglioti_value
+  0.00252935 #min -0.1 #max 0.1
+  0.002716717 #min -0.3 #max 0.3
+  0.002312246 #min -0.5 #max 0.5
+
+loop_
+_riet_par_gaussian_value
+  0 #min -1.0 #max 2.0
+  0.012 #min -0.1 #max 0.1
+
+
+#end_subordinateObject_Caglioti PV
+
+
+#subordinateObject_none abs
+
+_exptl_absorpt_correction_type 'none abs'
+
+
+#end_subordinateObject_none abs
+
+
+#end_subordinateObject_Diffraction Instrument
+
+
+#subordinateObject_none fluorescence
+
+_fluorescence_model_type 'none fluorescence'
+
+
+#end_subordinateObject_none fluorescence
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(0)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(0)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 0.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 506.0 0.044455424
+ 0.01 472.0 0.04602873
+ 0.02 493.0 0.045037735
+ 0.03 446.0 0.04735137
+ 0.04 443.0 0.047511432
+ 0.05 469.0 0.04617571
+ 0.06 456.0 0.04682929
+ 0.07 475.0 0.045883145
+ 0.08 524.0 0.0436852
+ 0.09 476.0 0.045834925
+ 0.1 508.0 0.044367824
+ 0.11 483.0 0.045501575
+ 0.12 447.0 0.047298376
+ 0.13 503.0 0.044587795
+ 0.14 443.0 0.047511432
+ 0.15 466.0 0.046324104
+ 0.16 483.0 0.045501575
+ 0.17 477.0 0.045786854
+ 0.18 461.0 0.046574645
+ 0.19 439.0 0.047727395
+ 0.2 439.0 0.047727395
+ 0.21 484.0 0.045454547
+ 0.22 479.0 0.045691166
+ 0.23 497.0 0.04485613
+ 0.24 485.0 0.04540766
+ 0.25 463.0 0.046473943
+ 0.26 531.0 0.043396305
+ 0.27 469.0 0.04617571
+ 0.28 514.0 0.044108108
+ 0.29 465.0 0.04637389
+ 0.3 496.0 0.044901326
+ 0.31 460.0 0.04662524
+ 0.32 463.0 0.046473943
+ 0.33 446.0 0.04735137
+ 0.34 483.0 0.045501575
+ 0.35 505.0 0.044499416
+ 0.36 434.0 0.048001535
+ 0.37 505.0 0.044499416
+ 0.38 475.0 0.045883145
+ 0.39 465.0 0.04637389
+ 0.4 480.0 0.045643546
+ 0.41 450.0 0.047140453
+ 0.42 489.0 0.045221563
+ 0.43 463.0 0.046473943
+ 0.44 505.0 0.044499416
+ 0.45 511.0 0.044237394
+ 0.46 497.0 0.04485613
+ 0.47 472.0 0.04602873
+ 0.48 480.0 0.045643546
+ 0.49 448.0 0.04724556
+ 0.5 474.0 0.04593152
+ 0.51 514.0 0.044108108
+ 0.52 510.0 0.044280745
+ 0.53 512.0 0.044194173
+ 0.54 526.0 0.04360207
+ 0.55 473.0 0.045980047
+ 0.56 478.0 0.045738935
+ 0.57 517.0 0.04397995
+ 0.58 537.0 0.043153185
+ 0.59 555.0 0.042447638
+ 0.6 573.0 0.0417756
+ 0.61 521.0 0.043810796
+ 0.62 496.0 0.044901326
+ 0.63 524.0 0.0436852
+ 0.64 521.0 0.043810796
+ 0.65 469.0 0.04617571
+ 0.66 493.0 0.045037735
+ 0.67 514.0 0.044108108
+ 0.68 485.0 0.04540766
+ 0.69 480.0 0.045643546
+ 0.7 480.0 0.045643546
+ 0.71 460.0 0.04662524
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(0)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(1)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(1)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 5.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 213.0 0.06851887
+ 0.01 227.0 0.06637233
+ 0.02 223.0 0.066964954
+ 0.03 264.0 0.061545745
+ 0.04 208.0 0.069337524
+ 0.05 195.0 0.07161149
+ 0.06 196.0 0.071428575
+ 0.07 236.0 0.065094456
+ 0.08 214.0 0.06835859
+ 0.09 220.0 0.06741998
+ 0.1 257.0 0.062378287
+ 0.11 264.0 0.061545745
+ 0.12 264.0 0.061545745
+ 0.13 317.0 0.056165595
+ 0.14 347.0 0.05368281
+ 0.15 365.0 0.052342393
+ 0.16 413.0 0.049206782
+ 0.17 402.0 0.049875468
+ 0.18 477.0 0.045786854
+ 0.19 465.0 0.04637389
+ 0.2 453.0 0.0469841
+ 0.21 466.0 0.046324104
+ 0.22 510.0 0.044280745
+ 0.23 570.0 0.04188539
+ 0.24 588.0 0.041239306
+ 0.25 566.0 0.042033136
+ 0.26 586.0 0.041309617
+ 0.27 527.0 0.043560684
+ 0.28 521.0 0.043810796
+ 0.29 480.0 0.045643546
+ 0.3 447.0 0.047298376
+ 0.31 418.0 0.048911598
+ 0.32 384.0 0.05103104
+ 0.33 426.0 0.048450157
+ 0.34 367.0 0.052199576
+ 0.35 369.0 0.052057922
+ 0.36 377.0 0.05150262
+ 0.37 381.0 0.051231552
+ 0.38 349.0 0.053528775
+ 0.39 335.0 0.054635838
+ 0.4 373.0 0.051778037
+ 0.41 347.0 0.05368281
+ 0.42 352.0 0.05330018
+ 0.43 354.0 0.053149402
+ 0.44 378.0 0.05143445
+ 0.45 398.0 0.050125472
+ 0.46 455.0 0.046880722
+ 0.47 426.0 0.048450157
+ 0.48 443.0 0.047511432
+ 0.49 473.0 0.045980047
+ 0.5 444.0 0.0474579
+ 0.51 423.0 0.048621666
+ 0.52 443.0 0.047511432
+ 0.53 437.0 0.047836486
+ 0.54 469.0 0.04617571
+ 0.55 417.0 0.04897021
+ 0.56 394.0 0.050379273
+ 0.57 371.0 0.05191741
+ 0.58 343.0 0.053994924
+ 0.59 324.0 0.055555556
+ 0.6 300.0 0.057735026
+ 0.61 304.0 0.057353932
+ 0.62 275.0 0.06030227
+ 0.63 266.0 0.061313935
+ 0.64 261.0 0.061898448
+ 0.65 226.0 0.06651901
+ 0.66 226.0 0.06651901
+ 0.67 252.0 0.06299408
+ 0.68 243.0 0.06415003
+ 0.69 244.0 0.06401844
+ 0.7 223.0 0.066964954
+ 0.71 237.0 0.06495698
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(1)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(2)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(2)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 10.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 89.0 0.10599979
+ 0.01 65.0 0.12403473
+ 0.02 41.0 0.15617377
+ 0.03 58.0 0.13130644
+ 0.04 47.0 0.145865
+ 0.05 49.0 0.14285715
+ 0.06 58.0 0.13130644
+ 0.07 57.0 0.13245323
+ 0.08 60.0 0.12909944
+ 0.09 76.0 0.114707865
+ 0.1 86.0 0.107832775
+ 0.11 112.0 0.09449112
+ 0.12 140.0 0.08451542
+ 0.13 190.0 0.07254762
+ 0.14 247.0 0.06362848
+ 0.15 304.0 0.057353932
+ 0.16 402.0 0.049875468
+ 0.17 437.0 0.047836486
+ 0.18 458.0 0.04672693
+ 0.19 506.0 0.044455424
+ 0.2 473.0 0.045980047
+ 0.21 449.0 0.047192916
+ 0.22 468.0 0.046225015
+ 0.23 433.0 0.048056934
+ 0.24 415.0 0.04908807
+ 0.25 330.0 0.05504819
+ 0.26 314.0 0.056433264
+ 0.27 287.0 0.059028134
+ 0.28 238.0 0.06482037
+ 0.29 235.0 0.065232806
+ 0.3 194.0 0.071795814
+ 0.31 190.0 0.07254762
+ 0.32 147.0 0.08247861
+ 0.33 150.0 0.08164966
+ 0.34 165.0 0.077849895
+ 0.35 142.0 0.08391814
+ 0.36 175.0 0.0755929
+ 0.37 149.0 0.081923194
+ 0.38 145.0 0.08304548
+ 0.39 149.0 0.081923194
+ 0.4 140.0 0.08451542
+ 0.41 135.0 0.0860663
+ 0.42 131.0 0.0873704
+ 0.43 133.0 0.086711
+ 0.44 135.0 0.0860663
+ 0.45 179.0 0.07474351
+ 0.46 182.0 0.07412493
+ 0.47 203.0 0.07018624
+ 0.48 283.0 0.05944383
+ 0.49 346.0 0.053760335
+ 0.5 364.0 0.052414242
+ 0.51 400.0 0.05
+ 0.52 382.0 0.051164452
+ 0.53 315.0 0.05634362
+ 0.54 357.0 0.052925613
+ 0.55 296.0 0.05812382
+ 0.56 256.0 0.0625
+ 0.57 237.0 0.06495698
+ 0.58 167.0 0.077382326
+ 0.59 156.0 0.08006407
+ 0.6 125.0 0.08944272
+ 0.61 129.0 0.08804509
+ 0.62 67.0 0.12216944
+ 0.63 89.0 0.10599979
+ 0.64 88.0 0.10660036
+ 0.65 75.0 0.11547005
+ 0.66 70.0 0.11952286
+ 0.67 64.0 0.125
+ 0.68 59.0 0.13018891
+ 0.69 69.0 0.120385855
+ 0.7 82.0 0.11043153
+ 0.71 75.0 0.11547005
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(2)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(3)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(3)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 15.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 47.0 0.145865
+ 0.01 30.0 0.18257418
+ 0.02 29.0 0.18569534
+ 0.03 30.0 0.18257418
+ 0.04 32.0 0.17677669
+ 0.05 29.0 0.18569534
+ 0.06 42.0 0.15430336
+ 0.07 33.0 0.17407766
+ 0.08 55.0 0.13483997
+ 0.09 41.0 0.15617377
+ 0.1 41.0 0.15617377
+ 0.11 57.0 0.13245323
+ 0.12 65.0 0.12403473
+ 0.13 85.0 0.10846523
+ 0.14 113.0 0.09407209
+ 0.15 180.0 0.0745356
+ 0.16 231.0 0.06579517
+ 0.17 326.0 0.055384878
+ 0.18 393.0 0.05044333
+ 0.19 435.0 0.04794633
+ 0.2 386.0 0.05089866
+ 0.21 318.0 0.056077216
+ 0.22 290.0 0.058722023
+ 0.23 222.0 0.067115605
+ 0.24 184.0 0.07372098
+ 0.25 138.0 0.085125655
+ 0.26 124.0 0.08980265
+ 0.27 101.0 0.09950372
+ 0.28 101.0 0.09950372
+ 0.29 66.0 0.12309149
+ 0.3 60.0 0.12909944
+ 0.31 50.0 0.14142136
+ 0.32 50.0 0.14142136
+ 0.33 66.0 0.12309149
+ 0.34 52.0 0.13867505
+ 0.35 65.0 0.12403473
+ 0.36 54.0 0.13608277
+ 0.37 68.0 0.12126781
+ 0.38 53.0 0.13736056
+ 0.39 51.0 0.14002801
+ 0.4 45.0 0.1490712
+ 0.41 50.0 0.14142136
+ 0.42 42.0 0.15430336
+ 0.43 58.0 0.13130644
+ 0.44 68.0 0.12126781
+ 0.45 62.0 0.12700012
+ 0.46 88.0 0.10660036
+ 0.47 143.0 0.0836242
+ 0.48 170.0 0.0766965
+ 0.49 240.0 0.06454972
+ 0.5 342.0 0.054073807
+ 0.51 351.0 0.053376053
+ 0.52 378.0 0.05143445
+ 0.53 368.0 0.0521286
+ 0.54 286.0 0.05913124
+ 0.55 217.0 0.06788442
+ 0.56 156.0 0.08006407
+ 0.57 110.0 0.09534626
+ 0.58 83.0 0.10976426
+ 0.59 82.0 0.11043153
+ 0.6 72.0 0.11785113
+ 0.61 55.0 0.13483997
+ 0.62 50.0 0.14142136
+ 0.63 53.0 0.13736056
+ 0.64 44.0 0.15075567
+ 0.65 48.0 0.14433756
+ 0.66 25.0 0.2
+ 0.67 41.0 0.15617377
+ 0.68 25.0 0.2
+ 0.69 36.0 0.16666667
+ 0.7 31.0 0.1796053
+ 0.71 31.0 0.1796053
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(3)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(4)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(4)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 20.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 30.0 0.18257418
+ 0.01 23.0 0.2085144
+ 0.02 28.0 0.18898223
+ 0.03 35.0 0.16903085
+ 0.04 29.0 0.18569534
+ 0.05 26.0 0.19611613
+ 0.06 28.0 0.18898223
+ 0.07 24.0 0.20412415
+ 0.08 25.0 0.2
+ 0.09 31.0 0.1796053
+ 0.1 41.0 0.15617377
+ 0.11 39.0 0.16012815
+ 0.12 37.0 0.16439898
+ 0.13 45.0 0.1490712
+ 0.14 62.0 0.12700012
+ 0.15 123.0 0.09016696
+ 0.16 179.0 0.07474351
+ 0.17 257.0 0.062378287
+ 0.18 349.0 0.053528775
+ 0.19 321.0 0.055814557
+ 0.2 245.0 0.063887656
+ 0.21 187.0 0.07312724
+ 0.22 150.0 0.08164966
+ 0.23 114.0 0.09365858
+ 0.24 83.0 0.10976426
+ 0.25 92.0 0.1042572
+ 0.26 46.0 0.14744195
+ 0.27 56.0 0.13363062
+ 0.28 27.0 0.19245009
+ 0.29 38.0 0.16222142
+ 0.3 33.0 0.17407766
+ 0.31 31.0 0.1796053
+ 0.32 51.0 0.14002801
+ 0.33 32.0 0.17677669
+ 0.34 40.0 0.15811388
+ 0.35 35.0 0.16903085
+ 0.36 26.0 0.19611613
+ 0.37 36.0 0.16666667
+ 0.38 41.0 0.15617377
+ 0.39 23.0 0.2085144
+ 0.4 21.0 0.2182179
+ 0.41 32.0 0.17677669
+ 0.42 37.0 0.16439898
+ 0.43 37.0 0.16439898
+ 0.44 37.0 0.16439898
+ 0.45 39.0 0.16012815
+ 0.46 52.0 0.13867505
+ 0.47 58.0 0.13130644
+ 0.48 90.0 0.10540926
+ 0.49 118.0 0.09205746
+ 0.5 219.0 0.06757374
+ 0.51 282.0 0.059549134
+ 0.52 312.0 0.05661385
+ 0.53 322.0 0.05572782
+ 0.54 257.0 0.062378287
+ 0.55 190.0 0.07254762
+ 0.56 108.0 0.096225046
+ 0.57 95.0 0.10259783
+ 0.58 85.0 0.10846523
+ 0.59 57.0 0.13245323
+ 0.6 54.0 0.13608277
+ 0.61 50.0 0.14142136
+ 0.62 45.0 0.1490712
+ 0.63 34.0 0.17149858
+ 0.64 39.0 0.16012815
+ 0.65 43.0 0.15249857
+ 0.66 35.0 0.16903085
+ 0.67 18.0 0.23570226
+ 0.68 38.0 0.16222142
+ 0.69 20.0 0.2236068
+ 0.7 37.0 0.16439898
+ 0.71 26.0 0.19611613
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(4)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(5)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(5)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 25.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 43.0 0.15249857
+ 0.01 27.0 0.19245009
+ 0.02 36.0 0.16666667
+ 0.03 21.0 0.2182179
+ 0.04 28.0 0.18898223
+ 0.05 25.0 0.2
+ 0.06 23.0 0.2085144
+ 0.07 29.0 0.18569534
+ 0.08 17.0 0.24253562
+ 0.09 23.0 0.2085144
+ 0.1 25.0 0.2
+ 0.11 31.0 0.1796053
+ 0.12 44.0 0.15075567
+ 0.13 49.0 0.14285715
+ 0.14 77.0 0.11396058
+ 0.15 114.0 0.09365858
+ 0.16 184.0 0.07372098
+ 0.17 311.0 0.056704797
+ 0.18 361.0 0.05263158
+ 0.19 313.0 0.05652334
+ 0.2 220.0 0.06741998
+ 0.21 120.0 0.09128709
+ 0.22 78.0 0.1132277
+ 0.23 78.0 0.1132277
+ 0.24 64.0 0.125
+ 0.25 43.0 0.15249857
+ 0.26 34.0 0.17149858
+ 0.27 42.0 0.15430336
+ 0.28 24.0 0.20412415
+ 0.29 23.0 0.2085144
+ 0.3 33.0 0.17407766
+ 0.31 37.0 0.16439898
+ 0.32 30.0 0.18257418
+ 0.33 33.0 0.17407766
+ 0.34 23.0 0.2085144
+ 0.35 24.0 0.20412415
+ 0.36 32.0 0.17677669
+ 0.37 31.0 0.1796053
+ 0.38 31.0 0.1796053
+ 0.39 26.0 0.19611613
+ 0.4 24.0 0.20412415
+ 0.41 34.0 0.17149858
+ 0.42 31.0 0.1796053
+ 0.43 30.0 0.18257418
+ 0.44 30.0 0.18257418
+ 0.45 32.0 0.17677669
+ 0.46 34.0 0.17149858
+ 0.47 39.0 0.16012815
+ 0.48 58.0 0.13130644
+ 0.49 82.0 0.11043153
+ 0.5 170.0 0.0766965
+ 0.51 237.0 0.06495698
+ 0.52 371.0 0.05191741
+ 0.53 403.0 0.04981355
+ 0.54 299.0 0.057831492
+ 0.55 226.0 0.06651901
+ 0.56 144.0 0.083333336
+ 0.57 111.0 0.0949158
+ 0.58 84.0 0.10910895
+ 0.59 55.0 0.13483997
+ 0.6 60.0 0.12909944
+ 0.61 48.0 0.14433756
+ 0.62 45.0 0.1490712
+ 0.63 40.0 0.15811388
+ 0.64 25.0 0.2
+ 0.65 30.0 0.18257418
+ 0.66 43.0 0.15249857
+ 0.67 24.0 0.20412415
+ 0.68 31.0 0.1796053
+ 0.69 38.0 0.16222142
+ 0.7 28.0 0.18898223
+ 0.71 42.0 0.15430336
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(5)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(6)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(6)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 30.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 42.0 0.15430336
+ 0.01 37.0 0.16439898
+ 0.02 33.0 0.17407766
+ 0.03 25.0 0.2
+ 0.04 33.0 0.17407766
+ 0.05 24.0 0.20412415
+ 0.06 32.0 0.17677669
+ 0.07 24.0 0.20412415
+ 0.08 31.0 0.1796053
+ 0.09 30.0 0.18257418
+ 0.1 32.0 0.17677669
+ 0.11 41.0 0.15617377
+ 0.12 49.0 0.14285715
+ 0.13 38.0 0.16222142
+ 0.14 67.0 0.12216944
+ 0.15 100.0 0.1
+ 0.16 199.0 0.07088812
+ 0.17 271.0 0.060745675
+ 0.18 396.0 0.05025189
+ 0.19 365.0 0.052342393
+ 0.2 180.0 0.0745356
+ 0.21 82.0 0.11043153
+ 0.22 57.0 0.13245323
+ 0.23 48.0 0.14433756
+ 0.24 54.0 0.13608277
+ 0.25 38.0 0.16222142
+ 0.26 34.0 0.17149858
+ 0.27 41.0 0.15617377
+ 0.28 29.0 0.18569534
+ 0.29 25.0 0.2
+ 0.3 19.0 0.22941573
+ 0.31 18.0 0.23570226
+ 0.32 26.0 0.19611613
+ 0.33 26.0 0.19611613
+ 0.34 23.0 0.2085144
+ 0.35 23.0 0.2085144
+ 0.36 33.0 0.17407766
+ 0.37 29.0 0.18569534
+ 0.38 20.0 0.2236068
+ 0.39 23.0 0.2085144
+ 0.4 22.0 0.21320072
+ 0.41 23.0 0.2085144
+ 0.42 26.0 0.19611613
+ 0.43 23.0 0.2085144
+ 0.44 26.0 0.19611613
+ 0.45 35.0 0.16903085
+ 0.46 33.0 0.17407766
+ 0.47 36.0 0.16666667
+ 0.48 38.0 0.16222142
+ 0.49 52.0 0.13867505
+ 0.5 120.0 0.09128709
+ 0.51 262.0 0.061780207
+ 0.52 360.0 0.05270463
+ 0.53 419.0 0.048853196
+ 0.54 330.0 0.05504819
+ 0.55 189.0 0.072739296
+ 0.56 131.0 0.0873704
+ 0.57 83.0 0.10976426
+ 0.58 65.0 0.12403473
+ 0.59 61.0 0.12803689
+ 0.6 55.0 0.13483997
+ 0.61 51.0 0.14002801
+ 0.62 35.0 0.16903085
+ 0.63 38.0 0.16222142
+ 0.64 32.0 0.17677669
+ 0.65 25.0 0.2
+ 0.66 43.0 0.15249857
+ 0.67 23.0 0.2085144
+ 0.68 31.0 0.1796053
+ 0.69 42.0 0.15430336
+ 0.7 34.0 0.17149858
+ 0.71 42.0 0.15430336
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(6)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(7)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(7)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 35.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 58.0 0.13130644
+ 0.01 50.0 0.14142136
+ 0.02 40.0 0.15811388
+ 0.03 39.0 0.16012815
+ 0.04 31.0 0.1796053
+ 0.05 23.0 0.2085144
+ 0.06 31.0 0.1796053
+ 0.07 23.0 0.2085144
+ 0.08 27.0 0.19245009
+ 0.09 28.0 0.18898223
+ 0.1 31.0 0.1796053
+ 0.11 30.0 0.18257418
+ 0.12 29.0 0.18569534
+ 0.13 45.0 0.1490712
+ 0.14 62.0 0.12700012
+ 0.15 86.0 0.107832775
+ 0.16 125.0 0.08944272
+ 0.17 244.0 0.06401844
+ 0.18 290.0 0.058722023
+ 0.19 194.0 0.071795814
+ 0.2 128.0 0.088388346
+ 0.21 55.0 0.13483997
+ 0.22 38.0 0.16222142
+ 0.23 44.0 0.15075567
+ 0.24 34.0 0.17149858
+ 0.25 28.0 0.18898223
+ 0.26 32.0 0.17677669
+ 0.27 30.0 0.18257418
+ 0.28 45.0 0.1490712
+ 0.29 26.0 0.19611613
+ 0.3 35.0 0.16903085
+ 0.31 39.0 0.16012815
+ 0.32 28.0 0.18898223
+ 0.33 31.0 0.1796053
+ 0.34 32.0 0.17677669
+ 0.35 39.0 0.16012815
+ 0.36 30.0 0.18257418
+ 0.37 29.0 0.18569534
+ 0.38 35.0 0.16903085
+ 0.39 31.0 0.1796053
+ 0.4 20.0 0.2236068
+ 0.41 25.0 0.2
+ 0.42 18.0 0.23570226
+ 0.43 20.0 0.2236068
+ 0.44 26.0 0.19611613
+ 0.45 24.0 0.20412415
+ 0.46 29.0 0.18569534
+ 0.47 33.0 0.17407766
+ 0.48 46.0 0.14744195
+ 0.49 48.0 0.14433756
+ 0.5 78.0 0.1132277
+ 0.51 160.0 0.07905694
+ 0.52 227.0 0.06637233
+ 0.53 271.0 0.060745675
+ 0.54 271.0 0.060745675
+ 0.55 154.0 0.0805823
+ 0.56 90.0 0.10540926
+ 0.57 69.0 0.120385855
+ 0.58 59.0 0.13018891
+ 0.59 37.0 0.16439898
+ 0.6 50.0 0.14142136
+ 0.61 53.0 0.13736056
+ 0.62 44.0 0.15075567
+ 0.63 40.0 0.15811388
+ 0.64 36.0 0.16666667
+ 0.65 42.0 0.15430336
+ 0.66 38.0 0.16222142
+ 0.67 41.0 0.15617377
+ 0.68 51.0 0.14002801
+ 0.69 45.0 0.1490712
+ 0.7 52.0 0.13867505
+ 0.71 54.0 0.13608277
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(7)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(8)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(8)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 40.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 68.0 0.12126781
+ 0.01 56.0 0.13363062
+ 0.02 49.0 0.14285715
+ 0.03 42.0 0.15430336
+ 0.04 31.0 0.1796053
+ 0.05 23.0 0.2085144
+ 0.06 31.0 0.1796053
+ 0.07 41.0 0.15617377
+ 0.08 34.0 0.17149858
+ 0.09 37.0 0.16439898
+ 0.1 36.0 0.16666667
+ 0.11 28.0 0.18898223
+ 0.12 40.0 0.15811388
+ 0.13 41.0 0.15617377
+ 0.14 42.0 0.15430336
+ 0.15 67.0 0.12216944
+ 0.16 101.0 0.09950372
+ 0.17 175.0 0.0755929
+ 0.18 170.0 0.0766965
+ 0.19 116.0 0.09284767
+ 0.2 67.0 0.12216944
+ 0.21 58.0 0.13130644
+ 0.22 45.0 0.1490712
+ 0.23 55.0 0.13483997
+ 0.24 39.0 0.16012815
+ 0.25 34.0 0.17149858
+ 0.26 31.0 0.1796053
+ 0.27 32.0 0.17677669
+ 0.28 35.0 0.16903085
+ 0.29 40.0 0.15811388
+ 0.3 63.0 0.12598816
+ 0.31 71.0 0.11867817
+ 0.32 52.0 0.13867505
+ 0.33 62.0 0.12700012
+ 0.34 74.0 0.11624764
+ 0.35 80.0 0.1118034
+ 0.36 42.0 0.15430336
+ 0.37 35.0 0.16903085
+ 0.38 36.0 0.16666667
+ 0.39 32.0 0.17677669
+ 0.4 31.0 0.1796053
+ 0.41 26.0 0.19611613
+ 0.42 27.0 0.19245009
+ 0.43 26.0 0.19611613
+ 0.44 32.0 0.17677669
+ 0.45 23.0 0.2085144
+ 0.46 16.0 0.25
+ 0.47 35.0 0.16903085
+ 0.48 41.0 0.15617377
+ 0.49 46.0 0.14744195
+ 0.5 59.0 0.13018891
+ 0.51 71.0 0.11867817
+ 0.52 105.0 0.09759001
+ 0.53 188.0 0.0729325
+ 0.54 218.0 0.06772855
+ 0.55 81.0 0.11111111
+ 0.56 66.0 0.12309149
+ 0.57 64.0 0.125
+ 0.58 66.0 0.12309149
+ 0.59 56.0 0.13363062
+ 0.6 36.0 0.16666667
+ 0.61 43.0 0.15249857
+ 0.62 55.0 0.13483997
+ 0.63 56.0 0.13363062
+ 0.64 46.0 0.14744195
+ 0.65 75.0 0.11547005
+ 0.66 63.0 0.12598816
+ 0.67 77.0 0.11396058
+ 0.68 78.0 0.1132277
+ 0.69 94.0 0.10314213
+ 0.7 75.0 0.11547005
+ 0.71 66.0 0.12309149
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(8)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(9)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(9)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 45.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 75.0 0.11547005
+ 0.01 73.0 0.11704115
+ 0.02 77.0 0.11396058
+ 0.03 81.0 0.11111111
+ 0.04 86.0 0.107832775
+ 0.05 68.0 0.12126781
+ 0.06 67.0 0.12216944
+ 0.07 47.0 0.145865
+ 0.08 35.0 0.16903085
+ 0.09 27.0 0.19245009
+ 0.1 27.0 0.19245009
+ 0.11 28.0 0.18898223
+ 0.12 35.0 0.16903085
+ 0.13 39.0 0.16012815
+ 0.14 46.0 0.14744195
+ 0.15 59.0 0.13018891
+ 0.16 65.0 0.12403473
+ 0.17 118.0 0.09205746
+ 0.18 156.0 0.08006407
+ 0.19 109.0 0.09578263
+ 0.2 57.0 0.13245323
+ 0.21 48.0 0.14433756
+ 0.22 36.0 0.16666667
+ 0.23 40.0 0.15811388
+ 0.24 43.0 0.15249857
+ 0.25 51.0 0.14002801
+ 0.26 31.0 0.1796053
+ 0.27 42.0 0.15430336
+ 0.28 44.0 0.15075567
+ 0.29 74.0 0.11624764
+ 0.3 103.0 0.09853293
+ 0.31 127.0 0.08873565
+ 0.32 106.0 0.097128585
+ 0.33 92.0 0.1042572
+ 0.34 82.0 0.11043153
+ 0.35 91.0 0.104828484
+ 0.36 79.0 0.11250879
+ 0.37 57.0 0.13245323
+ 0.38 66.0 0.12309149
+ 0.39 88.0 0.10660036
+ 0.4 69.0 0.120385855
+ 0.41 40.0 0.15811388
+ 0.42 31.0 0.1796053
+ 0.43 34.0 0.17149858
+ 0.44 26.0 0.19611613
+ 0.45 42.0 0.15430336
+ 0.46 33.0 0.17407766
+ 0.47 26.0 0.19611613
+ 0.48 30.0 0.18257418
+ 0.49 30.0 0.18257418
+ 0.5 42.0 0.15430336
+ 0.51 43.0 0.15249857
+ 0.52 78.0 0.1132277
+ 0.53 159.0 0.07930516
+ 0.54 176.0 0.07537784
+ 0.55 81.0 0.11111111
+ 0.56 48.0 0.14433756
+ 0.57 46.0 0.14744195
+ 0.58 49.0 0.14285715
+ 0.59 55.0 0.13483997
+ 0.6 40.0 0.15811388
+ 0.61 41.0 0.15617377
+ 0.62 54.0 0.13608277
+ 0.63 68.0 0.12126781
+ 0.64 81.0 0.11111111
+ 0.65 96.0 0.10206208
+ 0.66 102.0 0.09901475
+ 0.67 146.0 0.08276059
+ 0.68 135.0 0.0860663
+ 0.69 117.0 0.09245003
+ 0.7 89.0 0.10599979
+ 0.71 81.0 0.11111111
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(9)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(10)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(10)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 50.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 116.0 0.09284767
+ 0.01 147.0 0.08247861
+ 0.02 195.0 0.07161149
+ 0.03 165.0 0.077849895
+ 0.04 178.0 0.07495317
+ 0.05 204.0 0.07001401
+ 0.06 204.0 0.07001401
+ 0.07 136.0 0.08574929
+ 0.08 66.0 0.12309149
+ 0.09 38.0 0.16222142
+ 0.1 30.0 0.18257418
+ 0.11 25.0 0.2
+ 0.12 33.0 0.17407766
+ 0.13 39.0 0.16012815
+ 0.14 37.0 0.16439898
+ 0.15 51.0 0.14002801
+ 0.16 82.0 0.11043153
+ 0.17 119.0 0.09166985
+ 0.18 134.0 0.086386845
+ 0.19 90.0 0.10540926
+ 0.2 54.0 0.13608277
+ 0.21 54.0 0.13608277
+ 0.22 47.0 0.145865
+ 0.23 40.0 0.15811388
+ 0.24 62.0 0.12700012
+ 0.25 40.0 0.15811388
+ 0.26 42.0 0.15430336
+ 0.27 46.0 0.14744195
+ 0.28 82.0 0.11043153
+ 0.29 136.0 0.08574929
+ 0.3 140.0 0.08451542
+ 0.31 122.0 0.090535745
+ 0.32 111.0 0.0949158
+ 0.33 77.0 0.11396058
+ 0.34 79.0 0.11250879
+ 0.35 96.0 0.10206208
+ 0.36 112.0 0.09449112
+ 0.37 94.0 0.10314213
+ 0.38 80.0 0.1118034
+ 0.39 126.0 0.089087084
+ 0.4 118.0 0.09205746
+ 0.41 105.0 0.09759001
+ 0.42 93.0 0.10369517
+ 0.43 47.0 0.145865
+ 0.44 35.0 0.16903085
+ 0.45 47.0 0.145865
+ 0.46 19.0 0.22941573
+ 0.47 38.0 0.16222142
+ 0.48 35.0 0.16903085
+ 0.49 47.0 0.145865
+ 0.5 48.0 0.14433756
+ 0.51 53.0 0.13736056
+ 0.52 62.0 0.12700012
+ 0.53 149.0 0.081923194
+ 0.54 133.0 0.086711
+ 0.55 75.0 0.11547005
+ 0.56 51.0 0.14002801
+ 0.57 45.0 0.1490712
+ 0.58 42.0 0.15430336
+ 0.59 25.0 0.2
+ 0.6 40.0 0.15811388
+ 0.61 43.0 0.15249857
+ 0.62 52.0 0.13867505
+ 0.63 91.0 0.104828484
+ 0.64 146.0 0.08276059
+ 0.65 196.0 0.071428575
+ 0.66 166.0 0.07761505
+ 0.67 123.0 0.09016696
+ 0.68 135.0 0.0860663
+ 0.69 108.0 0.096225046
+ 0.7 147.0 0.08247861
+ 0.71 143.0 0.0836242
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(10)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(11)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(11)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 55.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 219.0 0.06757374
+ 0.01 235.0 0.065232806
+ 0.02 194.0 0.071795814
+ 0.03 141.0 0.084215194
+ 0.04 179.0 0.07474351
+ 0.05 227.0 0.06637233
+ 0.06 282.0 0.059549134
+ 0.07 298.0 0.057928443
+ 0.08 179.0 0.07474351
+ 0.09 80.0 0.1118034
+ 0.1 37.0 0.16439898
+ 0.11 38.0 0.16222142
+ 0.12 34.0 0.17149858
+ 0.13 46.0 0.14744195
+ 0.14 45.0 0.1490712
+ 0.15 73.0 0.11704115
+ 0.16 99.0 0.10050378
+ 0.17 124.0 0.08980265
+ 0.18 150.0 0.08164966
+ 0.19 89.0 0.10599979
+ 0.2 60.0 0.12909944
+ 0.21 40.0 0.15811388
+ 0.22 42.0 0.15430336
+ 0.23 36.0 0.16666667
+ 0.24 51.0 0.14002801
+ 0.25 45.0 0.1490712
+ 0.26 59.0 0.13018891
+ 0.27 92.0 0.1042572
+ 0.28 182.0 0.07412493
+ 0.29 207.0 0.069504805
+ 0.3 151.0 0.08137885
+ 0.31 108.0 0.096225046
+ 0.32 118.0 0.09205746
+ 0.33 161.0 0.07881104
+ 0.34 127.0 0.08873565
+ 0.35 177.0 0.0751646
+ 0.36 174.0 0.07580981
+ 0.37 125.0 0.08944272
+ 0.38 110.0 0.09534626
+ 0.39 115.0 0.09325048
+ 0.4 144.0 0.083333336
+ 0.41 233.0 0.06551218
+ 0.42 242.0 0.06428243
+ 0.43 105.0 0.09759001
+ 0.44 44.0 0.15075567
+ 0.45 37.0 0.16439898
+ 0.46 25.0 0.2
+ 0.47 31.0 0.1796053
+ 0.48 29.0 0.18569534
+ 0.49 32.0 0.17677669
+ 0.5 51.0 0.14002801
+ 0.51 55.0 0.13483997
+ 0.52 76.0 0.114707865
+ 0.53 143.0 0.0836242
+ 0.54 135.0 0.0860663
+ 0.55 93.0 0.10369517
+ 0.56 60.0 0.12909944
+ 0.57 47.0 0.145865
+ 0.58 48.0 0.14433756
+ 0.59 30.0 0.18257418
+ 0.6 26.0 0.19611613
+ 0.61 46.0 0.14744195
+ 0.62 61.0 0.12803689
+ 0.63 120.0 0.09128709
+ 0.64 227.0 0.06637233
+ 0.65 253.0 0.06286946
+ 0.66 155.0 0.08032193
+ 0.67 115.0 0.09325048
+ 0.68 147.0 0.08247861
+ 0.69 232.0 0.06565322
+ 0.7 221.0 0.06726728
+ 0.71 194.0 0.071795814
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(11)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(12)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(12)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 60.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 141.0 0.084215194
+ 0.01 116.0 0.09284767
+ 0.02 136.0 0.08574929
+ 0.03 101.0 0.09950372
+ 0.04 123.0 0.09016696
+ 0.05 196.0 0.071428575
+ 0.06 260.0 0.062017366
+ 0.07 298.0 0.057928443
+ 0.08 258.0 0.062257282
+ 0.09 114.0 0.09365858
+ 0.1 32.0 0.17677669
+ 0.11 26.0 0.19611613
+ 0.12 47.0 0.145865
+ 0.13 49.0 0.14285715
+ 0.14 47.0 0.145865
+ 0.15 49.0 0.14285715
+ 0.16 97.0 0.10153462
+ 0.17 132.0 0.08703883
+ 0.18 153.0 0.08084521
+ 0.19 64.0 0.125
+ 0.2 43.0 0.15249857
+ 0.21 40.0 0.15811388
+ 0.22 28.0 0.18898223
+ 0.23 32.0 0.17677669
+ 0.24 41.0 0.15617377
+ 0.25 61.0 0.12803689
+ 0.26 65.0 0.12403473
+ 0.27 117.0 0.09245003
+ 0.28 198.0 0.07106691
+ 0.29 199.0 0.07088812
+ 0.3 97.0 0.10153462
+ 0.31 111.0 0.0949158
+ 0.32 134.0 0.086386845
+ 0.33 135.0 0.0860663
+ 0.34 132.0 0.08703883
+ 0.35 217.0 0.06788442
+ 0.36 216.0 0.068041384
+ 0.37 126.0 0.089087084
+ 0.38 101.0 0.09950372
+ 0.39 149.0 0.081923194
+ 0.4 133.0 0.086711
+ 0.41 250.0 0.06324555
+ 0.42 381.0 0.051231552
+ 0.43 179.0 0.07474351
+ 0.44 65.0 0.12403473
+ 0.45 39.0 0.16012815
+ 0.46 28.0 0.18898223
+ 0.47 28.0 0.18898223
+ 0.48 35.0 0.16903085
+ 0.49 43.0 0.15249857
+ 0.5 48.0 0.14433756
+ 0.51 55.0 0.13483997
+ 0.52 60.0 0.12909944
+ 0.53 172.0 0.07624929
+ 0.54 134.0 0.086386845
+ 0.55 88.0 0.10660036
+ 0.56 54.0 0.13608277
+ 0.57 47.0 0.145865
+ 0.58 36.0 0.16666667
+ 0.59 29.0 0.18569534
+ 0.6 36.0 0.16666667
+ 0.61 43.0 0.15249857
+ 0.62 68.0 0.12126781
+ 0.63 144.0 0.083333336
+ 0.64 232.0 0.06565322
+ 0.65 150.0 0.08164966
+ 0.66 134.0 0.086386845
+ 0.67 132.0 0.08703883
+ 0.68 130.0 0.0877058
+ 0.69 147.0 0.08247861
+ 0.7 116.0 0.09284767
+ 0.71 179.0 0.07474351
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(12)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(13)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(13)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 65.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 46.0 0.14744195
+ 0.01 36.0 0.16666667
+ 0.02 63.0 0.12598816
+ 0.03 58.0 0.13130644
+ 0.04 71.0 0.11867817
+ 0.05 208.0 0.069337524
+ 0.06 257.0 0.062378287
+ 0.07 178.0 0.07495317
+ 0.08 171.0 0.07647191
+ 0.09 112.0 0.09449112
+ 0.1 55.0 0.13483997
+ 0.11 30.0 0.18257418
+ 0.12 37.0 0.16439898
+ 0.13 30.0 0.18257418
+ 0.14 32.0 0.17677669
+ 0.15 67.0 0.12216944
+ 0.16 100.0 0.1
+ 0.17 108.0 0.096225046
+ 0.18 103.0 0.09853293
+ 0.19 50.0 0.14142136
+ 0.2 37.0 0.16439898
+ 0.21 46.0 0.14744195
+ 0.22 31.0 0.1796053
+ 0.23 32.0 0.17677669
+ 0.24 42.0 0.15430336
+ 0.25 45.0 0.1490712
+ 0.26 82.0 0.11043153
+ 0.27 138.0 0.085125655
+ 0.28 219.0 0.06757374
+ 0.29 127.0 0.08873565
+ 0.3 127.0 0.08873565
+ 0.31 110.0 0.09534626
+ 0.32 96.0 0.10206208
+ 0.33 74.0 0.11624764
+ 0.34 63.0 0.12598816
+ 0.35 83.0 0.10976426
+ 0.36 72.0 0.11785113
+ 0.37 59.0 0.13018891
+ 0.38 66.0 0.12309149
+ 0.39 94.0 0.10314213
+ 0.4 120.0 0.09128709
+ 0.41 191.0 0.07235746
+ 0.42 333.0 0.05479966
+ 0.43 244.0 0.06401844
+ 0.44 145.0 0.08304548
+ 0.45 61.0 0.12803689
+ 0.46 25.0 0.2
+ 0.47 21.0 0.2182179
+ 0.48 31.0 0.1796053
+ 0.49 41.0 0.15617377
+ 0.5 46.0 0.14744195
+ 0.51 34.0 0.17149858
+ 0.52 75.0 0.11547005
+ 0.53 150.0 0.08164966
+ 0.54 149.0 0.081923194
+ 0.55 77.0 0.11396058
+ 0.56 56.0 0.13363062
+ 0.57 41.0 0.15617377
+ 0.58 29.0 0.18569534
+ 0.59 23.0 0.2085144
+ 0.6 31.0 0.1796053
+ 0.61 45.0 0.1490712
+ 0.62 88.0 0.10660036
+ 0.63 126.0 0.089087084
+ 0.64 186.0 0.073323555
+ 0.65 133.0 0.086711
+ 0.66 176.0 0.07537784
+ 0.67 111.0 0.0949158
+ 0.68 78.0 0.1132277
+ 0.69 52.0 0.13867505
+ 0.7 50.0 0.14142136
+ 0.71 43.0 0.15249857
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(13)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(14)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(14)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 70.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 21.0 0.2182179
+ 0.01 19.0 0.22941573
+ 0.02 13.0 0.2773501
+ 0.03 14.0 0.26726124
+ 0.04 46.0 0.14744195
+ 0.05 132.0 0.08703883
+ 0.06 242.0 0.06428243
+ 0.07 113.0 0.09407209
+ 0.08 117.0 0.09245003
+ 0.09 92.0 0.1042572
+ 0.1 51.0 0.14002801
+ 0.11 40.0 0.15811388
+ 0.12 44.0 0.15075567
+ 0.13 27.0 0.19245009
+ 0.14 38.0 0.16222142
+ 0.15 33.0 0.17407766
+ 0.16 52.0 0.13867505
+ 0.17 95.0 0.10259783
+ 0.18 78.0 0.1132277
+ 0.19 41.0 0.15617377
+ 0.2 34.0 0.17149858
+ 0.21 31.0 0.1796053
+ 0.22 19.0 0.22941573
+ 0.23 24.0 0.20412415
+ 0.24 38.0 0.16222142
+ 0.25 47.0 0.145865
+ 0.26 67.0 0.12216944
+ 0.27 123.0 0.09016696
+ 0.28 137.0 0.08543576
+ 0.29 116.0 0.09284767
+ 0.3 94.0 0.10314213
+ 0.31 66.0 0.12309149
+ 0.32 44.0 0.15075567
+ 0.33 42.0 0.15430336
+ 0.34 48.0 0.14433756
+ 0.35 40.0 0.15811388
+ 0.36 29.0 0.18569534
+ 0.37 27.0 0.19245009
+ 0.38 19.0 0.22941573
+ 0.39 48.0 0.14433756
+ 0.4 70.0 0.11952286
+ 0.41 218.0 0.06772855
+ 0.42 239.0 0.06468462
+ 0.43 162.0 0.07856742
+ 0.44 129.0 0.08804509
+ 0.45 72.0 0.11785113
+ 0.46 41.0 0.15617377
+ 0.47 31.0 0.1796053
+ 0.48 34.0 0.17149858
+ 0.49 35.0 0.16903085
+ 0.5 28.0 0.18898223
+ 0.51 37.0 0.16439898
+ 0.52 51.0 0.14002801
+ 0.53 115.0 0.09325048
+ 0.54 93.0 0.10369517
+ 0.55 67.0 0.12216944
+ 0.56 42.0 0.15430336
+ 0.57 33.0 0.17407766
+ 0.58 29.0 0.18569534
+ 0.59 22.0 0.21320072
+ 0.6 37.0 0.16439898
+ 0.61 53.0 0.13736056
+ 0.62 76.0 0.114707865
+ 0.63 98.0 0.101015255
+ 0.64 121.0 0.09090909
+ 0.65 137.0 0.08543576
+ 0.66 60.0 0.12909944
+ 0.67 50.0 0.14142136
+ 0.68 46.0 0.14744195
+ 0.69 35.0 0.16903085
+ 0.7 29.0 0.18569534
+ 0.71 26.0 0.19611613
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(14)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(15)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(15)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 75.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 20.0 0.2236068
+ 0.01 14.0 0.26726124
+ 0.02 20.0 0.2236068
+ 0.03 18.0 0.23570226
+ 0.04 31.0 0.1796053
+ 0.05 85.0 0.10846523
+ 0.06 145.0 0.08304548
+ 0.07 68.0 0.12126781
+ 0.08 79.0 0.11250879
+ 0.09 74.0 0.11624764
+ 0.1 53.0 0.13736056
+ 0.11 37.0 0.16439898
+ 0.12 24.0 0.20412415
+ 0.13 32.0 0.17677669
+ 0.14 31.0 0.1796053
+ 0.15 29.0 0.18569534
+ 0.16 47.0 0.145865
+ 0.17 81.0 0.11111111
+ 0.18 72.0 0.11785113
+ 0.19 18.0 0.23570226
+ 0.2 24.0 0.20412415
+ 0.21 20.0 0.2236068
+ 0.22 25.0 0.2
+ 0.23 23.0 0.2085144
+ 0.24 26.0 0.19611613
+ 0.25 27.0 0.19245009
+ 0.26 52.0 0.13867505
+ 0.27 76.0 0.114707865
+ 0.28 68.0 0.12126781
+ 0.29 85.0 0.10846523
+ 0.3 50.0 0.14142136
+ 0.31 42.0 0.15430336
+ 0.32 18.0 0.23570226
+ 0.33 30.0 0.18257418
+ 0.34 22.0 0.21320072
+ 0.35 41.0 0.15617377
+ 0.36 20.0 0.2236068
+ 0.37 15.0 0.2581989
+ 0.38 22.0 0.21320072
+ 0.39 11.0 0.30151135
+ 0.4 30.0 0.18257418
+ 0.41 106.0 0.097128585
+ 0.42 150.0 0.08164966
+ 0.43 100.0 0.1
+ 0.44 87.0 0.107211255
+ 0.45 51.0 0.14002801
+ 0.46 43.0 0.15249857
+ 0.47 12.0 0.28867513
+ 0.48 30.0 0.18257418
+ 0.49 22.0 0.21320072
+ 0.5 31.0 0.1796053
+ 0.51 26.0 0.19611613
+ 0.52 62.0 0.12700012
+ 0.53 89.0 0.10599979
+ 0.54 82.0 0.11043153
+ 0.55 53.0 0.13736056
+ 0.56 26.0 0.19611613
+ 0.57 16.0 0.25
+ 0.58 24.0 0.20412415
+ 0.59 28.0 0.18898223
+ 0.6 34.0 0.17149858
+ 0.61 35.0 0.16903085
+ 0.62 54.0 0.13608277
+ 0.63 55.0 0.13483997
+ 0.64 57.0 0.13245323
+ 0.65 65.0 0.12403473
+ 0.66 32.0 0.17677669
+ 0.67 28.0 0.18898223
+ 0.68 26.0 0.19611613
+ 0.69 28.0 0.18898223
+ 0.7 15.0 0.2581989
+ 0.71 23.0 0.2085144
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(15)
+
+
+#subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(16)
+
+_riet_meas_datafile_name '../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(16)'
+
+_riet_meas_datafile_format ?
+_pd_meas_angle_omega 19.2575
+_pd_meas_angle_chi 80.0
+_pd_meas_angle_phi 0.0
+_pd_meas_angle_eta 0.0
+_pd_meas_angle_2theta 38.515
+_pd_meas_energy_kev 0.0
+_riet_meas_datafile_compute true
+_riet_meas_datafile_fitting false
+_pd_meas_detector_id none
+_pd_meas_step_count_time 1.00
+_pd_meas_units_of_intensity counts
+_riet_meas_datafile_as_background false
+_riet_meas_data_group_count 1
+_riet_datafile_type 0
+_riet_datafile_save_custom ?
+_pd_meas_image_id -1
+_riet_background_interpolated_manual false
+_pd_meas_datetime_initiated 1984-01-01T00:00:00
+_pd_proc_ls_datafile_weight 1.0
+_riet_use_count_time false
+_riet_chebyshev_polynomial_background ?
+_pd_meas_counts_monitor 1.0 #positive #min 0.0 #max 10.0
+_riet_par_spec_displac_x_2R 0 #min -10.0 #max 10.0
+_riet_par_spec_displac_z_2R 0 #min -10.0 #max 10.0
+_riet_par_fluo_diffr_scale 1.0 #positive #min 0.0 #max 100.0
+
+
+#custom_object_intensity_data
+_pd_meas_number_of_points 72
+_riet_meas_datafile_calibrated false
+_riet_meas_datafile_dspacing_based false
+_riet_meas_datafile_energy_dispersive false
+_riet_meas_datafile_constant_step true
+loop_
+_pd_meas_position _pd_meas_intensity_total _pd_meas_intensity_sigma
+ 0.0 10.0 0.31622776
+ 0.01 8.0 0.35355338
+ 0.02 8.0 0.35355338
+ 0.03 6.0 0.4082483
+ 0.04 15.0 0.2581989
+ 0.05 12.0 0.28867513
+ 0.06 59.0 0.13018891
+ 0.07 46.0 0.14744195
+ 0.08 30.0 0.18257418
+ 0.09 39.0 0.16012815
+ 0.1 24.0 0.20412415
+ 0.11 29.0 0.18569534
+ 0.12 18.0 0.23570226
+ 0.13 11.0 0.30151135
+ 0.14 13.0 0.2773501
+ 0.15 25.0 0.2
+ 0.16 41.0 0.15617377
+ 0.17 52.0 0.13867505
+ 0.18 53.0 0.13736056
+ 0.19 27.0 0.19245009
+ 0.2 13.0 0.2773501
+ 0.21 19.0 0.22941573
+ 0.22 15.0 0.2581989
+ 0.23 13.0 0.2773501
+ 0.24 23.0 0.2085144
+ 0.25 19.0 0.22941573
+ 0.26 32.0 0.17677669
+ 0.27 35.0 0.16903085
+ 0.28 31.0 0.1796053
+ 0.29 39.0 0.16012815
+ 0.3 26.0 0.19611613
+ 0.31 15.0 0.2581989
+ 0.32 16.0 0.25
+ 0.33 26.0 0.19611613
+ 0.34 17.0 0.24253562
+ 0.35 19.0 0.22941573
+ 0.36 15.0 0.2581989
+ 0.37 18.0 0.23570226
+ 0.38 15.0 0.2581989
+ 0.39 13.0 0.2773501
+ 0.4 15.0 0.2581989
+ 0.41 45.0 0.1490712
+ 0.42 62.0 0.12700012
+ 0.43 62.0 0.12700012
+ 0.44 62.0 0.12700012
+ 0.45 47.0 0.145865
+ 0.46 39.0 0.16012815
+ 0.47 31.0 0.1796053
+ 0.48 22.0 0.21320072
+ 0.49 26.0 0.19611613
+ 0.5 21.0 0.2182179
+ 0.51 31.0 0.1796053
+ 0.52 52.0 0.13867505
+ 0.53 84.0 0.10910895
+ 0.54 76.0 0.114707865
+ 0.55 27.0 0.19245009
+ 0.56 18.0 0.23570226
+ 0.57 20.0 0.2236068
+ 0.58 20.0 0.2236068
+ 0.59 20.0 0.2236068
+ 0.6 24.0 0.20412415
+ 0.61 22.0 0.21320072
+ 0.62 39.0 0.16012815
+ 0.63 42.0 0.15430336
+ 0.64 28.0 0.18898223
+ 0.65 33.0 0.17407766
+ 0.66 26.0 0.19611613
+ 0.67 17.0 0.24253562
+ 0.68 26.0 0.19611613
+ 0.69 13.0 0.2773501
+ 0.7 15.0 0.2581989
+ 0.71 9.0 0.33333334
+
+#end_custom_object_intensity_data
+
+
+#custom_object_texture_factors
+_rita_texture_points_number 1
+
+#end_custom_object_texture_factors
+
+
+#end_subordinateObject_../Microbeam Collimator/Ti18_asrec/al_002_Ti18_asrec.xrdml(16)
+
+
+#custom_object_Fhkl
+
+#end_custom_object_Fhkl
+
+
+#end_subordinateObject_DataFileSet_x
+
+

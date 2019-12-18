@@ -1,0 +1,16 @@
+ Conversion program for binary BEARTEX format into misc. ASCII formats
+ -==Version 12.31.2017==-
+ (Compiled with Force2.0/gfortran)
+
+ Input binary ODF:
+    Y:\Texture\ARL\Maud\BearTex\XPert\Ti18asrec_xpert_alpha.YOD                
+
+ Tes Ti18 alpha                                                             
+ WIMV generated ODF                                                         
+ "Tes Ti18 alpha                                                            
+   11    1
+   2.923   2.923   4.671  90.000  90.000 120.000
+    0.00  360.00    5.00
+    0.00   90.00    5.00
+    0.00   60.00    5.00
+          13

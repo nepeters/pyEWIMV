@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xrdMeasurements xmlns="http://www.xrdml.com/XRDMeasurement/1.7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xrdml.com/XRDMeasurement/1.7 http://www.xrdml.com/XRDMeasurement/1.7/XRDMeasurement.xsd" status="Completed">
+	<comment>
+		<entry>Configuration=Chi-Phi-z stage 240 mm (reflection), Owner=User-1, Creation date=5/23/2017 1:55:25 PM</entry>
+		<entry>Goniometer=Theta/Theta; Minimum step size 2Theta:0.0001; Minimum step size Omega:0.0001</entry>
+		<entry>Sample stage=Chi-Phi-z stage 240 mm (reflection); Minimum step size Phi:0.01; Minimum step size Chi:0.01; Minimum step size Z:0.001</entry>
+		<entry>Diffractometer system=EMPYREAN</entry>
+		<entry>Measurement program=C:\PANalytical\Data Collector\Programs\Agnew\PF.xrdmp, Identifier={7BFD2093-01BA-4270-B8F9-2684A0011E7E}</entry>
+		<entry>Batch program=C:\PANalytical\Data Collector\Programs\Agnew\PF Collection Titanium.xrdmp, Identifier={F2E706EB-5E95-416E-8205-750EDBA3AA28}</entry>
+	</comment>
+	<sample type="To be analyzed">
+		<id></id>
+		<name></name>
+		<preparedBy></preparedBy>
+	</sample>
+	<xrdMeasurement measurementType="Texture pole figure" status="Completed" measurementStepAxis="Chi" sampleMode="Reflection">
+		<comment>
+			<entry>PHD Lower Level = 5.63 (keV), PHD Upper Level = 12.88 (keV)</entry>
+		</comment>
+		<usedWavelength intended="K-Alpha 1">
+			<kAlpha1 unit="Angstrom">1.5405980</kAlpha1>
+			<kAlpha2 unit="Angstrom">1.5444260</kAlpha2>
+			<kBeta unit="Angstrom">1.3922500</kBeta>
+			<ratioKAlpha2KAlpha1>0.5000</ratioKAlpha2KAlpha1>
+		</usedWavelength>
+		<incidentBeamPath>
+			<radius unit="mm">240.00</radius>
+			<xRayTube id="1010048" name="Empyrean Cu LFF HR (9430 033 7310x) DK416222">
+				<tension unit="kV">45.0</tension>
+				<current unit="mA">40.0</current>
+				<anodeMaterial>Cu</anodeMaterial>
+				<focus type="Line">
+					<length unit="mm">12.0</length>
+					<width unit="mm">0.4</width>
+					<takeOffAngle unit="deg">4.4</takeOffAngle>
+				</focus>
+			</xRayTube>
+			<xRayMirror id="27020009" name="Bragg-Brentano HD" hybrid="false">
+				<crystal type="Graded" shape="Flat">BB/HD</crystal>
+				<acceptanceAngle unit="deg">0.800</acceptanceAngle>
+				<length unit="mm">55.3</length>
+			</xRayMirror>
+			<divergenceSlit id="22010007" name="Fixed slit 1/8°" xsi:type="fixedDivergenceSlitType">
+				<distanceToSample unit="mm">140.00</distanceToSample>
+				<height unit="mm">0.19</height>
+			</divergenceSlit>
+		</incidentBeamPath>
+		<diffractedBeamPath>
+			<radius unit="mm">240.00</radius>
+			<parallelPlateCollimator id="25010002" name="Parallel plate collimator 0.18°">
+				<opening unit="deg">0.18</opening>
+			</parallelPlateCollimator>
+			<detector id="7010011" name="Proportional detector Xe" xsi:type="pointDetectorType">
+				<phd unit="%">
+					<lowerLevel>35.0</lowerLevel>
+					<upperLevel>80.0</upperLevel>
+				</phd>
+			</detector>
+		</diffractedBeamPath>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:27:54-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:29:08-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">48 48 58 54 54 55 56 46 66 69 48 59 56 63 56 67 54 50 57 54 46 50 51 68 41 49 50 54 66 61 53 57 49 57 49 64 60 59 58 44 47 51 54 55 45 57 41 44 51 54 60 62 59 60 58 58 64 40 55 58 68 73 58 37 61 59 52 51 53 59 45 59</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:29:44-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:30:58-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>5.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">23 25 26 29 27 25 26 40 34 27 29 48 28 48 41 73 63 56 65 68 65 64 47 44 38 49 35 40 39 31 45 33 36 34 37 28 40 27 32 33 37 34 38 50 44 44 44 44 45 44 66 57 60 63 47 72 46 60 56 48 47 51 52 42 33 32 29 27 34 35 13 33</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:31:34-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:32:48-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>10.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">18 15 11 12 14 11 19 19 20 19 24 28 43 45 73 72 94 92 76 75 66 59 46 31 33 33 20 22 21 25 24 13 24 22 24 18 17 21 26 40 35 36 35 51 44 47 68 65 82 56 61 81 76 72 80 71 51 63 53 39 38 31 25 25 17 11 18 16 12 10 12 12</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:33:24-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:34:38-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>15.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">9 11 8 4 15 8 10 8 14 9 11 20 14 32 53 68 102 97 97 90 73 52 33 26 25 13 19 14 14 21 18 23 17 18 16 27 27 20 21 28 20 24 18 14 26 32 43 42 56 60 88 84 92 92 98 62 73 56 38 29 15 19 16 11 9 14 12 12 13 9 8 11</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:35:14-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:36:28-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>20.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">9 8 11 11 10 10 5 8 13 9 15 9 14 21 39 66 92 122 140 117 45 40 15 11 11 14 13 13 13 19 10 21 15 17 28 17 18 16 10 17 15 12 22 25 27 24 32 34 48 52 82 103 153 142 146 80 63 33 23 22 15 15 9 14 8 8 15 11 12 14 17 9</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:37:04-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:38:18-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>25.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">16 10 10 11 14 12 5 7 7 7 12 19 10 22 17 58 116 142 151 82 49 23 10 12 17 13 10 9 8 13 18 27 29 29 23 18 13 18 8 7 9 16 7 9 15 14 22 17 20 35 51 74 138 128 126 82 46 30 16 18 16 12 10 10 10 12 6 15 19 25 28 40</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:38:53-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:40:08-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>30.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">239 141 101 78 47 21 23 15 8 10 10 10 18 10 33 76 127 186 202 84 29 19 9 16 10 10 13 11 8 10 12 23 33 48 86 102 72 35 13 15 21 14 9 9 9 6 12 9 15 41 50 138 161 184 113 63 35 17 14 14 10 8 14 8 17 12 21 43 84 133 256 358</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:40:43-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:41:57-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>35.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">122 149 139 148 115 76 54 32 19 16 13 6 13 10 28 56 124 199 241 103 33 17 19 15 12 10 12 12 10 9 29 57 128 209 261 229 165 100 122 91 69 38 7 9 9 11 8 11 10 28 61 176 354 356 179 65 20 21 14 10 18 14 10 15 12 22 34 52 68 95 95 139</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:42:33-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:43:47-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>40.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">14 24 19 52 79 116 132 104 61 21 12 4 11 19 17 46 139 245 341 216 69 26 14 23 12 9 11 17 16 37 66 79 79 64 94 87 46 23 38 47 87 87 72 43 27 8 16 7 24 24 53 191 455 504 223 49 17 15 16 11 7 8 9 17 18 32 39 33 19 25 27 17</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:44:23-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:45:37-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>45.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">9 11 12 21 26 38 84 144 114 50 15 9 18 13 22 90 208 357 253 241 75 43 18 23 14 15 17 19 16 43 36 31 29 27 22 20 11 11 17 14 10 40 82 179 75 13 15 10 14 27 51 169 336 460 282 107 30 21 18 8 7 13 23 26 32 25 25 11 8 7 10 14</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:46:13-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:47:27-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>50.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">9 8 12 10 17 12 21 67 119 123 36 10 10 13 23 58 138 207 322 237 114 45 35 21 15 17 23 28 27 21 16 17 17 21 10 19 6 13 10 15 12 18 34 113 154 33 18 9 13 32 45 71 158 297 259 60 22 16 11 22 9 18 46 34 17 14 19 11 14 11 13 10</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:48:02-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:49:17-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>55.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">6 11 7 10 7 10 8 17 62 130 66 9 12 12 18 55 114 194 196 128 76 38 20 21 23 28 33 27 15 11 13 10 9 13 11 12 3 10 16 9 10 12 36 39 95 76 34 11 25 16 40 44 207 266 142 42 18 15 12 7 27 40 95 36 7 8 9 10 10 11 13 12</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:49:52-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:51:06-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>60.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">16 11 10 19 3 10 13 12 25 83 124 24 15 16 24 42 66 96 116 87 84 45 24 15 14 37 38 21 16 7 20 8 12 17 16 5 15 16 8 14 11 9 16 11 66 157 60 17 11 12 22 48 168 171 101 41 16 12 13 16 23 120 130 35 13 7 8 11 11 7 21 17</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:51:42-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:52:56-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>65.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">20 17 14 12 16 7 10 15 15 125 287 46 10 15 28 30 43 78 79 79 48 37 16 17 16 55 68 10 11 14 11 25 10 13 16 12 14 16 6 5 6 13 10 7 49 329 62 15 12 10 15 20 78 111 84 35 16 32 16 14 20 153 73 17 13 11 9 16 14 13 26 29</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:53:32-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:54:46-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>70.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">23 18 11 17 10 6 14 9 16 64 147 25 11 19 30 32 57 102 89 49 27 21 16 8 13 78 41 12 8 8 13 21 43 23 26 13 14 13 6 11 12 7 8 6 24 175 70 23 6 18 13 21 68 108 76 32 27 17 11 13 13 62 41 15 11 9 11 13 16 28 28 37</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:55:21-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:56:36-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>75.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">67 33 16 22 7 9 10 5 8 9 20 19 12 17 23 34 57 89 46 39 30 14 21 6 16 32 10 13 10 11 16 16 27 20 55 49 35 13 12 8 10 5 5 4 16 55 47 18 17 20 17 23 36 70 70 41 21 15 11 4 21 74 14 8 13 12 16 22 26 30 42 78</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-06-23T18:57:11-04:00</startTimeStamp>
+				<endTimeStamp>2018-06-23T18:58:25-04:00</endTimeStamp>
+				<author>
+					<name>User</name>
+				</author>
+				<source>
+					<applicationSoftware version="5.5a">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="7.9j 20171025">EMPYREAN</instrumentControlSoftware>
+					<instrumentID>0000000011192939</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>57.2740</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>28.6370</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>80.00</commonPosition>
+				</positions>
+				<positions axis="Z" unit="mm">
+					<commonPosition>4.475</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">75 26 16 5 6 5 6 10 8 7 10 16 13 15 19 20 42 34 45 17 13 7 12 7 7 24 8 10 7 7 9 11 21 41 69 67 44 15 6 12 7 3 8 9 12 17 36 13 14 6 14 26 27 39 34 22 13 4 6 11 15 28 3 7 9 8 10 18 20 28 65 91</intensities>
+			</dataPoints>
+		</scan>
+	</xrdMeasurement>
+</xrdMeasurements>

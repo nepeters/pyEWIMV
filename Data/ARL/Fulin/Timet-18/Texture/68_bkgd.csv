@@ -1,0 +1,29 @@
+[Measurement conditions]
+Sample identification,
+Comment - 1,"Configuration=Open Eulerian Cradle (manual Z), Owner=User-1, Creation date=4/3/2012 1:39:10 PM"
+Comment - 2,"Goniometer=PW3050/60 (Theta/Theta); Minimum step size 2Theta:0.001; Minimum step size Omega:0.001"
+Comment - 3,"Sample stage=Open Eulerian Cradle (manual Z); Minimum step size Phi:0.01; Minimum step size Chi:0.01"
+Comment - 4,"Diffractometer system=XPERT-PRO"
+Comment - 5,"Measurement program=RP12L_bkgd, Owner=User-1, Creation date=8/20/2012 10:01:24 PM"
+Comment - 6,"Batch program=Titanium_texture, Owner=User-1, Creation date=8/14/2017 7:26:15 PM"
+Anode material,Cu
+K-Alpha1 wavelength,1.5405980
+K-Alpha2 wavelength,1.5444260
+Ratio K-Alpha2/K-Alpha1,0.500
+Receiving slit,0.10
+Monochromator used,YES
+Generator voltage, 45
+Tube current, 40
+File date and time,14/Aug/2017 21:08
+Unit cell,
+h k l, 0 0 0
+No. of scans, 17
+Psi range,0.00,80.00,5.00
+Phi range,0.00,0.00,0.0000000
+No. of points per scan, 1
+Scan type,STEP
+2Theta,68.000
+Omega,34.000
+Phi,0.00
+Time per step,2.00
+2228,2197,2169,2165,2288,2309,2249,2187,2167,2074,2186,2332,2171,2202,2013,1864,1411

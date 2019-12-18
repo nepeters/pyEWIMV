@@ -1,0 +1,776 @@
+data_global
+_audit_creation_date 'Mon Oct 12 15:11:53 PDT 1998'
+_audit_creation_method 'Maud, version 1.68'
+_audit_update_record 'Last update Tue Dec 26 09:57:08 GMT 2000'
+_computing_structure_refinement 'Maud, version 1.68'
+_pd_proc_ls_prof_R_factor '0.12916789'
+_pd_proc_ls_prof_wR_factor '0.16822314'
+_pd_proc_ls_prof_wR_expected '0.11063174'
+_pd_proc_info_author_name 'Luca Lutterotti'
+_pd_proc_title 'CuFe II specimen'
+_pd_proc_ls_extract_int 'end of iteration'
+_pd_proc_ls_texture_comp 'end of iteration'
+_computing_reduce_memory_occ 'true'
+_pd_proc_ls_theoretical_weight 'false'
+_pd_proc_ls_extract_pos 'end of iteration'
+_pd_proc_ls_strain_comp 'end of iteration'
+
+data_Instrument_IPNS_3
+_diffrn_measurement_device 'IPNS_3'
+_pd_proc_intensity_incident 0.21714780(4.97721E-4)
+_riet_par_asymmetry_truncation -0.04
+
+loop_
+_riet_par_asymmetry_value
+  58.23315264703177
+  -521.1983973085107
+  145.77676018922742
+
+loop_
+_riet_par_caglioti_value
+  8.142292747725859E-5
+  -0.4240390073397155
+  588.8248121975258
+
+loop_
+_riet_par_gaussian_value
+  0.0
+  0.0
+
+loop_
+_riet_par_2-theta_offset
+  -4.61665144e-4(1.41001E-5)
+
+
+#subordinateObject_IPNS/LANSCE Incident Spectrum
+
+_inst_intensity_calibration 'IPNS/LANSCE Incident Spectrum'
+
+_inst_inc_parameter_file 'iparm_s94.gpp'
+_instrument_counter_bank 'Bank 3'
+
+loop_
+_instrument_counter_bank_ID
+ 'Bank 3'
+
+loop_
+_inst_incident_spectrum_type
+ '2'
+
+
+loop_
+_inst_inc_spectrum_coeff_0
+  0.311925E+01
+
+loop_
+_inst_inc_spectrum_coeff_1
+  0.494393E+09
+
+loop_
+_inst_inc_spectrum_coeff_2
+  0.235432E+03
+
+loop_
+_inst_inc_spectrum_coeff_3
+  0.332860E+04
+
+loop_
+_inst_inc_spectrum_coeff_4
+  0.531141E-01
+
+loop_
+_inst_inc_spectrum_coeff_5
+  -0.364654E+04
+
+loop_
+_inst_inc_spectrum_coeff_6
+  0.164462E-01
+
+loop_
+_inst_inc_spectrum_coeff_7
+  0.173938E+04
+
+loop_
+_inst_inc_spectrum_coeff_8
+  0.406953E-02
+
+loop_
+_inst_inc_spectrum_coeff_9
+  0.000000E+00
+
+loop_
+_inst_inc_spectrum_coeff_10
+  0.000000E+00
+
+loop_
+_inst_inc_spectrum_coeff_11
+  0.000000E+00
+
+
+#end_subordinateObject_IPNS/LANSCE Incident Spectrum
+
+
+#subordinateObject_IPNS/LANSCE Bank
+
+_inst_angular_calibration 'IPNS/LANSCE Bank'
+
+_instrument_parameter_file 'iparm_s94.gpp'
+_instrument_counter_bank 'Bank 3'
+
+loop_
+_instrument_counter_bank_ID
+ 'Bank 3'
+
+
+loop_
+_instrument_bank_difc
+  7686.99
+
+loop_
+_instrument_bank_difa
+  0.49
+
+loop_
+_instrument_bank_zero
+  -4.55
+
+loop_
+_instrument_bank_tof_theta
+  90.00
+
+
+#end_subordinateObject_IPNS/LANSCE Bank
+
+
+#subordinateObject_IPNS/LANSCE TOF
+
+_pd_instr_geometry 'IPNS/LANSCE TOF'
+
+
+#end_subordinateObject_IPNS/LANSCE TOF
+
+
+#subordinateObject_TOF
+
+_diffrn_measurement_method 'TOF'
+
+
+#end_subordinateObject_TOF
+
+
+#subordinateObject_TOF
+
+_diffrn_radiation_type 'TOF'
+
+
+#end_subordinateObject_TOF
+
+
+#subordinateObject_TOF
+
+_diffrn_radiation_detector 'TOF'
+
+
+#end_subordinateObject_TOF
+
+
+#subordinateObject_none abs
+
+_exptl_absorpt_correction_type 'none abs'
+
+
+#end_subordinateObject_none abs
+
+data_phase_alfa-Fe
+_pd_phase_name 'alfa-Fe'
+_pd_phase_id 'alfa-Fe'
+_symmetry_cell_setting 'cubic'
+_symmetry_space_group_name_H-M 'Im-3m'
+_riet_Z_molecula_number '1'
+_exptl_absorpt_cryst_size '0'
+_riet_exp_texture_factors 'none'
+_cell_length_a 2.86737799(3.59854E-5)
+_riet_par_strain_thermal 0
+
+
+#subordinateObject_none tex
+
+_pd_proc_ls_pref_orient_corr 'none tex'
+
+
+#end_subordinateObject_none tex
+
+
+#subordinateObject_Delf
+
+_riet_size_strain_model 'Delf'
+
+
+#end_subordinateObject_Delf
+
+
+#subordinateObject_Isotropic
+
+_riet_sizestrain_sym_model 'Isotropic'
+
+_riet_par_cryst_size 903.245190(21.5207)
+_riet_par_rs_microstrain 0.00284537(3.53041E-5)
+
+#end_subordinateObject_Isotropic
+
+
+#subordinateObject_none abm
+
+_riet_antiphase_boundary 'none abm'
+
+
+#end_subordinateObject_none abm
+
+
+#subordinateObject_none pd
+
+_riet_planar_defect 'none pd'
+
+
+#end_subordinateObject_none pd
+
+
+#subordinateObject_no magnetic
+
+_riet_magnetic_structure_model 'no magnetic'
+
+
+#end_subordinateObject_no magnetic
+
+
+#subordinateObject_no strain
+
+_riet_par_strain_model 'no strain'
+
+
+#end_subordinateObject_no strain
+
+
+#subordinateObject_no stress
+
+_riet_par_stress_model 'no stress'
+
+
+#end_subordinateObject_no stress
+
+
+#subordinateObject_Fe1
+
+_atom_site_label 'Fe1'
+
+_atom_site_type_symbol 'FE'
+_atom_site_constraints '0'
+_atom_site_occupancy 1
+_atom_site_fract_x 0
+_atom_site_fract_y 0
+_atom_site_fract_z 0
+_atom_site_U_iso_or_equiv 0.35119384(0.00454)
+_atom_site_aniso_U_11 0.0
+_atom_site_aniso_U_22 0.0
+_atom_site_aniso_U_33 0.0
+_atom_site_aniso_U_23 0.0
+_atom_site_aniso_U_13 0.0
+_atom_site_aniso_U_12 0.0
+
+#end_subordinateObject_Fe1
+
+data_phase_Copper
+_pd_phase_name 'Copper'
+_pd_phase_id 'Copper'
+_symmetry_cell_setting 'cubic'
+_symmetry_space_group_name_H-M 'Fm-3m'
+_riet_Z_molecula_number '1'
+_exptl_absorpt_cryst_size '0'
+_riet_exp_texture_factors 'none'
+_cell_length_a 3.61586444(4.47941E-5)
+_riet_par_strain_thermal 0.0
+
+
+#subordinateObject_none tex
+
+_pd_proc_ls_pref_orient_corr 'none tex'
+
+
+#end_subordinateObject_none tex
+
+
+#subordinateObject_Delf
+
+_riet_size_strain_model 'Delf'
+
+
+#end_subordinateObject_Delf
+
+
+#subordinateObject_Isotropic
+
+_riet_sizestrain_sym_model 'Isotropic'
+
+_riet_par_cryst_size 620.744111(10.0413)
+_riet_par_rs_microstrain 0.00265867(3.61094E-5)
+
+#end_subordinateObject_Isotropic
+
+
+#subordinateObject_none
+
+_riet_antiphase_boundary 'none'
+
+
+#end_subordinateObject_none
+
+
+#subordinateObject_none
+
+_riet_planar_defect 'none'
+
+
+#end_subordinateObject_none
+
+
+#subordinateObject_no magnetic
+
+_riet_magnetic_structure_model 'no magnetic'
+
+
+#end_subordinateObject_no magnetic
+
+
+#subordinateObject_no strain
+
+_riet_par_strain_model 'no strain'
+
+
+#end_subordinateObject_no strain
+
+
+#subordinateObject_no stress
+
+_riet_par_stress_model 'no stress'
+
+
+#end_subordinateObject_no stress
+
+
+#subordinateObject_Cu1
+
+_atom_site_label 'Cu1'
+
+_atom_site_type_symbol 'CU'
+_atom_site_constraints '0'
+_atom_site_occupancy 1
+_atom_site_fract_x 0
+_atom_site_fract_y 0
+_atom_site_fract_z 0
+_atom_site_U_iso_or_equiv 0.35119384
+_atom_site_aniso_U_11 0.0
+_atom_site_aniso_U_22 0.00000000
+_atom_site_aniso_U_33 0.0
+_atom_site_aniso_U_23 0.0
+_atom_site_aniso_U_13 0.0
+_atom_site_aniso_U_12 0.0
+
+#end_subordinateObject_Cu1
+
+data_dataset_CuFeII_3
+_pd_meas_dataset_id 'CuFeII_3'
+_pd_meas_info_author_name 'IPNS Rudy'
+_riet_meas_datafile_format '?'
+_pd_proc_ls_background_function 'polinomial'
+_pd_proc_ls_profile_function '?'
+_pd_proc_ls_peak_cutoff '30'
+_diffrn_measurement_device 'IPNS_3'
+_pd_proc_2theta_range_min '0.5'
+_pd_proc_2theta_range_max '2.2'
+_pd_proc_2theta_range_inc '?'
+_diffrn_ambient_pressure '?'
+_diffrn_ambient_temperature '?'
+_riet_lorentz_restricted 'true'
+_riet_par_spec_displac_x 0.0
+_riet_par_spec_displac_y 0.0
+_riet_par_spec_displac_z 0.0
+
+loop_
+_riet_par_background_pol
+  0.20583689(0.00311)
+  -0.15639959(0.00866)
+  0.04324571(0.00877)
+  -5.98515771e-4(0.00419)
+  -6.23994504e-4(8.20293E-4)
+
+
+#subordinateObject_Le Bail
+
+_riet_intensity_extraction 'Le Bail'
+
+_riet_lebail_iteration_max '5'
+_riet_lebail_error_max '0.0050'
+_riet_lebail_range_factor '0.05'
+_riet_lebail_use_bkg 'true'
+_riet_lebail_use_hkl 'true'
+_riet_lebail_summation_delta '1.0E-4'
+
+#end_subordinateObject_Le Bail
+
+
+#subordinateObject_none pe
+
+_riet_position_extraction 'none pe'
+
+
+#end_subordinateObject_none pe
+
+
+#subordinateObject_none reflectivity
+
+_reflectivity_model_type 'none reflectivity'
+
+
+#end_subordinateObject_none reflectivity
+
+
+#subordinateObject_Region 1
+
+_pd_proc_info_excluded_regions 'Region 1'
+
+_riet_excl_2theta_range_min '0'
+_riet_excl_2theta_range_max '0'
+
+#end_subordinateObject_Region 1
+
+
+#subordinateObject_data/GPPD9088.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9088.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '0.0'
+_pd_meas_orientation_phi '0'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9088.GDA(3)
+
+
+#subordinateObject_data/GPPD9089.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9089.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '16.5'
+_pd_meas_orientation_phi '0'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9089.GDA(3)
+
+
+#subordinateObject_data/GPPD9090.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9090.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '16.5'
+_pd_meas_orientation_phi '60'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9090.GDA(3)
+
+
+#subordinateObject_data/GPPD9092.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9092.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '33.400000000000006'
+_pd_meas_orientation_phi '0'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9092.GDA(3)
+
+
+#subordinateObject_data/GPPD9093.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9093.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '28.799999999999997'
+_pd_meas_orientation_phi '30'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9093.GDA(3)
+
+
+#subordinateObject_data/GPPD9094.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9094.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '33.400000000000006'
+_pd_meas_orientation_phi '60'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9094.GDA(3)
+
+
+#subordinateObject_data/GPPD9095.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9095.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '28.799999999999997'
+_pd_meas_orientation_phi '90'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9095.GDA(3)
+
+
+#subordinateObject_data/GPPD9096.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9096.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '0'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9096.GDA(3)
+
+
+#subordinateObject_data/GPPD9097.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9097.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '15'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9097.GDA(3)
+
+
+#subordinateObject_data/GPPD9098.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9098.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '30'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9098.GDA(3)
+
+
+#subordinateObject_data/GPPD9099.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9099.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '45'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9099.GDA(3)
+
+
+#subordinateObject_data/GPPD9100.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9100.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '60'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9100.GDA(3)
+
+
+#subordinateObject_data/GPPD9101.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9101.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '75'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9101.GDA(3)
+
+
+#subordinateObject_data/GPPD9102.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9102.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '45.0'
+_pd_meas_orientation_phi '90'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9102.GDA(3)
+
+
+#subordinateObject_data/GPPD9091.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9091.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '16.5'
+_pd_meas_orientation_phi '120'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9091.GDA(3)
+
+
+#subordinateObject_data/GPPD9103.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9103.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '90.0'
+_pd_meas_orientation_phi '0'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9103.GDA(3)
+
+
+#subordinateObject_data/GPPD9104.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9104.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '90.0'
+_pd_meas_orientation_phi '30'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9104.GDA(3)
+
+
+#subordinateObject_data/GPPD9105.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9105.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '90.0'
+_pd_meas_orientation_phi '60'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9105.GDA(3)
+
+
+#subordinateObject_data/GPPD9106.GDA(3)
+
+_riet_meas_datafile_name 'data/GPPD9106.GDA(3)'
+
+_riet_meas_datafile_format '?'
+_pd_meas_orientation_omega '45'
+_pd_meas_orientation_chi '90.0'
+_pd_meas_orientation_phi '90'
+_riet_meas_datafile_compute 'true'
+_riet_meas_datafile_fitting 'false'
+
+
+#end_subordinateObject_data/GPPD9106.GDA(3)
+
+data_sample_CuFe2
+_pd_spec_id 'CuFe2'
+_pd_spec_shape 'cube'
+
+loop_
+_pd_meas_dataset_id
+ 'CuFeII_3'
+
+_pd_spec_orientation_omega 0.0
+_pd_spec_orientation_chi 0.0
+_pd_spec_orientation_phi 0.0
+_riet_par_spec_displac_x 0.0
+_riet_par_spec_displac_y 0.0
+_riet_par_spec_displac_z 0.0
+_pd_spec_size_axial 0.0
+_pd_spec_size_equat 0.0
+_pd_spec_size_thick 0.0
+_pd_spec_size_radius 0.0
+
+#subordinateObject_layer1
+
+_riet_spec_layer_id 'layer1'
+
+_riet_par_spec_layer_thickness 1.00000000e8
+_reflectivity_layer_critical_qc 0.04000000
+_reflectivity_layer_absorption 2.00000000e-7
+_reflectivity_layer_roughness 2.00000000
+
+loop_
+_pd_phase_atom_%
+  0.33677504
+  0.66322495(0.00212)
+
+
+#end_subordinateObject_layer1
+
+data_bound_none
+_riet_par_bound '60'
+_riet_par_bound_to '40'
+_riet_par_bound_ratio '1'
+_riet_par_bound_const '0'
+data_bound_none
+_riet_par_bound '62'
+_riet_par_bound_to '41'
+_riet_par_bound_ratio '1'
+_riet_par_bound_const '0'

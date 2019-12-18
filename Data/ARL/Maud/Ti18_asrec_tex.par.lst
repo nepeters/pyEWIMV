@@ -1,0 +1,898 @@
+Analysis title: Put a title here
+
+Refined parameters:
+
+0 Ti18_asrec_tex.par:Sample_x:layer1:_pd_phase_atom_%1 value:0.44955978 error:0.004775087
+1 Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol0 value:35.36989 error:25.708105
+2 Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol1 value:0.46377137 error:1.9569072
+3 Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol2 value:-0.02330211 error:0.053849176
+4 Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol3 value:1.8562132E-4 error:6.367163E-4
+5 Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol4 value:6.267913E-8 error:2.745546E-6
+6 Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:_pd_proc_intensity_incident value:5.234548 error:0.08722386
+7 Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Instrument disalignment:_riet_par_2-theta_offset0 value:-0.037504513 error:0.0039240983
+8 Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_length_a value:2.923327 error:2.8203698E-4
+9 Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_length_c value:4.672681 error:4.7297255E-4
+10 Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Isotropic:_riet_par_cryst_size value:2463.6038 error:108.380844
+11 Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Isotropic:_riet_par_rs_microstrain value:4.4700215E-4 error:8.844671E-5
+12 Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_B_iso_or_equiv value:6.6592402 error:0.15998699
+13 Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_length_a value:3.2187035 error:3.034035E-4
+14 Ti18_asrec_tex.par:Sample_x:Beta_Ti:Isotropic:_riet_par_cryst_size value:1432.0835 error:22.877275
+15 Ti18_asrec_tex.par:Sample_x:Beta_Ti:Isotropic:_riet_par_rs_microstrain value:6.3930325E-5 error:4.422828E-4
+
+Refinement final output indices:
+Global Rwp: 0.2531248
+Global Rp: 0.169607
+Global Rwpnb (no background): 0.33864513
+Global Rwpnb1 (no bkg rescaled): 0.28556156
+Global Rwpnb2 (no bkg rescaled^2): 0.26330954
+Global Rpnb (no background): 0.26299104
+Global Rpnb1 (no bkg rescaled): 0.20088388
+Global Rpnb2 (no bkg rescaled^2): 0.16845515
+Total energy: 0.0
+
+Refinement final output indices for single samples:
+Sample Sample_x :
+Sample Rwp: 0.2531248
+Sample Rp: 0.169607
+Sample Rwpnb (no background): 0.33864513
+Sample Rwpnb1 (no bkg rescaled): 0.28556156
+Sample Rwpnb2 (no bkg rescaled^2): 0.26330954
+Sample Rpnb (no background): 0.26299104
+Sample Rpnb1 (no bkg rescaled): 0.20088388
+Sample Rpnb2 (no bkg rescaled^2): 0.16845515
+Sample energy: 0.0
+
+Refinement final output indices for single datasets:
+DataSet abs :
+DataSet Rwp: 0.2531248
+DataSet Rp: 0.169607
+DataSet Rwpnb (no background): 0.33864513
+DataSet Rwpnb1 (no bkg rescaled): 0.28556156
+DataSet Rwpnb2 (no bkg rescaled^2): 0.26330954
+DataSet Rpnb (no background): 0.26299104
+DataSet Rpnb1 (no bkg rescaled): 0.20088388
+DataSet Rpnb2 (no bkg rescaled^2): 0.16845515
+
+Refinement final output indices for single spectra:
+Datafile Ti18_asrec_abs.xrdml(0) : Rwp: 0.2531248, Rp: 0.169607, Rwpnb: 0.33864513, Rwpnb1: 0.28556156, Rwpnb2: 0.26330954, Rpnb: 0.26299104Rpnb1: 0.20088388Rpnb2: 0.16845515
+
+Sample:Sample_x
+
+Phases:
+Alpha_Ti
+Density: 4.598421707051051
+Beta_Ti
+Density: 4.76889148315797
+
+             Object tree full informations
+
+
+                 Object: Ti18_asrec_tex.par
+
+String informations (CIF term, value) :
+_audit_creation_date, Tue Jul 10 09:28:16 EDT 2018
+_audit_creation_method, Maud, version 2.8
+_audit_update_record, Thu Jul 12 08:31:00 EDT 2018
+_computing_structure_refinement, Maud, version 2.8
+_refine_ls_R_factor_all, 0.169607
+_refine_ls_wR_factor_all, 0.2531248
+_refine_ls_goodness_of_fit_all, 0.12997396
+_publ_contact_author_name, Luca Lutterotti
+_publ_section_title, Put a title here
+_pd_proc_ls_extract_int, end of iteration
+_pd_proc_ls_texture_comp, end of iteration
+_computing_reduce_memory_occ, true
+_pd_proc_ls_theoretical_weight, false
+_pd_proc_ls_extract_pos, end of iteration
+_pd_proc_ls_strain_comp, end of iteration
+_pd_proc_ls_extract_Fhkl, end of iteration
+_pd_proc_ls_Fhkl_comp, end of iteration
+_pd_proc_ls_weight_scheme, sqrt
+_refine_ls_weighting_scheme, WgtSS
+_refine_ls_WSS_factor, 29071.59
+_maud_store_spectra_with_analysis, true
+_riet_remove_phases_under, 0.001
+_riet_refine_cell_over, 0.1
+_riet_refine_sizestrain_over, 0.1
+_riet_refine_crystal_structure_over, 0.1
+_riet_refine_texture_over, 0.15
+_riet_refine_strain_over, 0.25
+_pd_proc_ls_interpolation_comp, end of iteration
+_maud_analysis_name, Ti18_asrec_tex.par
+_maud_analysis_prog_number, 0
+_maud_store_structure_factors_with_analysis, true
+_maud_store_texture_factors_with_analysis, true
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: Marqardt Least Squares
+
+String informations (CIF term, value) :
+_refine_ls_number_iteration, 5
+_riet_refine_ls_precision, 0.00000001
+_riet_refine_ls_derivative_step, 0.0001
+_riet_refine_ls_lambda, 0.01
+_riet_refine_ls_double_derivative, false
+
+
+Loops of subordinate objects :
+ Object loop number 0 :
+  Object number 0 :
+
+                 Object: Sample_x
+
+String informations (CIF term, value) :
+_pd_spec_description, Sample description
+_riet_thin_film_phase_refinement, films
+_reflectivity_layer_qc_from_phases, false
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_orientation_omega  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_orientation_chi  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_orientation_phi  Value: 90, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_riet_par_spec_displac_x  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_riet_par_spec_displac_y  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_riet_par_spec_displac_z  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_size_axial  Value: 0, minimum: 0.0, maximum: 100.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_size_equat  Value: 0, minimum: 0.0, maximum: 100.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_size_thick  Value: 0, minimum: 0.0, maximum: 100.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_size_radius  Value: 0, minimum: 0.0, maximum: 100.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:_pd_spec_size_radius_y  Value: 0, minimum: 0.0, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: No shape
+
+ Subordinate object number 1 :
+
+                 Object: None Layer workout
+
+ Subordinate object number 2 :
+
+                 Object: No precession
+
+
+Loops of subordinate objects :
+ Object loop number 0 :
+  Object number 0 :
+
+                 Object: layer1
+
+       AtomSite   fractions
+n  label  atom  fraction(at)  fraction(wt)
+1) Ti 1.0 1.0
+
+String informations (CIF term, value) :
+_reflectivity_layer_qc_from_phases, false
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:layer1:_riet_par_spec_layer_thickness  Value: 1.0E7, minimum: 0.1, maximum: 1.0E8 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:layer1:_reflectivity_layer_critical_qc  Value: 0.04, minimum: 0.0010, maximum: 0.5 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:layer1:_reflectivity_layer_absorption  Value: 2.0E-7, minimum: 1.0E-8, maximum: 1.0E-5 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:layer1:_reflectivity_layer_roughness  Value: 2.0, minimum: 0.01, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+
+Parameter loop informations :
+Parameter loop number : 0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:layer1:_pd_phase_atom_%0  Value: 0.5504402, minimum: 0.0, maximum: 1.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:layer1:_pd_phase_atom_%1  Value: 0.44955978, minimum: 0.0, maximum: 34.24886 Status: refinable, error: +-0.004775087, only positive values permitted, minimum significant value: 0.0
+
+
+
+ Object loop number 1 :
+  Object number 0 :
+
+                 Object: abs
+
+String informations (CIF term, value) :
+_pd_meas_datetime_initiated, Date/time meas
+_pd_meas_info_author_name, 
+_riet_meas_datafile_format, 
+_pd_proc_ls_background_function, 
+_pd_proc_ls_profile_function, 
+_pd_proc_ls_peak_cutoff, 30
+_pd_proc_2theta_range_min, 0
+_pd_proc_2theta_range_max, 0
+_pd_proc_2theta_range_inc, 
+_diffrn_ambient_pressure, 
+_diffrn_ambient_temperature, 
+_riet_lorentz_restricted, true
+_riet_par_background_interpolated, false
+_riet_par_background_interpolation_range, 10
+_riet_meas_dataset_compute, true
+_riet_meas_datafile_replace, false
+_riet_meas_dataset_random_texture, false
+_maud_background_add_automatic, false
+_maud_interpolated_background_iterations, 10
+_pd_proc_ls_datafile_weight, 1.0
+_riet_meas_dataset_no_strain, false
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_exp_shift  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_exp_thermal_shift  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_spec_orientation_omega  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_spec_orientation_chi  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_spec_orientation_phi  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_meas_orientation_omega_offset  Value: 0, minimum: 0, maximum: 0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_meas_orientation_chi_offset  Value: 0, minimum: 0, maximum: 0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_meas_orientation_phi_offset  Value: 0, minimum: 0, maximum: 0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_pd_meas_orientation_eta_offset  Value: 0, minimum: 0, maximum: 0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_spec_displac_x  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_spec_displac_y  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_spec_displac_z  Value: 0, minimum: 0.0, maximum: 0.0 Status: not refinable, minimum significant value: 0.0
+
+Parameter loop informations :
+Parameter loop number : 0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol0  Value: 35.36989, minimum: 10000.0, maximum: -10000.0 Status: refinable, error: +-25.708105, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol1  Value: 0.46377137, minimum: -77.26483, maximum: 1.0807426 Status: refinable, error: +-1.9569072, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol2  Value: -0.02330211, minimum: -77.26483, maximum: 0.0 Status: refinable, error: +-0.053849176, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol3  Value: 1.8562132E-4, minimum: -86.82664, maximum: 71.03998 Status: refinable, error: +-6.367163E-4, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:_riet_par_background_pol4  Value: 6.267913E-8, minimum: -86.82664, maximum: 71.03998 Status: refinable, error: +-2.745546E-6, minimum significant value: 0.0
+
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: Le Bail
+
+String informations (CIF term, value) :
+_riet_lebail_iteration_max, 5
+_riet_lebail_error_max, 0.0050
+_riet_lebail_range_factor, 0.05
+_riet_lebail_use_bkg, true
+_riet_lebail_use_hkl, true
+_riet_lebail_summation_delta, 1.0E-4
+
+ Subordinate object number 1 :
+
+                 Object: none pe
+
+ Subordinate object number 2 :
+
+                 Object: none reflectivity
+
+ Subordinate object number 3 :
+
+                 Object: Diffraction Instrument
+
+String informations (CIF term, value) :
+_diffrn_measurement_device_type, Diffraction Instrument
+_maud_optional_intensity_factor, 1.0
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:_pd_proc_intensity_incident  Value: 5.234548, minimum: 0.0, maximum: 10000.0 Status: refinable, error: +-0.08722386, only positive values permitted, minimum significant value: 0.0
+
+Parameter loop informations :
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: none cal
+
+ Subordinate object number 1 :
+
+                 Object: Instrument disalignment
+
+Parameter loop informations :
+Parameter loop number : 0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Instrument disalignment:_riet_par_2-theta_offset0  Value: -0.037504513, minimum: -2.09, maximum: 0.07223146 Status: refinable, error: +-0.0039240983, minimum significant value: 0.0
+
+
+ Subordinate object number 2 :
+
+                 Object: Bragg-Brentano
+
+String informations (CIF term, value) :
+_diffrn_radiation_monochromator, filtered
+_pd_instr_2theta_monochr_post, 0
+_pd_instr_dist_src/samp, 175.0
+_pd_instr_monochr_pre_spec, filtered
+_pd_instr_2theta_monochr_pre, 0
+_pd_instr_divg_eq_src/samp, 0.0
+_pd_instr_divg_slit_auto, false
+_pd_instr_divg_ax_src/samp, 0.0
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Bragg-Brentano:_diffrn_radiation_polarisn_norm  Value: 0, minimum: 0.0, maximum: 360.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Bragg-Brentano:_diffrn_radiation_polarisn_ratio  Value: 0, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+
+ Subordinate object number 3 :
+
+                 Object: Theta-2Theta
+
+ Subordinate object number 4 :
+
+                 Object: X-ray tube
+
+String informations (CIF term, value) :
+_diffrn_dynamical_scattering_correction, true
+_diffrn_dynamical_scattering_correction_crystallite, false
+
+ Subordinate object number 5 :
+
+                 Object: Scintillation
+
+ Subordinate object number 6 :
+
+                 Object: Caglioti PV
+
+String informations (CIF term, value) :
+_riet_caglioti_d_dep, true
+_riet_asymmetry_tan_dep, true
+_riet_omega/chi_broadening_convoluted, false
+_riet_par_asymmetry_truncation, 0.4
+_riet_par_asymmetry_reciprocal, false
+
+Parameter loop informations :
+Parameter loop number : 0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_asymmetry_value0  Value: 72.17134, minimum: 5.0, maximum: 1000.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_asymmetry_value1  Value: -0.229337, minimum: -10.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+
+Parameter loop number : 1
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_caglioti_value0  Value: 0.00252935, minimum: -0.1, maximum: 0.1 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_caglioti_value1  Value: 0.002716717, minimum: -0.3, maximum: 0.3 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_caglioti_value2  Value: 0.002312246, minimum: -0.5, maximum: 0.5 Status: not refinable, minimum significant value: 0.0
+
+Parameter loop number : 2
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_gaussian_value0  Value: 0, minimum: -1.0, maximum: 2.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Diffraction Instrument:Caglioti PV:_riet_par_gaussian_value1  Value: 0.012, minimum: -0.1, maximum: 0.1 Status: not refinable, minimum significant value: 0.0
+
+
+ Subordinate object number 7 :
+
+                 Object: none abs
+
+
+Loops of subordinate objects :
+
+ Subordinate object number 4 :
+
+                 Object: none fluorescence
+
+
+Loops of subordinate objects :
+ Object loop number 2 :
+  Object number 0 :
+
+                 Object: Ti18_asrec_abs.xrdml(0)
+
+String informations (CIF term, value) :
+_riet_meas_datafile_format, 
+_pd_meas_angle_omega, 0
+_pd_meas_angle_chi, 0.0
+_pd_meas_angle_phi, 0.0
+_pd_meas_angle_eta, 0.0
+_pd_meas_angle_2theta, 0
+_pd_meas_energy_kev, 0
+_riet_meas_datafile_compute, true
+_riet_meas_datafile_fitting, false
+_pd_meas_detector_id, none
+_pd_meas_step_count_time, 27.555
+_pd_meas_units_of_intensity, counts
+_riet_meas_datafile_as_background, false
+_riet_meas_data_group_count, 1
+_riet_datafile_type, 0
+_riet_datafile_save_custom, 
+_pd_meas_image_id, -1
+_riet_background_interpolated_manual, false
+_pd_meas_datetime_initiated, 
+_pd_proc_ls_datafile_weight, 1.0
+_riet_use_count_time, false
+_riet_chebyshev_polynomial_background, 
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Ti18_asrec_abs.xrdml(0):_pd_meas_counts_monitor  Value: 1.0, minimum: 0.0, maximum: 10.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Ti18_asrec_abs.xrdml(0):_riet_par_spec_displac_x_2R  Value: 0, minimum: -10.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Ti18_asrec_abs.xrdml(0):_riet_par_spec_displac_z_2R  Value: 0, minimum: -10.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:abs:Ti18_asrec_abs.xrdml(0):_riet_par_fluo_diffr_scale  Value: 1.0, minimum: 0.0, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+
+Parameter loop informations :
+
+
+
+
+ Object loop number 2 :
+  Object number 0 :
+
+                 Object: Alpha_Ti
+
+       General position
+1)  +x  |  +y  |  +z
+2)  +x-y  |  +x  |  +z+0.5
+3)  -y  |  +x-y  |  +z
+4)  -x  |  -y  |  +z+0.5
+5)  -x+y  |  -x  |  +z
+6)  +y  |  -x+y  |  +z+0.5
+7)  +x-y  |  -y  |  -z
+8)  -x  |  -x+y  |  -z
+9)  +y  |  +x  |  -z
+10)  -y  |  -x  |  -z+0.5
+11)  -x+y  |  +y  |  -z+0.5
+12)  +x  |  +x-y  |  -z+0.5
+13)  -x  |  -y  |  -z
+14)  -x+y  |  -x  |  -z+0.5
+15)  +y  |  -x+y  |  -z
+16)  +x  |  +y  |  -z+0.5
+17)  +x-y  |  +x  |  -z
+18)  -y  |  +x-y  |  -z+0.5
+19)  -x+y  |  +y  |  +z
+20)  +x  |  +x-y  |  +z
+21)  -y  |  -x  |  +z
+22)  +y  |  +x  |  +z+0.5
+23)  +x-y  |  -y  |  +z+0.5
+24)  -x  |  -x+y  |  +z+0.5
+
+       AtomSite list
+n  label  symbol  quantity  occupancy  x  y  z  multiplicity  B  radius  weight  neutron scattering  neutron absorption
+1)  Ti 2.0 1.0 0.33333 0.66667 0.25000 2 6.6592402 1.45 47.883
+
+
+       Atomic fractions
+n  label  atomic fraction
+1) Ti 1.0
+
+       Reflection list
+n  h  k  l  multiplicity  d-space  crystallite(Angstrom)  microstrain
+1)  1 0 0 6 2.531675445568952 
+2)  0 0 2 2 2.3363404999999995 
+3)  1 0 1 12 2.2259542062414894 
+4)  1 0 2 12 1.7169506897536302 
+5)  1 1 0 6 1.4616635 
+6)  1 0 3 12 1.3266013056633519 
+7)  2 0 0 6 1.265837722784476 
+8)  1 1 2 12 1.2391422424409466 
+9)  2 0 1 12 1.2217988405745273 
+10)  0 0 4 2 1.1681702499999997 
+11)  2 0 2 12 1.1129771031207447 
+12)  1 0 4 12 1.0606982174420962 
+
+String informations (CIF term, value) :
+_chemical_name_common, Alpha_Ti
+_chemical_formula_sum, Ti
+_symmetry_cell_setting, hexagonal
+_symmetry_Int_Tables_number, 1
+_symmetry_space_group_name_sch, C1^1
+_symmetry_space_group_name_H-M, P63/mmc
+_symmetry_space_group_name_Hall, P1
+_cell_formula_units_Z, 1
+_refine_ls_d_res_low, 0
+_refine_ls_d_res_high, 5000
+_reflns_d_resolution_low, 0.7
+_reflns_d_resolution_high, 50
+_maud_sg_centering_type, P
+_chemical_name_mineral, Unknown
+_chemical_name_systematic, Unknown
+
+Loop of string informations (CIF term, value) :
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_length_a  Value: 2.923327, minimum: 5.0, maximum: 30.0 Status: refinable, error: +-2.8203698E-4, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_length_b  Value: 2.923327, minimum: 5.0, maximum: 30.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_length_c  Value: 4.672681, minimum: 5.0, maximum: 30.0 Status: refinable, error: +-4.7297255E-4, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_angle_alpha  Value: 90, minimum: 90.0, maximum: 120.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_angle_beta  Value: 90, minimum: 90.0, maximum: 120.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_cell_angle_gamma  Value: 120, minimum: 90.0, maximum: 120.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_riet_par_strain_thermal  Value: 0, minimum: -0.1, maximum: 0.1 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_exptl_absorpt_cryst_size  Value: 0, minimum: 0.001, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:_riet_par_phase_scale_factor  Value: 1.0, minimum: 0.0, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: WIMV
+
+String informations (CIF term, value) :
+_rita_generate_symmetry, none
+_rita_wimv_sum_coincidence, true
+_rita_wimv_iteration_max, 20
+_rita_wimv_Rp_minimum, 1.0
+_rita_wimv_speed_minimum, 0.01
+_rita_wimv_exponent, 2.0
+_rita_wimv_RPO_level, 0.05
+_rita_wimv_zigzag_factor, 1.1
+_rita_wimv_zigzag, enabled
+_rita_wimv_ODF_optimization, Rp
+_rita_wimv_refl_min_int, 0.02
+_rita_odf_sharpness, 
+_rita_wimv_odf_resolution, 5
+_rita_odf_refinable, false
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: Triangular
+
+String informations (CIF term, value) :
+_rita_interpol_dist_control, 20.0
+_rita_interpol_polar_angle_max, 90.0
+_rita_interpol_minimum_angle, 20.0
+_rita_interpol_degree, 1
+
+
+Loops of subordinate objects :
+
+ Subordinate object number 1 :
+
+                 Object: Delft
+
+ Subordinate object number 2 :
+
+                 Object: Isotropic
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Isotropic:_riet_par_cryst_size  Value: 2463.6038, minimum: 50.0, maximum: 5000.0 Status: refinable, error: +-108.380844, only positive values permitted, minimum significant value: 5.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Isotropic:_riet_par_rs_microstrain  Value: 4.4700215E-4, minimum: 0.0, maximum: 0.005 Status: refinable, error: +-8.844671E-5, only positive values permitted, minimum significant value: 1.0E-4
+
+ Subordinate object number 3 :
+
+                 Object: none abm
+
+ Subordinate object number 4 :
+
+                 Object: none pd
+
+ Subordinate object number 5 :
+
+                 Object: no magnetic
+
+ Subordinate object number 6 :
+
+                 Object: no strain
+
+ Subordinate object number 7 :
+
+                 Object: No microabsorption
+
+ Subordinate object number 8 :
+
+                 Object: Atomic Structure
+
+String informations (CIF term, value) :
+_riet_structure_quantity_from_occupancy, true
+_refine_ls_energy_weight, 1.0
+_riet_structure_use_U_dimensionless, false
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: No force field
+
+
+Loops of subordinate objects :
+ Object loop number 0 :
+  Object number 0 :
+
+                 Object: Ti
+
+String informations (CIF term, value) :
+_atom_site_type_symbol, dummy
+_atom_site_constraints, 
+_atom_type_number_in_cell, 2.0
+_atom_site_calc_flag, .
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_occupancy  Value: 1.0, minimum: 0.0, maximum: 1.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_fract_x  Value: 0.33333, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_fract_y  Value: 0.66667, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_fract_z  Value: 0.25000, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_B_iso_or_equiv  Value: 6.6592402, minimum: -1.0, maximum: 10.0 Status: refinable, error: +-0.15998699, minimum significant value: 0.0
+       Parameters bounded to this parameter:
+          Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_B_iso_or_equiv
+
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_aniso_B_11  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_aniso_B_22  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_aniso_B_33  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_aniso_B_12  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_aniso_B_13  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_aniso_B_23  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+
+
+
+ Subordinate object number 9 :
+
+                 Object: atomic standard model
+
+ Subordinate object number 10 :
+
+                 Object: Le Bail
+
+String informations (CIF term, value) :
+_riet_lebail_iteration_max, 5
+_riet_lebail_error_max, 0.005
+_riet_lebail_range_factor, 0.05
+_riet_lebail_use_bkg, true
+_riet_lebail_summation_delta, 1.0E-4
+_riet_lebail_use_previous_factors, true
+
+ Subordinate object number 11 :
+
+                 Object: None TDS
+
+
+Loops of subordinate objects :
+
+  Object number 1 :
+
+                 Object: Beta_Ti
+
+       General position
+1)  +x  |  +y  |  +z
+2)  -y  |  +x  |  +z
+3)  -x  |  -y  |  +z
+4)  +y  |  -x  |  +z
+5)  +x  |  -z  |  +y
+6)  +x  |  -y  |  -z
+7)  +x  |  +z  |  -y
+8)  +z  |  +y  |  -x
+9)  -x  |  +y  |  -z
+10)  -z  |  +y  |  +x
+11)  +z  |  +x  |  +y
+12)  +y  |  +z  |  +x
+13)  -y  |  -z  |  +x
+14)  +z  |  -x  |  -y
+15)  -y  |  +z  |  -x
+16)  -z  |  -x  |  +y
+17)  -z  |  +x  |  -y
+18)  +y  |  -z  |  -x
+19)  +y  |  +x  |  -z
+20)  -y  |  -x  |  -z
+21)  -x  |  +z  |  +y
+22)  -x  |  -z  |  -y
+23)  +z  |  -y  |  +x
+24)  -z  |  -y  |  -x
+25)  -x  |  -y  |  -z
+26)  +y  |  -x  |  -z
+27)  +x  |  +y  |  -z
+28)  -y  |  +x  |  -z
+29)  -x  |  +z  |  -y
+30)  -x  |  +y  |  +z
+31)  -x  |  -z  |  +y
+32)  -z  |  -y  |  +x
+33)  +x  |  -y  |  +z
+34)  +z  |  -y  |  -x
+35)  -z  |  -x  |  -y
+36)  -y  |  -z  |  -x
+37)  +y  |  +z  |  -x
+38)  -z  |  +x  |  +y
+39)  +y  |  -z  |  +x
+40)  +z  |  +x  |  -y
+41)  +z  |  -x  |  +y
+42)  -y  |  +z  |  +x
+43)  -y  |  -x  |  +z
+44)  +y  |  +x  |  +z
+45)  +x  |  -z  |  -y
+46)  +x  |  +z  |  +y
+47)  -z  |  +y  |  -x
+48)  +z  |  +y  |  +x
+49)  +x+0.5  |  +y+0.5  |  +z+0.5
+50)  -y+0.5  |  +x+0.5  |  +z+0.5
+51)  -x+0.5  |  -y+0.5  |  +z+0.5
+52)  +y+0.5  |  -x+0.5  |  +z+0.5
+53)  +x+0.5  |  -z+0.5  |  +y+0.5
+54)  +x+0.5  |  -y+0.5  |  -z+0.5
+55)  +x+0.5  |  +z+0.5  |  -y+0.5
+56)  +z+0.5  |  +y+0.5  |  -x+0.5
+57)  -x+0.5  |  +y+0.5  |  -z+0.5
+58)  -z+0.5  |  +y+0.5  |  +x+0.5
+59)  +z+0.5  |  +x+0.5  |  +y+0.5
+60)  +y+0.5  |  +z+0.5  |  +x+0.5
+61)  -y+0.5  |  -z+0.5  |  +x+0.5
+62)  +z+0.5  |  -x+0.5  |  -y+0.5
+63)  -y+0.5  |  +z+0.5  |  -x+0.5
+64)  -z+0.5  |  -x+0.5  |  +y+0.5
+65)  -z+0.5  |  +x+0.5  |  -y+0.5
+66)  +y+0.5  |  -z+0.5  |  -x+0.5
+67)  +y+0.5  |  +x+0.5  |  -z+0.5
+68)  -y+0.5  |  -x+0.5  |  -z+0.5
+69)  -x+0.5  |  +z+0.5  |  +y+0.5
+70)  -x+0.5  |  -z+0.5  |  -y+0.5
+71)  +z+0.5  |  -y+0.5  |  +x+0.5
+72)  -z+0.5  |  -y+0.5  |  -x+0.5
+73)  -x+0.5  |  -y+0.5  |  -z+0.5
+74)  +y+0.5  |  -x+0.5  |  -z+0.5
+75)  +x+0.5  |  +y+0.5  |  -z+0.5
+76)  -y+0.5  |  +x+0.5  |  -z+0.5
+77)  -x+0.5  |  +z+0.5  |  -y+0.5
+78)  -x+0.5  |  +y+0.5  |  +z+0.5
+79)  -x+0.5  |  -z+0.5  |  +y+0.5
+80)  -z+0.5  |  -y+0.5  |  +x+0.5
+81)  +x+0.5  |  -y+0.5  |  +z+0.5
+82)  +z+0.5  |  -y+0.5  |  -x+0.5
+83)  -z+0.5  |  -x+0.5  |  -y+0.5
+84)  -y+0.5  |  -z+0.5  |  -x+0.5
+85)  +y+0.5  |  +z+0.5  |  -x+0.5
+86)  -z+0.5  |  +x+0.5  |  +y+0.5
+87)  +y+0.5  |  -z+0.5  |  +x+0.5
+88)  +z+0.5  |  +x+0.5  |  -y+0.5
+89)  +z+0.5  |  -x+0.5  |  +y+0.5
+90)  -y+0.5  |  +z+0.5  |  +x+0.5
+91)  -y+0.5  |  -x+0.5  |  +z+0.5
+92)  +y+0.5  |  +x+0.5  |  +z+0.5
+93)  +x+0.5  |  -z+0.5  |  -y+0.5
+94)  +x+0.5  |  +z+0.5  |  +y+0.5
+95)  -z+0.5  |  +y+0.5  |  -x+0.5
+96)  +z+0.5  |  +y+0.5  |  +x+0.5
+
+       AtomSite list
+n  label  symbol  quantity  occupancy  x  y  z  multiplicity  B  radius  weight  neutron scattering  neutron absorption
+1)  Ti 2.0 1.0 0 0 0 2 6.6592402 1.45 47.883
+
+
+       Atomic fractions
+n  label  atomic fraction
+1) Ti 1.0
+
+       Reflection list
+n  h  k  l  multiplicity  d-space  crystallite(Angstrom)  microstrain
+1)  1 1 0 12 2.275967071478875 
+2)  2 0 0 6 1.60935175 
+3)  2 1 1 24 1.3140302013850527 
+4)  2 2 0 12 1.1379835357394374 
+
+String informations (CIF term, value) :
+_chemical_name_common, Beta_Ti
+_chemical_formula_sum, Ti
+_symmetry_cell_setting, cubic
+_symmetry_Int_Tables_number, 1
+_symmetry_space_group_name_sch, C1^1
+_symmetry_space_group_name_H-M, Im-3m
+_symmetry_space_group_name_Hall, P1
+_cell_formula_units_Z, 1
+_refine_ls_d_res_low, 0
+_refine_ls_d_res_high, 5000
+_reflns_d_resolution_low, 0.7
+_reflns_d_resolution_high, 50
+_maud_sg_centering_type, P
+_chemical_name_mineral, Unknown
+_chemical_name_systematic, Unknown
+
+Loop of string informations (CIF term, value) :
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_length_a  Value: 3.2187035, minimum: 5.0, maximum: 30.0 Status: refinable, error: +-3.034035E-4, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_length_b  Value: 3.2187035, minimum: 5.0, maximum: 30.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_length_c  Value: 3.2187035, minimum: 5.0, maximum: 30.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_angle_alpha  Value: 90, minimum: 90.0, maximum: 120.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_angle_beta  Value: 90, minimum: 90.0, maximum: 120.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_cell_angle_gamma  Value: 90, minimum: 90.0, maximum: 120.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_riet_par_strain_thermal  Value: 0, minimum: -0.1, maximum: 0.1 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_exptl_absorpt_cryst_size  Value: 0, minimum: 0.001, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:_riet_par_phase_scale_factor  Value: 1.0, minimum: 0.0, maximum: 100.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: WIMV
+
+String informations (CIF term, value) :
+_rita_generate_symmetry, none
+_rita_wimv_sum_coincidence, true
+_rita_wimv_iteration_max, 20
+_rita_wimv_Rp_minimum, 1.0
+_rita_wimv_speed_minimum, 0.01
+_rita_wimv_exponent, 2.0
+_rita_wimv_RPO_level, 0.05
+_rita_wimv_zigzag_factor, 1.1
+_rita_wimv_zigzag, enabled
+_rita_wimv_ODF_optimization, Rp
+_rita_wimv_refl_min_int, 0.02
+_rita_odf_sharpness, 
+_rita_wimv_odf_resolution, 5
+_rita_odf_refinable, false
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: Triangular
+
+String informations (CIF term, value) :
+_rita_interpol_dist_control, 20.0
+_rita_interpol_polar_angle_max, 90.0
+_rita_interpol_minimum_angle, 20.0
+_rita_interpol_degree, 1
+
+
+Loops of subordinate objects :
+
+ Subordinate object number 1 :
+
+                 Object: Delft
+
+ Subordinate object number 2 :
+
+                 Object: Isotropic
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Isotropic:_riet_par_cryst_size  Value: 1432.0835, minimum: 50.0, maximum: 5000.0 Status: refinable, error: +-22.877275, only positive values permitted, minimum significant value: 5.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Isotropic:_riet_par_rs_microstrain  Value: 6.3930325E-5, minimum: 0.0, maximum: 0.005 Status: refinable, error: +-4.422828E-4, only positive values permitted, minimum significant value: 1.0E-4
+
+ Subordinate object number 3 :
+
+                 Object: none abm
+
+ Subordinate object number 4 :
+
+                 Object: none pd
+
+ Subordinate object number 5 :
+
+                 Object: no magnetic
+
+ Subordinate object number 6 :
+
+                 Object: no strain
+
+ Subordinate object number 7 :
+
+                 Object: No microabsorption
+
+ Subordinate object number 8 :
+
+                 Object: Atomic Structure
+
+String informations (CIF term, value) :
+_riet_structure_quantity_from_occupancy, true
+_refine_ls_energy_weight, 1.0
+_riet_structure_use_U_dimensionless, false
+
+Subordinate objects :
+ Subordinate object number 0 :
+
+                 Object: No force field
+
+
+Loops of subordinate objects :
+ Object loop number 0 :
+  Object number 0 :
+
+                 Object: Ti
+
+String informations (CIF term, value) :
+_atom_site_type_symbol, dummy
+_atom_site_constraints, 
+_atom_type_number_in_cell, 2.0
+_atom_site_calc_flag, .
+
+Parameter informations :
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_occupancy  Value: 1.0, minimum: 0.0, maximum: 1.0 Status: not refinable, only positive values permitted, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_fract_x  Value: 0, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_fract_y  Value: 0, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_fract_z  Value: 0, minimum: 0.0, maximum: 1.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_B_iso_or_equiv  Value: 6.6592402, minimum: -1.0, maximum: 10.0 Status: equal to 0 + 1 * Ti18_asrec_tex.par:Sample_x:Alpha_Ti:Atomic Structure:Ti:_atom_site_B_iso_or_equiv, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_aniso_B_11  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_aniso_B_22  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_aniso_B_33  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_aniso_B_12  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_aniso_B_13  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+- Parameter:  Ti18_asrec_tex.par:Sample_x:Beta_Ti:Atomic Structure:Ti:_atom_site_aniso_B_23  Value: 0, minimum: -1.0, maximum: 10.0 Status: not refinable, minimum significant value: 0.0
+
+
+
+ Subordinate object number 9 :
+
+                 Object: atomic standard model
+
+ Subordinate object number 10 :
+
+                 Object: Le Bail
+
+String informations (CIF term, value) :
+_riet_lebail_iteration_max, 5
+_riet_lebail_error_max, 0.005
+_riet_lebail_range_factor, 0.05
+_riet_lebail_use_bkg, true
+_riet_lebail_summation_delta, 1.0E-4
+_riet_lebail_use_previous_factors, true
+
+ Subordinate object number 11 :
+
+                 Object: None TDS
+
+
+Loops of subordinate objects :
+
+
+
+
+

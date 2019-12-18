@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xrdMeasurements xmlns="http://www.xrdml.com/XRDMeasurement/1.5" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xrdml.com/XRDMeasurement/1.5 http://www.xrdml.com/XRDMeasurement/1.5/XRDMeasurement.xsd" status="Completed">
+	<comment>
+		<entry>Configuration=Open Eulerian Cradle, Owner=User-1, Creation date=6/5/2018 4:51:53 PM</entry>
+		<entry>Goniometer=PW3050/60 (Theta/Theta); Minimum step size 2Theta:0.001; Minimum step size Omega:0.001</entry>
+		<entry>Sample stage=Open Eulerian Cradle (manual Z); Minimum step size Phi:0.01; Minimum step size Chi:0.01</entry>
+		<entry>Diffractometer system=XPERT-PRO</entry>
+		<entry>Measurement program=Aluminum, Owner=User-1, Creation date=6/14/2018 5:47:59 PM</entry>
+		<entry>Batch program=Al_PFS, Owner=User-1, Creation date=6/21/2018 10:31:58 AM</entry>
+	</comment>
+	<sample type="To be analyzed">
+		<id>1_mid</id>
+		<name></name>
+		<preparedBy></preparedBy>
+	</sample>
+	<xrdMeasurement measurementType="Texture pole figure" status="Completed" measurementStepAxis="Chi" sampleMode="Reflection">
+		<comment>
+			<entry>60Chi</entry>
+		</comment>
+		<usedWavelength intended="K-Alpha 1">
+			<kAlpha1 unit="Angstrom">1.5405980</kAlpha1>
+			<kAlpha2 unit="Angstrom">1.5444260</kAlpha2>
+			<kBeta unit="Angstrom">1.3922500</kBeta>
+			<ratioKAlpha2KAlpha1>0.5000</ratioKAlpha2KAlpha1>
+		</usedWavelength>
+		<incidentBeamPath>
+			<radius unit="mm">240.00</radius>
+			<xRayTube id="1010048" name="Empyrean XRD tube Cu LFF HR DK302959">
+				<tension unit="kV">45</tension>
+				<current unit="mA">40</current>
+				<anodeMaterial>Cu</anodeMaterial>
+				<focus type="Point">
+					<length unit="mm">12.0</length>
+					<width unit="mm">0.4</width>
+					<takeOffAngle unit="deg">6.0</takeOffAngle>
+				</focus>
+			</xRayTube>
+			<filter id="20010004" name="Beta-filter Nickel">
+				<material>Ni</material>
+				<thickness unit="mm">0.020</thickness>
+			</filter>
+		</incidentBeamPath>
+		<diffractedBeamPath>
+			<radius unit="mm">240.00</radius>
+			<parallelPlateCollimator id="25010002" name="Parallel plate collimator 0.18°">
+				<opening unit="deg">0.18</opening>
+			</parallelPlateCollimator>
+			<detector id="7010011" name="Proportional detector Xe" xsi:type="pointDetectorType">
+				<phd>
+					<lowerLevel unit="%">35.0</lowerLevel>
+					<upperLevel unit="%">80.0</upperLevel>
+				</phd>
+			</detector>
+		</diffractedBeamPath>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:07:20-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:08:32-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>0.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2337 1473 1168 1530 1040 1006 880 1073 1312 2342 3218 2538 1433 1341 904 813 867 1027 878 1215 1155 1478 1209 1196 1213 1871 1131 1050 1256 1498 2065 1620 1327 1627 1062 1755 1363 1019 1205 1118 1684 1106 1771 1076 1781 1806 1580 1556 1948 934 1201 2126 1875 2071 2611 1861 1231 942 788 1043 3569 1378 966 1031 939 879 1152 1351 1749 1941 2246 3546</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:08:40-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:09:53-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>5.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2759 1734 1513 1354 1427 1626 2002 1535 1886 2540 3231 2575 1227 1032 1401 1038 1407 2142 1820 1488 1509 2413 1559 1465 1599 2143 1441 1105 1823 1668 1829 1840 1920 1460 1695 1753 1324 1680 1707 2099 1963 2273 1255 825 2033 2993 2872 1398 1702 1844 2005 1889 1468 1609 1946 1094 945 1380 1448 2329 3117 1919 1112 1199 1390 1500 1517 898 2128 2133 2126 2836</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:10:01-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:11:14-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>10.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1831 1052 1943 1480 1162 2382 2217 1895 2018 1564 1466 1580 1636 1105 2439 1566 1710 1797 2578 1719 1343 1773 1423 1969 1811 1451 2314 1625 1714 2562 2282 3031 1954 2640 2131 2311 1828 2187 2502 2142 2231 2756 1695 1503 1542 3211 3625 1789 1320 1542 1914 1402 1028 1479 1581 1392 1953 1959 1568 1442 1207 1942 1096 1251 1130 2090 2195 1562 1635 2019 2193 1868</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:11:22-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:12:35-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>15.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1883 1760 2512 2133 2544 2798 2961 2008 2383 2052 1629 1562 2025 2259 2722 2337 1761 1917 1933 1808 1469 1964 1791 2062 1968 1749 2822 2390 2310 2509 3225 3497 3367 3622 2184 2826 2784 2575 2474 2092 1885 3336 2445 2540 1889 2511 2463 2094 1284 1316 1478 1345 1509 2021 1510 1818 1602 1551 1443 2119 1554 1914 1636 2241 1209 2455 1973 2468 2184 2930 2558 2639</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:12:43-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:13:56-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>20.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">3369 2260 2623 3285 2726 2774 2261 2603 3103 2879 1931 2515 2503 2744 2498 2943 2201 1919 2506 2477 2242 2079 1824 2047 1893 3331 3401 2814 3102 2658 3284 3115 4012 2895 3335 2660 3696 3142 2754 3412 2166 2542 2558 3016 2429 2511 1974 2232 1991 2357 1627 1975 2462 2245 2268 1837 2081 2007 2406 3194 2549 2234 2178 2605 2654 2181 2047 2485 2831 2834 2563 2585</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:14:03-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:15:16-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>25.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">3694 2856 4030 3677 4054 2245 2377 3078 2841 3158 2360 2920 2207 3041 3055 2835 2733 2293 3458 2799 2689 2592 2445 2530 2231 3439 2877 2825 4033 3021 3250 3112 3167 3085 3124 3011 3970 3752 3719 4152 2530 3679 3145 3188 2668 2267 2644 2969 2236 2484 2445 2808 2575 2176 2575 3320 2526 2935 2548 2476 3586 2799 2769 2879 3288 2934 2754 2751 3690 4086 3658 3311</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:15:24-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:16:37-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>30.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">3792 3693 3970 3607 3679 3365 3357 2748 2519 2643 2594 3198 3076 3380 3167 3317 3844 3723 3000 3222 2521 2804 3169 3104 2669 2861 2784 2709 3517 3132 3092 2795 3286 3559 3928 3155 3544 2905 3550 3537 3065 3773 3755 3401 2576 2579 3487 2983 2410 2885 2857 3150 3052 2556 2864 3970 3852 3520 2768 2327 2723 2570 3406 2875 3093 3395 3517 3670 4463 4829 3768 4310</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:16:46-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:17:58-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>35.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">3551 3762 3228 3993 3887 3523 3832 2870 2700 3264 3059 3139 3772 4608 3611 3792 3682 3882 3272 3546 2893 2961 3115 3216 3031 3010 3150 3217 3551 3256 3307 3072 3385 4241 3035 3091 3618 3127 3182 2997 3509 3587 3975 3569 3275 3535 3401 3476 2977 3521 3561 3347 3297 3596 2841 3622 3287 3214 3557 2965 2552 2294 3453 2986 3150 3828 3754 3556 3947 3201 3406 4634</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:18:07-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:19:20-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>40.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2754 2765 3208 3683 4145 3514 3957 3802 3796 3833 3430 3570 3633 4213 4258 4137 3419 3874 3703 3670 3340 3764 3280 3937 3542 3848 3666 4793 4858 4302 4573 3589 3900 3590 2413 2298 2279 2654 2943 2527 3668 4111 4670 4131 4580 4552 3531 3759 3875 3764 3948 4248 3311 3511 3734 3616 3481 3498 3478 3453 3157 2801 4419 3531 3880 3554 4189 3633 3151 3084 3283 3044</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:19:28-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:20:41-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>45.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1872 2252 2787 3084 3880 3987 4317 5474 5940 5391 4510 4097 4585 3850 4079 4445 3734 3947 3278 3587 3238 4078 3877 4903 4744 5548 4898 6160 5955 5111 4883 3662 3559 2405 2119 2296 2300 2137 2503 2762 3706 5084 5696 5909 6101 6720 5572 4558 4443 3799 3754 3874 3609 4059 4027 3525 3552 3424 3715 3775 3454 4418 5728 5442 5515 5802 4971 4252 2791 2698 2380 1946</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:20:49-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:22:02-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>50.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1936 1575 2422 3306 4349 4833 5615 6182 7153 7633 5742 5388 5070 4533 3658 3852 4234 3954 3227 3483 3746 3597 4490 4864 5634 6214 7254 6930 7070 5310 5753 4367 2926 2172 2007 2324 2374 1928 2348 2687 3454 5101 5589 6904 7933 8022 6796 5522 4886 4243 3898 3749 3728 4319 3686 3676 3856 3640 4220 4180 5302 5746 6835 6799 8004 6522 4622 4214 3226 2272 2178 2020</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:22:11-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:23:23-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>55.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2173 1981 2252 2694 4098 4788 6089 6589 7381 7121 7045 5612 4974 4320 4019 3569 3675 4110 3762 3942 3731 3365 4362 5043 4853 6823 8268 8164 7591 5771 5720 4178 2966 2263 2090 2172 1665 1741 2102 2384 2991 4424 5426 6319 8335 8182 6423 5217 5205 4643 3496 3490 4403 4514 4280 3856 3859 3640 4079 5172 6283 7290 8947 8270 8121 6196 4872 4368 3246 2378 2634 2337</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:23:28-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:24:41-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>60.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2162 1868 2148 2634 3447 4217 5575 5791 6249 6404 6134 5214 5229 4473 3812 4065 3977 4041 4029 3757 3295 3180 3495 4335 4285 5888 6279 6977 6627 5001 4307 3341 2605 2439 1963 1907 2057 1764 2033 2337 2734 3717 4145 5085 7157 7331 6314 5368 4612 4421 3723 3412 3918 4638 4005 4140 3894 3952 4097 4369 5584 6731 7819 7487 7743 5743 4398 4103 2886 2686 2723 2356</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:24:50-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:26:03-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>65.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1839 1680 2276 2514 2652 3174 4117 4792 5592 5490 4858 4102 3622 3517 3454 3558 2885 3461 3284 3260 3106 2950 3151 3356 4024 4847 5143 5234 5216 3686 3427 2719 2600 2195 2133 2252 1883 2109 2183 2174 2709 2696 3541 4018 5616 5284 4856 4394 3465 3092 3456 3176 3566 4326 3980 4014 3528 3646 3445 3899 4775 5220 6149 5859 5517 4410 4022 3502 2833 2444 2691 2097</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:26:12-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:27:24-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>70.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2056 1891 2095 2290 2460 2981 3136 3768 4507 3988 3862 3446 2995 2771 3069 2866 2352 2652 3181 2789 2558 2893 2529 2647 2977 3341 3629 3886 3929 3223 3372 2817 2628 2326 2354 2061 1959 2212 2135 2159 2529 2738 3190 3476 3747 3979 3957 3321 2904 2861 2968 2743 3123 3622 3874 3468 3129 3120 2533 3038 3408 4145 4419 4441 4025 3580 3056 2754 2807 2597 2594 1920</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:27:33-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:28:46-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>75.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">2045 1858 2074 2244 2453 2739 2870 3185 3392 3179 3126 2891 2707 2505 2415 2207 2532 2465 2531 2289 2132 2181 2113 2403 2457 2630 3258 3157 3282 3145 3154 3296 2929 2701 2601 2029 2061 2297 2292 2721 2845 3204 3113 3156 3180 3146 3140 2588 2733 2306 2598 2326 2823 2744 2979 3098 2474 2507 2520 2622 2671 3020 3396 3345 3614 2974 2880 2932 2655 2265 2295 2070</intensities>
+			</dataPoints>
+		</scan>
+		<scan appendNumber="0" mode="Continuous" scanAxis="Phi" status="Completed">
+			<header>
+				<startTimeStamp>2018-08-09T18:28:51-04:00</startTimeStamp>
+				<endTimeStamp>2018-08-09T18:30:04-04:00</endTimeStamp>
+				<author>
+					<name>ms6pb</name>
+				</author>
+				<source>
+					<applicationSoftware version="3.0c">Data Collector</applicationSoftware>
+					<instrumentControlSoftware version="2.1A">XPERT-PRO</instrumentControlSoftware>
+					<instrumentID>0000000014024241</instrumentID>
+				</source>
+			</header>
+			<dataPoints>
+				<positions axis="2Theta" unit="deg">
+					<commonPosition>38.189</commonPosition>
+				</positions>
+				<positions axis="Omega" unit="deg">
+					<commonPosition>19.094</commonPosition>
+				</positions>
+				<positions axis="Phi" unit="deg">
+					<startPosition>2.50</startPosition>
+					<endPosition>357.50</endPosition>
+				</positions>
+				<positions axis="Chi" unit="deg">
+					<commonPosition>80.00</commonPosition>
+				</positions>
+				<commonCountingTime unit="seconds">1.00</commonCountingTime>
+				<intensities unit="counts">1944 1848 2054 2276 2539 2616 2768 2938 2678 2746 2477 2290 2160 1994 1921 1720 1915 1712 1728 1693 1645 1587 1641 1882 2344 2352 2801 2537 2827 2931 3230 3287 3155 2480 2323 2148 2028 2328 2433 2759 3230 3454 3121 2756 2763 2785 2806 2338 2197 2042 1880 1885 1989 1865 1912 1970 2023 2076 2052 2140 2274 2598 2587 2480 2847 2763 2609 2866 2420 2123 2009 1910</intensities>
+			</dataPoints>
+		</scan>
+	</xrdMeasurement>
+</xrdMeasurements>
