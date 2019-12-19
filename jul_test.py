@@ -26,11 +26,12 @@ dir_path = os.path.dirname(os.path.realpath('__file__'))
 data_path = os.path.join(dir_path, 'Data', 'HB2B')
 
 hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
+re_hkls = np.array([(1,1,1), (2,0,0), (2,2,0)])
 P = 1
 crystalSym = 'm-3m'
 sampleSym = '1'
-cellSize = np.deg2rad(10)
-theta = np.deg2rad(10)
+cellSize = np.deg2rad(5)
+theta = np.deg2rad(5)
 omega = np.radians(np.arange(0,360+5,5))
 
 pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
@@ -41,6 +42,7 @@ pfs = [pf222path,pf311path,pf400path]
 pf = poleFigure(pfs, hkls, crystalSym, 'jul')
 od = bunge(cellSize, crystalSym, sampleSym)
 hkls = normalize(hkls)
+re_hkls = normalize(re_hkls)
 
 """ ones for refl_wgt """
 
@@ -53,7 +55,7 @@ hkl_str = [''.join(tuple(map(str,h))) for h in hkls]
 
 """ rotate """
 
-rot = R.from_euler('ZXZ',(90,90,90), degrees=True).as_dcm()
+rot = R.from_euler('ZXZ',(87,90,90), degrees=True).as_dcm()
 pf.rotate(rot)
 
 """ only use proper rotations """
@@ -69,9 +71,9 @@ quatSymOps = quatSymOps.transpose((2,0,1))
 
 """ search for unique hkls to save time """
 
-hkls_loop, uni_hkls_idx, hkls_loop_idx = np.unique(hkls,axis=0,return_inverse=True,return_index=True)
-symHKL_loop = symmetrise(crystalSym, hkls_loop)
-symHKL_loop = normalize(symHKL_loop)
+re_hkls_loop, uni_re_hkls_idx, re_hkls_loop_idx = np.unique(re_hkls,axis=0,return_inverse=True,return_index=True)
+sym_reHKL_loop = symmetrise(crystalSym, re_hkls_loop)
+sym_reHKL_loop = normalize(sym_reHKL_loop)
 
 """ gen quats from bunge grid """
 
@@ -228,12 +230,12 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             
             egrid_trun[fi][yi] = bungeAngs[query_uni]
             
-    return nn_gridPts, nn_gridDist, fibre_e, egrid_trun
+    return nn_gridPts, nn_gridDist
 
-nn_gridPts, nn_gridDist, fibre_q, egrid = calcFibre(pf.symHKL,pf.y,qgrid,omega,rad,tree,euc_rad)
-tempPts_full, tempDist_full, fibre_e_full, egrid_trun = calcFibre(symHKL_loop,xyz_pf,qgrid,omega,rad,tree,euc_rad)
+nn_gridPts, nn_gridDist = calcFibre(pf.symHKL,pf.y,qgrid,omega,rad,tree,euc_rad)
+tempPts_full, tempDist_full = calcFibre(sym_reHKL_loop,xyz_pf,qgrid,omega,rad,tree,euc_rad)
  
-for i,hi in enumerate(hkls_loop_idx):
+for i,hi in enumerate(re_hkls_loop_idx):
 
     nn_gridPts_full[i] = tempPts_full[hi]
     nn_gridDist_full[i] = tempDist_full[hi]
@@ -401,4 +403,4 @@ for i in tqdm(range(iterations)):
 
 clevels = np.arange(0,5.5,0.5)
 recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=clevels,cmap='magma')
-recalc_pf_full[iterations-1].export('/Users/nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/NRSF2 10res 10rad')
+recalc_pf_full[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/NRSF2 5res 6rad')

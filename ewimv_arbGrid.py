@@ -36,8 +36,8 @@ P = 1
 
 crystalSym = 'm-3m'
 sampleSym = '1'
-cellSize = np.deg2rad(10)
-theta = np.deg2rad(10)
+cellSize = np.deg2rad(5)
+theta = np.deg2rad(5)
 
 hkls = []
 files = []
@@ -175,7 +175,7 @@ qgrid_pos[qgrid_pos[:,0] < 0] *= -1
 tree = KDTree(qgrid_pos)
 
 rad = ( 1 - np.cos(theta) ) / 2
-euc_rad = 4*np.sin(theta)**2
+euc_rad = 4*np.sin(1.25*theta)**2
     
 def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
     
@@ -268,10 +268,10 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             
             egrid_trun[fi][yi] = bungeAngs[query_uni]
             
-    return nn_gridPts, nn_gridDist, fibre_e, egrid_trun
+    return nn_gridPts, nn_gridDist
 
-nn_gridPts, nn_gridDist, fibre_q, egrid = calcFibre(pf.symHKL,pf.y,qgrid,omega,rad,tree,euc_rad)
-tempPts_full, tempDist_full, fibre_e_full, egrid_trun = calcFibre(symHKL_loop,xyz_pf,qgrid,omega,rad,tree,euc_rad)
+nn_gridPts, nn_gridDist = calcFibre(pf.symHKL,pf.y,qgrid,omega,rad,tree,euc_rad)
+tempPts_full, tempDist_full = calcFibre(symHKL_loop,xyz_pf,qgrid,omega,rad,tree,euc_rad)
  
 for i,hi in enumerate(hkls_loop_idx):
 
