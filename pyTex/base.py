@@ -196,6 +196,38 @@ class poleFigure(object):
             except:
                 pass
 
+        elif pf_type == 'jul':
+
+            """ HB-2B """
+
+            self.data = {}
+            self.y = {}
+            self.y_pol = {}
+            self.hkl = hkls
+            self._numHKL = len(hkls)
+
+            for i,(f,h) in enumerate(zip(files,hkls)):
+
+                if f.endswith('.jul') and os.path.exists(f):
+
+                    temp = np.genfromtxt(f,skip_header=2)
+
+                    self.data[i] = temp[:,2]
+
+                    temp[:,1] = np.where(temp[:,1] < 0, temp[:,1]+360, temp[:,1])
+                    self.y_pol[i] = np.deg2rad(temp[:,:2]) #alpha, beta
+
+                    xyz_pf = np.zeros((self.y_pol[i].shape[0],3))
+                    xyz_pf[:,0] = np.sin( self.y_pol[i][:,0] ) * np.cos( self.y_pol[i][:,1] )
+                    xyz_pf[:,1] = np.sin( self.y_pol[i][:,0] ) * np.sin( self.y_pol[i][:,1] )
+                    xyz_pf[:,2] = np.cos( self.y_pol[i][:,0] )
+
+                    self.y[i] = xyz_pf
+                    
+            self.subtype = 'nd_poleFig'
+            self.symHKL = symmetrise(cs,hkls)
+            self.symHKL = normalize(self.symHKL)            
+
         else: raise NotImplementedError('pf type not recognized')
         
     def plot( self, plt_type='contour', cmap='magma_r', contourlevels=None, pfs='all' ):
