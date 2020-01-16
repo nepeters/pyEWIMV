@@ -95,7 +95,7 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
     calc_od = {}
     recalc_pf = {}
 
-    for i in _tqdm(range(iterations)):
+    for i in _tqdm(range(iterations),position=0):
         
         """ first iteration, skip recalc of PF """
         
@@ -155,20 +155,23 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
         recalc_pf[i].normalize()
         
         """ compare recalculated to experimental """
+            
+        RP_err = {}
+        prnt_str = None
         
-    #    RP_err = {}
-    #    prnt_str = None
-       
-    #    for fi in range(numPoles):
-           
-    #        expLim = pfs.data[fi].shape
-    #        RP_err[fi] = ( pfs.data[fi] - recalc_pf[i].data[fi][:expLim[0],:expLim[1]] ) / pfs.data[fi]
-    #        RP_err[fi] = _np.sum(RP_err[fi])
-           
-    #        if prnt_str is None: prnt_str = 'RP Error: {}'.format(round(RP_err[fi],ndigits=2))
-    #        else: prnt_str += ' | {}'.format(round(RP_err[fi],ndigits=2))
-           
-    #    print(prnt_str)
+        _np.seterr(divide='ignore')
+
+        for fi in range(numPoles):
+            
+            expLim = pfs.data[fi].shape
+            RP_err[fi] = _np.abs( recalc_pf[i].data[fi][:expLim[0],:expLim[1]] - pfs.data[fi] ) / recalc_pf[i].data[fi][:expLim[0],:expLim[1]]
+            RP_err[fi][_np.isinf(RP_err[fi])] = 0
+            RP_err[fi] = _np.sqrt(_np.mean(RP_err[fi]**2))
+            
+            if prnt_str is None: prnt_str = 'RMS Error: {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
+            else: prnt_str += ' | {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
+            
+        _tqdm.write(prnt_str)
             
         """ (i+1)th inversion """
 
@@ -202,14 +205,14 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
                     
             calc_od[i+1][:,fi] = _np.power(od_data,(1/numHKLs[fi]))
         
-        calc_od[i+1] = calc_od[i].weights * _np.power(_np.product(calc_od[i+1],axis=1),(1/numPoles))
+        calc_od[i+1] = calc_od[i].weights * _np.power(_np.product(calc_od[i+1],axis=1),(0.8/numPoles))
         
         #place into OD object
         calc_od[i+1] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[i+1])
         calc_od[i+1].normalize()    
 
 
-    if ret_pointer is True: return recalc_pf, calc_od, pf_od, od_pf
+    if ret_pointer is True: return recalc_pf, calc_od, pf_od, od_pf, prnt_str
     else: return recalc_pf, calc_od
     
 def e_wimv( exp_pfs, orient_dist ):

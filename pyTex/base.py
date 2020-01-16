@@ -206,8 +206,6 @@ class poleFigure(object):
 
             else:
 
-                print('test')
-
                 for i,h in enumerate(hkls):
                                     
                     #reuse files variable... may not be clear
@@ -268,8 +266,10 @@ class poleFigure(object):
 
             if self.subtype != 'poleFig':
 
-                raise NotImplementedError('plotting not supported for bkgd/defocus')
-            
+                if self.subtype != 'recalc':
+
+                    raise NotImplementedError('plotting not supported for bkgd/defocus')
+
             fig, axes = plt.subplots(rows, cols, subplot_kw=dict(polar=True))
 
             if proj == 'stereo': plt_alpha = (np.pi/2)*np.tan(copy.deepcopy(self.alpha)/2)

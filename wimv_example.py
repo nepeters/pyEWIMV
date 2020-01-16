@@ -6,50 +6,51 @@ Created on Thu Nov 28 10:16:57 2019
 @author: nate
 """
 
-import sys
+import sys,os
 import numpy as np
 
-sys.path.insert(0,'/home/nate/wimv')
+filepath = os.path.dirname(os.path.abspath(__file__))
 
-from pyTex import poleFigure, bunge
+from pyTex import poleFigure as _poleFigure
+from pyTex import bunge as _bunge
 from pyTex.inversion import wimv
 
 crystalSym = 'm-3m'
 sampleSym = '1'
-cellSize = np.deg2rad(5)
+cellSize = np.deg2rad(2.5)
 hkls = [(1,1,1),(2,0,0),(2,2,0)]
 
-bkgd111path = '/home/nate/wimv/Data/32.5_ bkgd.xrdml'
-bkgd200path = '/home/nate/wimv/Data/55_bkgd.xrdml'
-bkgd220path = '/home/nate/wimv/Data/55_bkgd.xrdml'
+bkgd111path = os.path.join(filepath,'Data','XRD Aluminum','32.5_ bkgd.xrdml')
+bkgd200path = os.path.join(filepath,'Data','XRD Aluminum','55_bkgd.xrdml')
+bkgd220path = os.path.join(filepath,'Data','XRD Aluminum','55_bkgd.xrdml')
 
 bkgds = [bkgd111path,bkgd200path,bkgd220path]
-bkgd = poleFigure(bkgds, hkls, crystalSym, 'xrdml',subtype='bkgd')
+bkgd = _poleFigure(bkgds, hkls, crystalSym, 'xrdml',subtype='bkgd')
 
-def111path = '/home/nate/wimv/Data/defocus_38.xrdml'
-def200path = '/home/nate/wimv/Data/defocus_45.xrdml'
-def220path = '/home/nate/wimv/Data/defocus_65.xrdml'
+def111path = os.path.join(filepath,'Data','XRD Aluminum','defocus_38.xrdml')
+def200path = os.path.join(filepath,'Data','XRD Aluminum','defocus_45.xrdml')
+def220path = os.path.join(filepath,'Data','XRD Aluminum','defocus_65.xrdml')
 
 defs = [def111path,def200path,def220path]
-defocus = poleFigure(defs, hkls, crystalSym, 'xrdml',subtype='defocus')
+defocus = _poleFigure(defs, hkls, crystalSym, 'xrdml',subtype='defocus')
 
-pf111path = '/home/nate/wimv/Data/111pf_2T=38.xrdml'
-pf200path = '/home/nate/wimv/Data/200pf_2T=45.xrdml'
-pf220path = '/home/nate/wimv/Data/220pf_2theta=65.xrdml'
+pf111path = os.path.join(filepath,'Data','XRD Aluminum','111pf_2T=38.xrdml')
+pf200path = os.path.join(filepath,'Data','XRD Aluminum','200pf_2T=45.xrdml')
+pf220path = os.path.join(filepath,'Data','XRD Aluminum','220pf_2theta=65.xrdml')
 
 pfs = [pf111path,pf200path,pf220path]
-pf = poleFigure(pfs, hkls, crystalSym, 'xrdml')
+pf = _poleFigure(pfs, hkls, crystalSym, 'xrdml')
 
 pf.correct(bkgd=bkgd,defocus=defocus)
 pf.normalize()
 
-od = bunge(cellSize, crystalSym, sampleSym)
+od = _bunge(cellSize, crystalSym, sampleSym)
 
 pf_grid = pf.grid(full=True)
 
-recalc_pf, calc_od, pf_od, od_pf = wimv(pf, od, ret_pointer=True)
+recalc_pf, calc_od, pf_od, od_pf, prnt_str = wimv(pf, od, ret_pointer=True )
 
-recalc_pf[11].plot(cmap='viridis_r',contourlevels=np.arange(1,10))
+recalc_pf[11].plot(cmap='viridis_r',contourlevels=np.arange(1,10), proj='none')
 
 # %%
 
