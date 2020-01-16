@@ -37,7 +37,7 @@ class poleFigure(object):
     pole figure constructor
     """
     
-    def __init__( self, files, hkls, cs, pf_type, subtype=None, names=None, resolution=None):
+    def __init__( self, files, hkls, cs, pf_type, subtype=None, names=None, resolution=None, arb_y=None ):
         
         """
         list of file names
@@ -166,31 +166,56 @@ class poleFigure(object):
             self.data = {}
             self.hkl = {}
             self._numHKL = len(hkls)
-            
-            for i,h in enumerate(hkls):
-                                
-                #trick to reuse variable... may not be clear
-                self.data[i] = files[:,:,i]
-                self.hkl[i] = h
-                
-                self.subtype = 'recalc'
-                
-                #assuming equal grid spacing
-                if resolution is None: self.res = None
-                else: self.res = resolution
-                
-                #polar
-                self._alphasteps = np.arange(0,files.shape[0]*self.res,self.res)
-                #azimuth
-                self._betasteps = np.arange(2.5,files.shape[1]*self.res,self.res)
-                #grids
-                self.alpha, self.beta = np.meshgrid(self._alphasteps,self._betasteps,indexing='ij')
-                
-                #convert to rad
-                self.alpha = np.deg2rad(self.alpha)
-                self.beta = np.deg2rad(self.beta)
-                self.res = np.deg2rad(self.res)
 
+            #equal grid spacing
+            if resolution is None: self.res = None
+            else: self.res = resolution
+
+            #polar
+            self._alphasteps = np.arange(0,19*self.res,self.res)
+            #azimuth
+            self._betasteps = np.arange(0,72*self.res,self.res)
+            #grids
+            self.alpha, self.beta = np.meshgrid(self._alphasteps,self._betasteps,indexing='ij')
+
+            #convert to rad
+            self.alpha = np.deg2rad(self.alpha)
+            #stereo proj
+            self.alpha_stereo = (np.pi/2)*np.tan(copy.deepcopy(self.alpha)/2)
+            self.beta = np.deg2rad(self.beta)
+            self.res = np.deg2rad(self.res)
+
+            inter_x = copy.deepcopy(self.alpha_stereo*np.cos(self.beta))
+            inter_y = copy.deepcopy(self.alpha_stereo*np.sin(self.beta))
+            
+            #calculated with equispaced grid
+            #must interpolate
+            if isinstance(files,dict):
+
+                intMethod='linear'
+
+                if arb_y is None: raise ValueError('Please provide arbitrary pole figure vectors (y) for interpolation')
+                else: arb_y_pol = XYZtoSPH(arb_y)
+
+                for i in range(self._numHKL):
+
+                    x_pf = copy.deepcopy(arb_y_pol[:,1]*np.cos(arb_y_pol[:,0]))
+                    y_pf = copy.deepcopy(arb_y_pol[:,1]*np.sin(arb_y_pol[:,0]))
+
+                    self.data[i] = abs(griddata(np.array((x_pf,y_pf)).T, files[i], (inter_x,inter_y), method=intMethod, fill_value=0.05))                
+
+            else:
+
+                print('test')
+
+                for i,h in enumerate(hkls):
+                                    
+                    #reuse files variable... may not be clear
+                    self.data[i] = files[:,:,i]
+                    self.hkl[i] = h
+                    
+            self.subtype = 'recalc'
+                
             try:
                 self.cellVolume = self.res * ( np.cos( self.alpha - (self.res/2) ) - np.cos( self.alpha + (self.res/2) ) )        
             except:
@@ -230,7 +255,7 @@ class poleFigure(object):
 
         else: raise NotImplementedError('pf type not recognized')
         
-    def plot( self, plt_type='contour', cmap='magma_r', contourlevels=None, pfs='all' ):
+    def plot( self, plt_type='contour', proj='stereo', cmap='magma_r', contourlevels=None, pfs='all' ):
         
         """
         plotting utility
@@ -246,23 +271,27 @@ class poleFigure(object):
                 raise NotImplementedError('plotting not supported for bkgd/defocus')
             
             fig, axes = plt.subplots(rows, cols, subplot_kw=dict(polar=True))
-            
+
+            if proj == 'stereo': plt_alpha = (np.pi/2)*np.tan(copy.deepcopy(self.alpha)/2)
+            elif proj == 'earea': plt_alpha = 2*np.sin(copy.deepcopy(self.alpha)/2)
+            elif proj == 'none': plt_alpha = copy.deepcopy(self.alpha)
+
             for n,ax in enumerate(axes):
                 
                 ax.set_yticklabels([])
                 ax.set_xticklabels([])
-                ax.set_ylim([0,np.pi/2])
+                ax.set_ylim([0,np.max(plt_alpha)])
 
                 if plt_type != 'contour':
                     plt.close()
                     raise NotImplementedError('choose contour')
                 elif contourlevels is None:
-                    pt = ax.contourf(self.beta+np.deg2rad(90),self.alpha,self.data[n],cmap=cmap)
+                    pt = ax.contourf(self.beta,plt_alpha,self.data[n],cmap=cmap)
+                    fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04)
                 elif contourlevels is not None:
-                    pt = ax.contourf(self.beta+np.deg2rad(90),self.alpha,self.data[n],levels=contourlevels,cmap=cmap)
-                    
-                fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04)
-
+                    pt = ax.contourf(self.beta,plt_alpha,self.data[n],levels=contourlevels,cmap=cmap)
+                    if n == (len(axes)-1): fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04)
+                
         else: 
 
             """ working for nd_poleFig """
@@ -279,30 +308,34 @@ class poleFigure(object):
                 pass
             
             fig, axes = plt.subplots(rows, cols, subplot_kw=dict(polar=True))
-            
+
+            if proj == 'stereo': plt_alpha = (np.pi/2)*np.tan(copy.deepcopy(self.alpha)/2)
+            elif proj == 'earea': plt_alpha = 2*np.sin(copy.deepcopy(self.alpha)/2)
+            elif proj == 'none': plt_alpha = copy.deepcopy(self.alpha)
+
             for n,ax in enumerate(axes):
                 
                 ax.set_yticklabels([])
                 ax.set_xticklabels([])
-                ax.set_ylim([0,np.pi/2])
+                ax.set_ylim([0,np.max(plt_alpha)])
 
                 if plt_type != 'contour':
                     plt.close()
                     raise NotImplementedError('choose contour')
                 elif contourlevels is None:
-                    pt = ax.contourf(self.beta+np.deg2rad(90),self.alpha,self.data[n],cmap=cmap)
+                    pt = ax.contourf(self.beta,plt_alpha,self.data[n],cmap=cmap)
+                    fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04)
                 elif contourlevels is not None:
-                    pt = ax.contourf(self.beta+np.deg2rad(90),self.alpha,self.data[n],levels=contourlevels,cmap=cmap)
-                    
-                fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04)            
-            
+                    pt = ax.contourf(self.beta,plt_alpha,self.data[n],levels=contourlevels,cmap=cmap)
+                    if n == (len(axes)-1): fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04)
+                                    
     def grid( self, full=False, ret_ab=False, ret_steps=True ):
         
         """
         Returns ndarray of grid points on pole figure
         
         Inputs:
-            full: returns full PF grid
+            full: returns full NxN PF grid - N = res
             ret_ab: returns alpha, beta mgrids
         """
         
@@ -442,7 +475,7 @@ class poleFigure(object):
 
                     self.data[i] = ( 1 / norm ) * d
 
-    def interpolate( self, res, grid=None, intMethod='cubic' ):
+    def _interpolate( self, res, grid=None, intMethod='cubic' ):
 
         """
         interpolate data points to normal grid | (res x res) cell size
@@ -480,7 +513,6 @@ class poleFigure(object):
 
         """
         rotates pfs by a given g matrix
-
         """
 
         if g.shape != (3,3): raise ValueError('g not 3x3')
@@ -489,8 +521,6 @@ class poleFigure(object):
         if self.subtype == 'nd_poleFig':
 
             for i in range(self._numHKL):
-
-                temp = np.zeros_like(self.y[i])
 
                 for yi,y in enumerate(self.y[i]):
 
@@ -508,9 +538,6 @@ class poleFigure(object):
         """
 
         if not os.path.exists(location): os.mkdir(location)
-
-        if sampleName: filePrefix = sampleName
-        else: filePrefix = ''
 
         for hi,h in self.hkl.items():
             
@@ -623,7 +650,7 @@ class bunge( OD ):
 
     def normalize( self ):
 
-        temp = np.sum( np.ravel(self.weights) * np.ravel(self.cellVolume) ) / np.sum( np.ravel(self.cellVolume) )
+        temp = np.sum( self.weights * np.ravel(self.cellVolume) ) / np.sum( np.ravel(self.cellVolume) )
 
         if temp != 1:
 
@@ -632,6 +659,45 @@ class bunge( OD ):
             norm = np.sum ( np.ravel(od_dg) ) / np.sum( np.ravel( self.cellVolume ) )
 
             self.weights = ( 1 / norm ) * self.weights
+            
+    def sectionPlot( self, sectionAxis, sectionVal, cmap='magma_r' ):
+        
+        cols = 1
+        rows = 2 #change this later??
+        fig, axes = plt.subplots(rows, cols)
+            
+        for n,ax in enumerate(axes):   
+            
+            if sectionAxis == 'phi1': pass
+            elif sectionAxis == 'phi': pass
+            elif sectionAxis == 'phi2':
+                
+                if sectionVal in self._phi2range: section_id = np.where(self._phi2range == sectionVal)[0] - 1
+                else: raise ValueError('section must be in discrete grid')
+        
+                pltX, pltY = np.rad2deg(self.phi1cen[section_id,:,:]), np.rad2deg(self.Phicen[section_id,:,:])
+                pltX = pltX.reshape(pltX.shape[1:])
+                pltY = pltY.reshape(pltY.shape[1:])
+                
+                pltWgt = np.copy(self.weights)
+                pltWgt = pltWgt.reshape(self.Phicen.shape)
+                pltWgt = pltWgt[section_id,:,:]
+                pltWgt = pltWgt.reshape(pltWgt.shape[1:])
+            
+            pt = ax.contourf(pltX,pltY,pltWgt,cmap=cmap)
+            fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04) 
+
+    def export( self, fname ):
+        
+        out = np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights)).T
+        
+        with open(fname, 'w') as file:
+            file.write('#phi1\tPhi\tphi2\tweight\n')
+            np.savetxt(file,
+                        out,
+                        fmt=('%.5f','%.5f','%.5f','%.5f'),
+                        delimiter='\t',
+                        newline='\n')
 
 class rodrigues( OD ):
     
@@ -643,9 +709,6 @@ class rodrigues( OD ):
                  
         super(rodrigues, self).__init__( crystalSym, sampleSym )
         
-
-        
-# %%
         
 ### TESTING ###
         

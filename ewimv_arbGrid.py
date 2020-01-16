@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sat Dec 14 18:01:30 2019
-
 @author: nate
 """
 
@@ -17,6 +16,8 @@ this goes scattering vector -> intersection in bunge
 """
 
 import os
+from math import pi
+import json
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
@@ -27,7 +28,7 @@ from pymatgen.core import Lattice, Structure
 
 from pyTex import poleFigure, bunge
 from pyTex.orientation import eu2quat, quat2eu 
-from pyTex.utils import symmetrise, normalize, genSym
+from pyTex.utils import symmetrise, normalize, genSymOps
 from pyTex.diffrac import calc_XRDreflWeights
 
 dir_path = os.path.dirname(os.path.realpath('__file__'))
@@ -37,12 +38,29 @@ P = 1
 crystalSym = 'm-3m'
 sampleSym = '1'
 cellSize = np.deg2rad(5)
-theta = np.deg2rad(5)
+theta = np.deg2rad(7)
+
+""" NRSF2 .jul """
+
+# data_path = os.path.join(dir_path, 'Data', 'HB2B')
+# hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
+
+# pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
+# pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
+# pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
+
+# pfs = [pf222path,pf311path,pf400path]
+# pf = poleFigure(pfs, hkls, crystalSym, 'jul')
+
+
+""" peak-fitted pole figures """
 
 hkls = []
 files = []
 
 datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','pole figures','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
 # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
 
 for file in os.listdir(datadir):
@@ -59,14 +77,16 @@ for file in os.listdir(datadir):
     hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
+pf = poleFigure(files,hkls,crystalSym,'nd')
+
 """ refl weights """
 
-a = 4.046 #Angstrom
-latt = Lattice.cubic(a)
-structure = Structure(latt, ["Al", "Al", "Al", "Al"], [[0, 0, 0], [0.5, 0.5, 0], [0, 0.5, 0.5], [0.5, 0, 0.5]])
-rad = 'CuKa'
+# a = 4.046 #Angstrom
+# latt = Lattice.cubic(a)
+# structure = Structure(latt, ["Al", "Al", "Al", "Al"], [[0, 0, 0], [0.5, 0.5, 0], [0, 0.5, 0.5], [0.5, 0, 0.5]])
+# rad = 'CuKa'
 
-refl_wgt = calc_XRDreflWeights(structure, hkls, rad='MoKa')
+# refl_wgt = calc_XRDreflWeights(structure, hkls, rad='MoKa')
 
 """ ones for refl_wgt """
 
@@ -80,8 +100,8 @@ hkl_str = [''.join(tuple(map(str,h))) for h in hkls]
 """ rotate """
 
 rot = R.from_euler('XZY',(13,-90,90), degrees=True).as_dcm()
+# rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
 
-pf = poleFigure(files,hkls,crystalSym,'nd')
 pf.rotate(rot)
 
 od = bunge(cellSize, crystalSym, sampleSym)
@@ -102,7 +122,7 @@ hkls_loop, uni_hkls_idx, hkls_loop_idx = np.unique(hkls,axis=0,return_inverse=Tr
 symHKL_loop = symmetrise(crystalSym, hkls_loop)
 symHKL_loop = normalize(symHKL_loop)
 
-symOps = genSym(crystalSym)
+symOps = genSymOps(crystalSym)
 symOps = np.unique(np.swapaxes(symOps,2,0),axis=0)
 
 """ only use proper rotations """
@@ -123,20 +143,46 @@ for ii,i in enumerate(np.ndindex(od.phi1cen.shape)):
 
 qgrid = eu2quat(bungeAngs).T
 
-""" calculate pf grid XYZ for fibre """
+# """ calculate pf grid XYZ for fibre """
 
-pf_grid, alp, bet = pf.grid(full=True, ret_ab=True)
+# pf_grid, alp, bet = pf.grid(full=True, ret_ab=True)
 
-#calculate pole figure y's
-sph = np.array(np.divmod(np.ravel(pf_grid),pf_grid.shape[1])).T
-sph = sph * pf.res
-sph[:,0] = np.where(sph[:,0] == 0, 0.004363323, sph[:,0]) #1/4deg tilt off center to avoid issues
+# #calculate pole figure y's
+# sph = np.array(np.divmod(np.ravel(pf_grid),pf_grid.shape[1])).T
+# sph = sph * pf.res
+# sph[:,0] = np.where(sph[:,0] == 0, 0.004363323, sph[:,0]) #1/4deg tilt off center to avoid issues
 
-#convert to xyz
-xyz_pf = np.zeros((sph.shape[0],3))
-xyz_pf[:,0] = np.sin( sph[:,0] ) * np.cos( sph[:,1] )
-xyz_pf[:,1] = np.sin( sph[:,0] ) * np.sin( sph[:,1] )
-xyz_pf[:,2] = np.cos( sph[:,0] )
+# #convert to xyz
+# xyz_pf = np.zeros((sph.shape[0],3))
+# xyz_pf[:,0] = np.sin( sph[:,0] ) * np.cos( sph[:,1] )
+# xyz_pf[:,1] = np.sin( sph[:,0] ) * np.sin( sph[:,1] )
+# xyz_pf[:,2] = np.cos( sph[:,0] )
+
+pi2 = pi/2
+
+polar_stepN = 15
+polar_step = pi2 / (polar_stepN-1)
+
+polar = np.arange(0,polar_stepN) * polar_step
+r = np.sin(polar)
+azi_stepN = np.ceil(2.0*pi*r / polar_step)
+azi_stepN[0] = 0.9995 #single point at poles
+azi_step = 2*pi / azi_stepN
+
+pts = []
+
+for azi_n,pol in zip(azi_stepN,polar):
+    
+    azi = np.linspace(0,2*pi,azi_n)
+    pol = np.ones((len(azi)))*pol
+
+    x = np.sin(pol) * np.cos(azi)
+    y = np.sin(pol) * np.sin(azi)
+    z = np.cos(pol)
+
+    pts.append(np.array((x,y,z)).T)
+
+xyz_pf = np.vstack(pts) 
 
 fibre_full_e = {}
 fibre_full_q = {}
@@ -175,7 +221,7 @@ qgrid_pos[qgrid_pos[:,0] < 0] *= -1
 tree = KDTree(qgrid_pos)
 
 rad = ( 1 - np.cos(theta) ) / 2
-euc_rad = 4*np.sin(1.25*theta)**2
+euc_rad = 4*np.sin(theta)**2
     
 def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
     
@@ -286,7 +332,7 @@ for i,hi in enumerate(hkls_loop_idx):
     od_pf: od --> od to pf
     each entry stored as dict; ['cell'] is cell #s ['weights'] is weights """
     
-tube_exp = 0.5
+tube_exp = 0.75
 
 pf_od = {}
 pf_od_full = {}
@@ -335,15 +381,17 @@ odwgts_tot = 1 / odwgts_tot
 od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
 calc_od = {}
 recalc_pf = {}
+rel_err = {}
 
+eps = 2
 recalc_pf_full = {}
     
 numPoles = pf._numHKL
 numHKLs = [len(fam) for fam in pf.symHKL]
 
-iterations = 9
+iterations = 15
 
-for i in tqdm(range(iterations)):
+for i in range(iterations):
     
     """ first iteration, skip recalc of PF """
     
@@ -391,20 +439,52 @@ for i in tqdm(range(iterations)):
 
                 recalc_pf[i][fi][yi] = ( 1 / (2*np.pi) ) * ( 1 / sum(pf_od[fi][yi]['weight']) ) * np.sum( pf_od[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )    
    
+    # """ recalculate full pole figures """
+    # recalc_pf_full[i] = np.zeros((pf_grid.shape[0],pf_grid.shape[1],numPoles))
+    
+    # for fi in range(numPoles):
+        
+    #     for pf_cell in np.ravel(pf_grid):
+            
+    #         if pf_cell in pf_od_full[fi]: #pf_cell is defined
+                
+    #             od_cells = np.array(pf_od_full[fi][pf_cell]['cell'])
+    #             ai, bi = np.divmod(pf_cell, pf_grid.shape[1])
+    #             recalc_pf_full[i][int(ai),int(bi),fi] = ( 1 / np.sum(pf_od_full[fi][pf_cell]['weight']) ) * np.sum( pf_od_full[fi][pf_cell]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
+        
+    # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
+    # recalc_pf_full[i].normalize()
+
+    """ comparison """
+
+    rel_err[i] = {}
+
+    for fi in range(numPoles):
+
+        rel_err[i][fi] =  np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
+        
+        #RP2 error - from matthies/rollett paper
+        rp2 = np.where(rel_err[i][fi] > eps, 1, 0)
+        rel_err[i][fi] = np.round( np.sum(rel_err[i][fi]*rp2) / np.sum(rp2), decimals = 3 )
+
+    print(json.dumps(rel_err[i]))
+
     """ recalculate full pole figures """
-    recalc_pf_full[i] = np.zeros((pf_grid.shape[0],pf_grid.shape[1],numPoles))
+    recalc_pf_full[i] = {}
     
     for fi in range(numPoles):
         
-        for pf_cell in np.ravel(pf_grid):
+        recalc_pf_full[i][fi] = np.zeros(len(xyz_pf))
+
+        for yi in range(len(xyz_pf)):
             
-            if pf_cell in pf_od_full[fi]: #pf_cell is defined
+            if yi in pf_od_full[fi]: #pf_cell is defined
                 
-                od_cells = np.array(pf_od_full[fi][pf_cell]['cell'])
-                ai, bi = np.divmod(pf_cell, pf_grid.shape[1])
-                recalc_pf_full[i][int(ai),int(bi),fi] = ( 1 / np.sum(pf_od_full[fi][pf_cell]['weight']) ) * np.sum( pf_od_full[fi][pf_cell]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
+                od_cells = np.array(pf_od_full[fi][yi]['cell'])
+
+                recalc_pf_full[i][fi][yi] = ( 1 / np.sum(pf_od_full[fi][yi]['weight']) ) * np.sum( pf_od_full[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
         
-    recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
+    recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
     recalc_pf_full[i].normalize()    
         
     """ (i+1)th inversion """
@@ -437,8 +517,10 @@ for i in tqdm(range(iterations)):
     #place into OD object
     calc_od[i+1] = bunge(od.res, od.cs, od.ss, weights=calc_od[i+1])
     calc_od[i+1].normalize() 
-        
-recalc_pf_full[iterations-1].plot(pfs=3)
+     
+cl = np.arange(0,7.5,0.5)       
+recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma',proj='none')
+
 # %%
 
 ### FIBER PLOT ###
@@ -464,12 +546,17 @@ recalc_pf_full[iterations-1].plot(pfs=3)
 # ## manual fibre ##
 # gd2 = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(0,1,0))
 # gd2.actor.property.render_points_as_spheres = True
-# gd2.actor.property.point_size = 5   
+# gd2.actor.property.point_size = 5
+
+# ## trun grid ##
+# gd3 = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(0,0,1))
+# gd3.actor.property.render_points_as_spheres = True
+# gd3.actor.property.point_size = 5   
 
 # plt_list = list(fibre_e_full[pf_num].keys())
 # plt_list.sort()
 
-# @mlab.animate(delay=50)
+# @mlab.animate(delay=100)
 # def anim():
 #     while True:
         
@@ -484,14 +571,14 @@ recalc_pf_full[iterations-1].plot(pfs=3)
 #                                   z = fibre_e_full[pf_num][yi][:,2])
             
 #             gd2.mlab_source.reset( x = egrid_trun[pf_num][yi][:,0],
-#                                     y = egrid_trun[pf_num][yi][:,1],
-#                                     z = egrid_trun[pf_num][yi][:,2])
+#                                    y = egrid_trun[pf_num][yi][:,1],
+#                                    z = egrid_trun[pf_num][yi][:,2])
             
-#             # tubePts = nn_gridPts_full[pf_num][yi]
+#             tubePts = nn_gridPts_full[pf_num][yi]
             
-#             # gd2.mlab_source.reset( x = bungeAngs[tubePts.astype(int),0],
-#             #                       y = bungeAngs[tubePts.astype(int),1],
-#             #                       z = bungeAngs[tubePts.astype(int),2])
+#             gd3.mlab_source.reset( x = bungeAngs[tubePts.astype(int),0],
+#                                    y = bungeAngs[tubePts.astype(int),1],
+#                                    z = bungeAngs[tubePts.astype(int),2])
         
 #             yield
             

@@ -56,7 +56,7 @@ def normalize(v):
 
     return hkl_n
 
-def genSym(cs):
+def genSymOps(cs):
 
     """
     generate sym ops for system
@@ -98,7 +98,7 @@ def symmetrise(cs,hkl):
 
     elif cs == 'm-3m' or cs == '432':
 
-        symOps = genSym(cs)
+        symOps = genSymOps(cs)
         temp = _np.dot(hkl,symOps)
 
         if len(temp.shape) > 2:
@@ -125,9 +125,9 @@ def symmetrise(cs,hkl):
 
 def XYZtoSPH( xyz, proj='stereo', upperOnly=True ):
     
-    ## invert with -y ##
-    
     if len(xyz.shape) == 3:
+
+        ## invert with -y ##
 
         if upperOnly is True:
 
