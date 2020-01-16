@@ -58,9 +58,9 @@ theta = np.deg2rad(7)
 hkls = []
 files = []
 
-datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','pole figures','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','pole figures','combined')
 # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
 # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
 
 for file in os.listdir(datadir):
@@ -391,7 +391,7 @@ numHKLs = [len(fam) for fam in pf.symHKL]
 
 iterations = 15
 
-for i in range(iterations):
+for i in tqdm(range(iterations),position=0):
     
     """ first iteration, skip recalc of PF """
     
@@ -455,19 +455,37 @@ for i in range(iterations):
     # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
     # recalc_pf_full[i].normalize()
 
-    """ comparison """
+    # """ comparison """
 
-    rel_err[i] = {}
+    # rel_err[i] = {}
+
+    # for fi in range(numPoles):
+
+    #     rel_err[i][fi] =  np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
+        
+    #     #RP2 error - from matthies/rollett paper
+    #     rp2 = np.where(rel_err[i][fi] > eps, 1, 0)
+    #     rel_err[i][fi] = np.round( np.sum(rel_err[i][fi]*rp2) / np.sum(rp2), decimals = 3 )
+
+    # print(json.dumps(rel_err[i]))
+
+    """ compare recalculated to experimental """
+        
+    RP_err = {}
+    prnt_str = None
+    
+    np.seterr(divide='ignore')
 
     for fi in range(numPoles):
-
-        rel_err[i][fi] =  np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
         
-        #RP2 error - from matthies/rollett paper
-        rp2 = np.where(rel_err[i][fi] > eps, 1, 0)
-        rel_err[i][fi] = np.round( np.sum(rel_err[i][fi]*rp2) / np.sum(rp2), decimals = 3 )
-
-    print(json.dumps(rel_err[i]))
+        RP_err[fi] = np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
+        RP_err[fi][np.isinf(RP_err[fi])] = 0
+        RP_err[fi] = np.sqrt(np.mean(RP_err[fi]**2))
+        
+        if prnt_str is None: prnt_str = 'RP Error: {:.4f}'.format(np.round(RP_err[fi],decimals=4))
+        else: prnt_str += ' | {:.4f}'.format(np.round(RP_err[fi],decimals=4))
+        
+    tqdm.write(prnt_str)
 
     """ recalculate full pole figures """
     recalc_pf_full[i] = {}

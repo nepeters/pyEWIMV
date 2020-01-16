@@ -168,7 +168,7 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
             RP_err[fi][_np.isinf(RP_err[fi])] = 0
             RP_err[fi] = _np.sqrt(_np.mean(RP_err[fi]**2))
             
-            if prnt_str is None: prnt_str = 'RMS Error: {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
+            if prnt_str is None: prnt_str = 'RP Error: {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
             else: prnt_str += ' | {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
             
         _tqdm.write(prnt_str)
