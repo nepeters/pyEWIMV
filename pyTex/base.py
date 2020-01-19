@@ -246,7 +246,10 @@ class poleFigure(object):
                     xyz_pf[:,2] = np.cos( self.y_pol[i][:,0] )
 
                     self.y[i] = xyz_pf
-                    
+                
+                elif os.path.exists(f) is False: raise ValueError('file path not found')                    
+                else: raise ValueError('not .jul file format')
+
             self.subtype = 'nd_poleFig'
             self.symHKL = symmetrise(cs,hkls)
             self.symHKL = normalize(self.symHKL)            
@@ -698,6 +701,16 @@ class bunge( OD ):
                         fmt=('%.5f','%.5f','%.5f','%.5f'),
                         delimiter='\t',
                         newline='\n')
+
+    def index( self, print=False ):
+
+        """
+        calculate texture index
+
+        """
+
+        return np.mean(self.weights**2)
+
 
 class rodrigues( OD ):
     

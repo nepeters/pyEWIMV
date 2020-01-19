@@ -36,13 +36,13 @@ dir_path = os.path.dirname(os.path.realpath('__file__'))
 P = 1
 
 crystalSym = 'm-3m'
-sampleSym = '1'
+sampleSym = 'mmm'
 cellSize = np.deg2rad(5)
 theta = np.deg2rad(7)
 
 """ NRSF2 .jul """
 
-# data_path = os.path.join(dir_path, 'Data', 'HB2B')
+# data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
 # hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
 
 # pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
@@ -51,7 +51,6 @@ theta = np.deg2rad(7)
 
 # pfs = [pf222path,pf311path,pf400path]
 # pf = poleFigure(pfs, hkls, crystalSym, 'jul')
-
 
 """ peak-fitted pole figures """
 
@@ -99,8 +98,8 @@ hkl_str = [''.join(tuple(map(str,h))) for h in hkls]
 
 """ rotate """
 
-rot = R.from_euler('XZY',(13,-90,90), degrees=True).as_dcm()
-# rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
+# rot = R.from_euler('XZY',(13,-90,90), degrees=True).as_dcm()
+rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
 
 pf.rotate(rot)
 
@@ -274,7 +273,7 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             eu_fib = np.stack( (phi1, Phi, phi2), axis=2 )
             eu_fib = np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
     
-            fz = (eu_fib[:,0] < od._phi1max) & (eu_fib[:,1] < od._Phimax) & (eu_fib[:,2] < od._phi2max)
+            fz = (eu_fib[:,0] <= od._phi1max) & (eu_fib[:,1] <= od._Phimax) & (eu_fib[:,2] <= od._phi2max)
             fz_idx = np.nonzero(fz)
             
             fibre_e[fi][yi] = eu_fib[fz]
@@ -283,17 +282,17 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             
             fibre_q[fi][yi] = qfib[fib_idx]
             
-            """ reduce geodesic query size """
-            qfib_pos = np.copy(qfib[fib_idx])
-            qfib_pos[qfib_pos[:,0] < 0] *= -1
+            # """ reduce geodesic query size """
+            # qfib_pos = np.copy(qfib[fib_idx])
+            # qfib_pos[qfib_pos[:,0] < 0] *= -1
             
-            query = np.concatenate(tree.query_radius(qfib_pos,euc_rad))
-            query_uni = np.unique(query)
-            qgrid_trun = qgrid[query_uni]
-            qgrid_trun_idx = np.arange(len(qgrid))[query_uni] #store indexes to retrieve original grid pts later
+            # query = np.concatenate(tree.query_radius(qfib_pos,euc_rad))
+            # query_uni = np.unique(query)
+            # qgrid_trun = qgrid[query_uni]
+            # qgrid_trun_idx = np.arange(len(qgrid))[query_uni] #store indexes to retrieve original grid pts later
             
             """ distance calc """
-            temp = quatMetricNumba(qgrid_trun,qfib[fib_idx])
+            temp = quatMetricNumba(qgrid,qfib[fib_idx])
             """ find tube """
             tube = (temp <= rad)
             temp = np.column_stack((np.argwhere(tube)[:,0],temp[tube]))
@@ -309,21 +308,21 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             """ return unique pts (first in list) """
             uni_pts = np.unique(temp[:,0],return_index=True)
             
-            nn_gridPts[fi][yi] = qgrid_trun_idx[uni_pts[0].astype(int)]
+            nn_gridPts[fi][yi] = uni_pts[0].astype(int)
             nn_gridDist[fi][yi] = temp[uni_pts[1],1]
             
-            egrid_trun[fi][yi] = bungeAngs[query_uni]
+            # egrid_trun[fi][yi] = bungeAngs[query_uni]
             
-    return nn_gridPts, nn_gridDist
+    return nn_gridPts, nn_gridDist,fibre_e
 
-nn_gridPts, nn_gridDist = calcFibre(pf.symHKL,pf.y,qgrid,omega,rad,tree,euc_rad)
-tempPts_full, tempDist_full = calcFibre(symHKL_loop,xyz_pf,qgrid,omega,rad,tree,euc_rad)
- 
+# nn_gridPts, nn_gridDist = calcFibre(pf.symHKL,pf.y,qgrid,omega,rad,tree,euc_rad)
+tempPts_full, tempDist_full,fibre_e  = calcFibre(symHKL_loop,xyz_pf,qgrid,omega,rad,tree,euc_rad)
+
 for i,hi in enumerate(hkls_loop_idx):
 
     nn_gridPts_full[i] = tempPts_full[hi]
     nn_gridDist_full[i] = tempDist_full[hi]
-
+    fibre_full_e[i] = fibre_e[hi]
     
 # %%        
 
@@ -332,280 +331,297 @@ for i,hi in enumerate(hkls_loop_idx):
     od_pf: od --> od to pf
     each entry stored as dict; ['cell'] is cell #s ['weights'] is weights """
     
-tube_exp = 0.75
+# tube_exp = 0.75
 
-pf_od = {}
-pf_od_full = {}
-odwgts_tot = np.zeros( ( len(hkls), od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] ) )
+# pf_od = {}
+# pf_od_full = {}
+# odwgts_tot = np.zeros( ( len(hkls), od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] ) )
 
-test = []
+# test = []
 
-for hi, h in enumerate(hkls):
+# for hi, h in enumerate(hkls):
     
-    pf_od[hi] = {}
-    pf_od_full[hi] = {}
+#     pf_od[hi] = {}
+#     pf_od_full[hi] = {}
     
-    for yi in range(len(nn_gridPts[hi].keys())):
+#     for yi in range(len(nn_gridPts[hi].keys())):
         
-        od_cells = nn_gridPts[hi][yi]
-        #TODO: work on scaling towards max distance
-        scaled_dist = nn_gridDist[hi][yi]
-        weights = 1 / ( ( scaled_dist )**tube_exp )
+#         od_cells = nn_gridPts[hi][yi]
+
+#         #handle no od_cells
+#         if len(od_cells) == 0: continue
+#         else:
+
+#             #TODO: work on scaling towards max distance?
+#             scaled_dist = nn_gridDist[hi][yi]
+#             weights = 1 / ( ( scaled_dist )**tube_exp )
+            
+#             if np.any(weights < 0): raise ValueError('neg weight')
+#             if np.any(weights == 0): raise ValueError('zero weight')
+            
+#             pf_od[hi][yi] = {'cell': od_cells, 'weight': weights}
+            
+#             odwgts_tot[hi,od_cells.astype(int)] += weights
         
-        if np.any(weights < 0): raise ValueError('neg weight')
-        if np.any(weights == 0): raise ValueError('zero weight')
+#     for yi in range(len(nn_gridPts_full[hi].keys())):
         
-        pf_od[hi][yi] = {'cell': od_cells, 'weight': weights}
+#         od_cells = nn_gridPts_full[hi][yi]
+
+#         #handle no od_cells
+#         if len(od_cells) == 0: continue
+#         else:
+
+#             #TODO: work on scaling towards max distance
+#             scaled_dist = nn_gridDist_full[hi][yi]
+#             weights = 1 / ( ( scaled_dist )**tube_exp )
+            
+#             if np.any(weights < 0): raise ValueError('neg weight')
+#             if np.any(weights == 0): raise ValueError('zero weight')
+            
+#             pf_od_full[hi][yi] = {'cell': od_cells, 'weight': weights}
         
-        odwgts_tot[hi,od_cells.astype(int)] += weights
-        
-    for yi in range(len(nn_gridPts_full[hi].keys())):
-        
-        od_cells = nn_gridPts_full[hi][yi]
-        #TODO: work on scaling towards max distance
-        scaled_dist = nn_gridDist_full[hi][yi]
-        weights = 1 / ( ( scaled_dist )**tube_exp )
-        
-        if np.any(weights < 0): raise ValueError('neg weight')
-        if np.any(weights == 0): raise ValueError('zero weight')
-        
-        pf_od_full[hi][yi] = {'cell': od_cells, 'weight': weights}
-        
-odwgts_tot = np.where(odwgts_tot == 0, 1, odwgts_tot)
-odwgts_tot = 1 / odwgts_tot
+# odwgts_tot = np.where(odwgts_tot == 0, 1, odwgts_tot)
+# odwgts_tot = 1 / odwgts_tot
 
 # %%
     
-""" e-wimv iteration start """
+# """ e-wimv iteration start """
         
-od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
-calc_od = {}
-recalc_pf = {}
-rel_err = {}
+# od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
+# calc_od = {}
+# recalc_pf = {}
+# rel_err = {}
 
-eps = 2
-recalc_pf_full = {}
+# eps = 2
+# recalc_pf_full = {}
     
-numPoles = pf._numHKL
-numHKLs = [len(fam) for fam in pf.symHKL]
+# numPoles = pf._numHKL
+# numHKLs = [len(fam) for fam in pf.symHKL]
 
-iterations = 15
+# iterations = 15
 
-for i in tqdm(range(iterations),position=0):
+# for i in tqdm(range(iterations),position=0):
     
-    """ first iteration, skip recalc of PF """
+#     """ first iteration, skip recalc of PF """
     
-    if i == 0: #first iteration is direct from PFs
+#     if i == 0: #first iteration is direct from PFs
         
-        od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
-        calc_od[0] = np.ones( (od_data.shape[0], numPoles) )        
+#         od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
+#         calc_od[0] = np.ones( (od_data.shape[0], numPoles) )        
         
-        for fi in range(numPoles): 
+#         for fi in range(numPoles): 
             
-            temp = np.ones(( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2], len(pf.y[fi]) ))
+#             temp = np.ones(( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2], len(pf.y[fi]) ))
             
-            for yi in range(len(pf.y[fi])):
+#             for yi in range(len(pf.y[fi])):
+
+#                 #check for zero OD cells that correspond to the specified pole figure direction 
+#                 if len(nn_gridPts[hi][yi]) == 0:
                     
-                od_cells = pf_od[fi][yi]['cell']
-                wgts = pf_od[fi][yi]['weight']                   
-        
-                temp[od_cells.astype(int), yi] *= abs(pf.data[fi][yi])
+#                     od_cells = pf_od[fi][yi]['cell']
+#                     wgts = pf_od[fi][yi]['weight']                   
             
-            """ zero to 1E-5 """
-            temp = np.where(temp==0,1E-5,temp)
-            """ log before sum instead of product """
-            temp = np.log(temp)
-            n = np.count_nonzero(temp,axis=1)
-            n = np.where(n == 0, 1, n)
-            calc_od[0][:,fi] = np.exp((np.sum(temp,axis=1)*refl_wgt[fi])/n)
+#                     temp[od_cells.astype(int), yi] *= abs(pf.data[fi][yi])
+            
+#             "3"" zero to 1E-5 """
+#             temp = np.where(temp==0,1E-5,temp)
+#             """ log before sum instead of product """
+#             temp = np.log(temp)
+#             n = np.count_nonzero(temp,axis=1)
+#             n = np.where(n == 0, 1, n)
+#             calc_od[0][:,fi] = np.exp((np.sum(temp,axis=1)*refl_wgt[fi])/n)
         
-        calc_od[0] = np.product(calc_od[0],axis=1)**(1/numPoles)
-        #place into OD object
-        calc_od[0] = bunge(od.res, od.cs, od.ss, weights=calc_od[0])
-        calc_od[0].normalize()
+#         calc_od[0] = np.product(calc_od[0],axis=1)**(1/numPoles)
+#         #place into OD object
+#         calc_od[0] = bunge(od.res, od.cs, od.ss, weights=calc_od[0])
+#         calc_od[0].normalize()
         
-    """ recalculate poles """
-    recalc_pf[i] = {}
+#     """ recalculate poles """
+#     recalc_pf[i] = {}
     
-    for fi in range(numPoles):
+#     for fi in range(numPoles):
         
-        recalc_pf[i][fi] = np.zeros(len(pf.y[fi]))
+#         recalc_pf[i][fi] = np.zeros(len(pf.y[fi]))
         
-        for yi in range(len(pf.y[fi])):
+#         for yi in range(len(pf.y[fi])):
             
-            if yi in pf_od[fi]: #pf_cell is defined
+#             if yi in pf_od[fi]: #pf_cell is defined
                 
-                od_cells = np.array(pf_od[fi][yi]['cell'])
+#                 od_cells = np.array(pf_od[fi][yi]['cell'])
 
-                recalc_pf[i][fi][yi] = ( 1 / (2*np.pi) ) * ( 1 / sum(pf_od[fi][yi]['weight']) ) * np.sum( pf_od[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )    
+#                 recalc_pf[i][fi][yi] = ( 1 / (2*np.pi) ) * ( 1 / sum(pf_od[fi][yi]['weight']) ) * np.sum( pf_od[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )    
    
-    # """ recalculate full pole figures """
-    # recalc_pf_full[i] = np.zeros((pf_grid.shape[0],pf_grid.shape[1],numPoles))
+#     # """ recalculate full pole figures """
+#     # recalc_pf_full[i] = np.zeros((pf_grid.shape[0],pf_grid.shape[1],numPoles))
     
-    # for fi in range(numPoles):
+#     # for fi in range(numPoles):
         
-    #     for pf_cell in np.ravel(pf_grid):
+#     #     for pf_cell in np.ravel(pf_grid):
             
-    #         if pf_cell in pf_od_full[fi]: #pf_cell is defined
+#     #         if pf_cell in pf_od_full[fi]: #pf_cell is defined
                 
-    #             od_cells = np.array(pf_od_full[fi][pf_cell]['cell'])
-    #             ai, bi = np.divmod(pf_cell, pf_grid.shape[1])
-    #             recalc_pf_full[i][int(ai),int(bi),fi] = ( 1 / np.sum(pf_od_full[fi][pf_cell]['weight']) ) * np.sum( pf_od_full[fi][pf_cell]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
+#     #             od_cells = np.array(pf_od_full[fi][pf_cell]['cell'])
+#     #             ai, bi = np.divmod(pf_cell, pf_grid.shape[1])
+#     #             recalc_pf_full[i][int(ai),int(bi),fi] = ( 1 / np.sum(pf_od_full[fi][pf_cell]['weight']) ) * np.sum( pf_od_full[fi][pf_cell]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
         
-    # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
-    # recalc_pf_full[i].normalize()
+#     # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
+#     # recalc_pf_full[i].normalize()
 
-    # """ comparison """
-
-    # rel_err[i] = {}
-
-    # for fi in range(numPoles):
-
-    #     rel_err[i][fi] =  np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
+#     """ compare recalculated to experimental """
         
-    #     #RP2 error - from matthies/rollett paper
-    #     rp2 = np.where(rel_err[i][fi] > eps, 1, 0)
-    #     rel_err[i][fi] = np.round( np.sum(rel_err[i][fi]*rp2) / np.sum(rp2), decimals = 3 )
-
-    # print(json.dumps(rel_err[i]))
-
-    """ compare recalculated to experimental """
-        
-    RP_err = {}
-    prnt_str = None
+#     RP_err = {}
+#     prnt_str = None
     
-    np.seterr(divide='ignore')
+#     np.seterr(divide='ignore')
 
-    for fi in range(numPoles):
+#     for fi in range(numPoles):
         
-        RP_err[fi] = np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
-        RP_err[fi][np.isinf(RP_err[fi])] = 0
-        RP_err[fi] = np.sqrt(np.mean(RP_err[fi]**2))
+#         RP_err[fi] = np.abs( recalc_pf[i][fi] - pf.data[fi] ) / recalc_pf[i][fi]
+#         RP_err[fi][np.isinf(RP_err[fi])] = 0
+#         RP_err[fi] = np.sqrt(np.mean(RP_err[fi]**2))
         
-        if prnt_str is None: prnt_str = 'RP Error: {:.4f}'.format(np.round(RP_err[fi],decimals=4))
-        else: prnt_str += ' | {:.4f}'.format(np.round(RP_err[fi],decimals=4))
+#         if prnt_str is None: prnt_str = 'RP Error: {:.4f}'.format(np.round(RP_err[fi],decimals=4))
+#         else: prnt_str += ' | {:.4f}'.format(np.round(RP_err[fi],decimals=4))
         
-    tqdm.write(prnt_str)
+#     tqdm.write(prnt_str)
 
-    """ recalculate full pole figures """
-    recalc_pf_full[i] = {}
+#     """ recalculate full pole figures """
+#     recalc_pf_full[i] = {}
     
-    for fi in range(numPoles):
+#     for fi in range(numPoles):
         
-        recalc_pf_full[i][fi] = np.zeros(len(xyz_pf))
+#         recalc_pf_full[i][fi] = np.zeros(len(xyz_pf))
 
-        for yi in range(len(xyz_pf)):
+#         for yi in range(len(xyz_pf)):
             
-            if yi in pf_od_full[fi]: #pf_cell is defined
+#             if yi in pf_od_full[fi]: #pf_cell is defined
                 
-                od_cells = np.array(pf_od_full[fi][yi]['cell'])
+#                 od_cells = np.array(pf_od_full[fi][yi]['cell'])
 
-                recalc_pf_full[i][fi][yi] = ( 1 / np.sum(pf_od_full[fi][yi]['weight']) ) * np.sum( pf_od_full[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
+#                 recalc_pf_full[i][fi][yi] = ( 1 / np.sum(pf_od_full[fi][yi]['weight']) ) * np.sum( pf_od_full[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
         
-    recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
-    recalc_pf_full[i].normalize()    
+#     recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
+#     recalc_pf_full[i].normalize()    
         
-    """ (i+1)th inversion """
+#     """ (i+1)th inversion """
 
-    od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
-    calc_od[i+1] = np.zeros( (od_data.shape[0], numPoles) )        
+#     od_data = np.ones( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] )
+#     calc_od[i+1] = np.zeros( (od_data.shape[0], numPoles) )        
     
-    for fi in range(numPoles):
+#     for fi in range(numPoles):
 
-        temp = np.ones(( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2], len(pf.y[fi]) ))
+#         temp = np.ones(( od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2], len(pf.y[fi]) ))
         
-        for yi in range(len(pf.y[fi])):
+#         for yi in range(len(pf.y[fi])):
             
-            od_cells = pf_od[fi][yi]['cell']
-            wgts = pf_od[fi][yi]['weight']
-                
-            if recalc_pf[i][fi][yi] == 0: continue
-            else: temp[od_cells.astype(int), yi] = ( abs(pf.data[fi][yi]) / recalc_pf[i][fi][yi] )
+#             #check for zero OD cells that correspond to the specified pole figure direction 
+#             if len(nn_gridPts_full[hi][yi]) == 0:                   
+            
+#                 od_cells = pf_od[fi][yi]['cell']
+#                 wgts = pf_od[fi][yi]['weight']
+                    
+#                 if recalc_pf[i][fi][yi] == 0: continue
+#                 else: temp[od_cells.astype(int), yi] = ( abs(pf.data[fi][yi]) / recalc_pf[i][fi][yi] )
 
-        """ zero to 1E-5 """
-        temp = np.where(temp==0,1E-5,temp)
-        """ log sum """
-        temp = np.log(temp)
-        n = np.count_nonzero(temp,axis=1)
-        n = np.where(n == 0, 1, n)
-        calc_od[i+1][:,fi] = np.exp((np.sum(temp,axis=1)*refl_wgt[fi])/n)
+#         """ zero to 1E-5 """
+#         temp = np.where(temp==0,1E-5,temp)
+#         """ log sum """
+#         temp = np.log(temp)
+#         n = np.count_nonzero(temp,axis=1)
+#         n = np.where(n == 0, 1, n)
+#         calc_od[i+1][:,fi] = np.exp((np.sum(temp,axis=1)*refl_wgt[fi])/n)
 
-    calc_od[i+1] = calc_od[i].weights * np.power(np.product(calc_od[i+1],axis=1),(1/numPoles))
+#     calc_od[i+1] = calc_od[i].weights * np.power(np.product(calc_od[i+1],axis=1),(1/numPoles))
 
-    #place into OD object
-    calc_od[i+1] = bunge(od.res, od.cs, od.ss, weights=calc_od[i+1])
-    calc_od[i+1].normalize() 
+#     #place into OD object
+#     calc_od[i+1] = bunge(od.res, od.cs, od.ss, weights=calc_od[i+1])
+#     calc_od[i+1].normalize() 
      
-cl = np.arange(0,7.5,0.5)       
-recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma',proj='none')
+# cl = np.arange(0,7.5,0.5)       
+# recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma',proj='none')
+# print(calc_od[iterations-1].index())
 
 # %%
 
 ### FIBER PLOT ###
 
-# pf_num = 0
+pf_num = 0
 
-# import mayavi.mlab as mlab
-# # import matplotlib.pyplot as plt
-# # fig = plt.figure()
+import mayavi.mlab as mlab
+# import matplotlib.pyplot as plt
+# fig = plt.figure()
 
-# mlab.figure(bgcolor=(1,1,1))
+mlab.figure(bgcolor=(1,1,1))
 
-# ## grid ##
-# gd = mlab.points3d(bungeAngs[:,0],bungeAngs[:,1],bungeAngs[:,2],scale_factor=1,mode='point',color=(0,0,0))
-# gd.actor.property.render_points_as_spheres = True
-# gd.actor.property.point_size = 3
+## grid ##
+gd = mlab.points3d(bungeAngs[:,0],bungeAngs[:,1],bungeAngs[:,2],scale_factor=1,mode='point',color=(0,0,0))
+gd.actor.property.render_points_as_spheres = True
+gd.actor.property.point_size = 3
   
-# ## lit point ##
-# gd = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(1,0,0))
-# gd.actor.property.render_points_as_spheres = True
-# gd.actor.property.point_size = 5
+## lit point ##
+gd = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(1,0,0))
+gd.actor.property.render_points_as_spheres = True
+gd.actor.property.point_size = 5
 
-# ## manual fibre ##
-# gd2 = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(0,1,0))
-# gd2.actor.property.render_points_as_spheres = True
-# gd2.actor.property.point_size = 5
+## manual fibre ##
+gd2 = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(0,1,0))
+gd2.actor.property.render_points_as_spheres = True
+gd2.actor.property.point_size = 5
 
-# ## trun grid ##
-# gd3 = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(0,0,1))
-# gd3.actor.property.render_points_as_spheres = True
-# gd3.actor.property.point_size = 5   
+## trun grid ##
+gd3 = mlab.points3d(0,0,0,scale_factor=1,mode='point',color=(0,0,1))
+gd3.actor.property.render_points_as_spheres = True
+gd3.actor.property.point_size = 5   
 
-# plt_list = list(fibre_e_full[pf_num].keys())
-# plt_list.sort()
+plt_list = list(fibre_full_e[pf_num].keys())
+plt_list.sort()
 
-# @mlab.animate(delay=100)
-# def anim():
-#     while True:
+""" cube (111) pts """
+
+from scipy.spatial.distance import cdist
+
+azi = np.deg2rad(np.array((45,135,225,315)))
+pol = np.deg2rad(np.array((35,35,35,35)))
+x = np.sin(pol) * np.cos(azi)
+y = np.sin(pol) * np.sin(azi)
+z = np.cos(pol)
+pts = np.array((x,y,z)).T
+
+dist_mat = cdist(xyz_pf,pts)
+plt_list = np.argmin(dist_mat,axis=0)
+
+@mlab.animate(delay=100)
+def anim():
+    while True:
         
-#         for yi in plt_list:
+        for yi in plt_list:
                 
-# #            gd2.mlab_source.reset( x = fibre_wimv[pf_num][yi][:,0],
-# #                                   y = fibre_wimv[pf_num][yi][:,1],
-# #                                   z = fibre_wimv[pf_num][yi][:,2])
+#            gd2.mlab_source.reset( x = fibre_wimv[pf_num][yi][:,0],
+#                                   y = fibre_wimv[pf_num][yi][:,1],
+#                                   z = fibre_wimv[pf_num][yi][:,2])
             
-#             gd.mlab_source.reset( x = fibre_e_full[pf_num][yi][:,0],
-#                                   y = fibre_e_full[pf_num][yi][:,1],
-#                                   z = fibre_e_full[pf_num][yi][:,2])
+            gd.mlab_source.reset( x = fibre_full_e[pf_num][yi][:,0],
+                                  y = fibre_full_e[pf_num][yi][:,1],
+                                  z = fibre_full_e[pf_num][yi][:,2])
             
-#             gd2.mlab_source.reset( x = egrid_trun[pf_num][yi][:,0],
-#                                    y = egrid_trun[pf_num][yi][:,1],
-#                                    z = egrid_trun[pf_num][yi][:,2])
+            # gd2.mlab_source.reset( x = egrid_trun[pf_num][yi][:,0],
+            #                         y = egrid_trun[pf_num][yi][:,1],
+            #                         z = egrid_trun[pf_num][yi][:,2])
             
-#             tubePts = nn_gridPts_full[pf_num][yi]
+            # tubePts = nn_gridPts_full[pf_num][yi]
             
-#             gd3.mlab_source.reset( x = bungeAngs[tubePts.astype(int),0],
-#                                    y = bungeAngs[tubePts.astype(int),1],
-#                                    z = bungeAngs[tubePts.astype(int),2])
+            # gd3.mlab_source.reset( x = bungeAngs[tubePts.astype(int),0],
+            #                         y = bungeAngs[tubePts.astype(int),1],
+            #                         z = bungeAngs[tubePts.astype(int),2])
         
-#             yield
+            yield
             
-# anim()
+anim()
 
-# #for yi in range(len(pf.y[pf_num])):
-# #    
-# #        gd = mlab.points3d(fibre[pf_num][yi][:,0],fibre[pf_num][yi][:,1],fibre[pf_num][yi][:,2],scale_factor=1,mode='point',color=(1,0,0))
-# #        gd.actor.property.render_points_as_spheres = True
-# #        gd.actor.property.point_size = 5    
+#for yi in range(len(pf.y[pf_num])):
+#    
+#        gd = mlab.points3d(fibre[pf_num][yi][:,0],fibre[pf_num][yi][:,1],fibre[pf_num][yi][:,2],scale_factor=1,mode='point',color=(1,0,0))
+#        gd.actor.property.render_points_as_spheres = True
+#        gd.actor.property.point_size = 5    
 
-# mlab.show(stop=True)
+mlab.show(stop=True)

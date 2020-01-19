@@ -88,6 +88,7 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
         nn_gridDist[fi] = {}
         
         egrid_trun[fi] = {}
+        qfib_all = {}
         
         """ set proper iterator """
         if isinstance(yset,dict): it = yset[fi]
@@ -128,6 +129,7 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))
             
             fibre_q[fi][yi] = qfib[fib_idx]
+            qfib_all[yi] = qfib
             
             """ reduce geodesic query size """
             qfib_pos = np.copy(qfib[fib_idx])
@@ -161,9 +163,57 @@ def calcFibre(symHKL,yset,qgrid,omega,rad,tree,euc_rad):
             egrid_trun[fi][yi] = bungeAngs[query_uni]
             
     # return nn_gridPts, nn_gridDist
-    return fibre_e, nn_gridPts
+    return qfib_all, nn_gridPts
 
 brassFibre, nn_gridPts  = calcFibre(symHKL,brass_y,qgrid,omega,rad,tree,euc_rad)
+
+# %%
+
+""" Marc DeGraef method J. Appl. Cryst. (2019) 52 """
+
+brass_y2 = np.zeros((1,3,8))
+HxY = {}
+ome = {}
+
+cphi = np.cos(omega/2)
+sphi = np.sin(omega/2)
+
+q0 = {}
+q = {}
+qf = {}
+
+for yi,by in enumerate(brass_y): 
+    
+    brass_y2[:,:,yi] = by
+    HxY[yi] = np.cross(symHKL[0],by)
+    ome[yi] = np.arccos(np.dot(symHKL[0],by))
+    
+    q0[yi] = {}
+    q[yi] = {}
+    qf[yi] = {}
+    
+    for hi,h in enumerate(HxY[yi]):
+        
+        q0[yi][hi] = np.hstack( [ np.cos(ome[yi][hi]/2), np.sin(ome[yi][hi]/2) * h ] )
+        q[yi][hi]  = np.hstack( [ cphi[:, np.newaxis], np.tile( by, (len(cphi),1) ) * sphi[:, np.newaxis] ] )
+        
+        qf[yi][hi] = quat.multiply(q[yi][hi], q0[yi][hi])
+    
+# %%
+        
+""" compare """
+
+test = {}
+
+for yi in qf.keys():
+    
+    test[yi] = {}
+    
+    for hi in qf[yi].keys():
+        
+        test[yi][hi] = quat.allclose(qf[yi][hi],brassFibre[yi][:,hi,:])
+
+
 
 # %%
 
