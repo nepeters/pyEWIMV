@@ -24,7 +24,7 @@ import os as _os
 from pymatgen.analysis.diffraction.xrd import XRDCalculator as _xrdcalc
 
 # for ND
-import neutronpy as _npy
+from neutronpy import Material
 
 __location__ = _os.path.realpath(_os.path.join(_os.getcwd(), _os.path.dirname(__file__)))
 
@@ -75,8 +75,35 @@ def calc_XRDreflWeights(pymat_struct, hkls, rad='CuKa'):
         
     return refl_wgt  
 
+def calc_NDreflWeights(npy_materialDef, hkls):
+    
+    if isinstance(npy_materialDef,dict): 
 
-
+        mat = Material(npy_materialDef)
+        
+        str_fac = {}
+        
+        for fi,fam in enumerate(hkls):
+            
+            str_fac[fi] = []
+            
+            for h in fam:
+                
+                str_fac[fi].append( _np.abs( mat.calc_nuc_str_fac(h) )**2 )
+                
+            str_fac[fi] = _np.average(str_fac[fi])
+            
+            
+        #normalize
+        norm = 1 / _np.max(list(str_fac.values()))
+            
+        for fi,fam in enumerate(hkls):
+            
+            str_fac[fi] *= norm
+            
+        return str_fac
+    
+    else: raise ValueError('supplied mat def not valid')
 
 
 

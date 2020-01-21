@@ -581,9 +581,9 @@ def quat2eu(quat, P=-1):
     q12 = quat[:,:,1]**2 + quat[:,:,2]**2 
     chi = _np.sqrt(q03*q12)
 
-    q03 = _np.round(q03, decimals = 10)
-    q12 = _np.round(q12, decimals = 10)
-    chi = _np.round(chi, decimals = 10)
+    q03 = _np.round(q03, decimals = 15)
+    q12 = _np.round(q12, decimals = 15)
+    chi = _np.round(chi, decimals = 15)
     
     case1 = (chi == 0) & (q12 == 0)
     case2 = (chi == 0) & (q03 == 0)
@@ -635,9 +635,9 @@ def quat2eu(quat, P=-1):
         Phi[case3] = Phi_t
         phi2[case3] = phi2_t
 
-    phi1 = _np.round(phi1, decimals = 10)
-    Phi = _np.round(Phi, decimals = 10)
-    phi2 = _np.round(phi2, decimals = 10)
+    phi1 = _np.round(phi1, decimals = 15)
+    Phi = _np.round(Phi, decimals = 15)
+    phi2 = _np.round(phi2, decimals = 15)
 
     return phi1,Phi,phi2
 #    return case1, case2, case3

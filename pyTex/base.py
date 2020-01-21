@@ -197,13 +197,14 @@ class poleFigure(object):
                 if arb_y is None: raise ValueError('Please provide arbitrary pole figure vectors (y) for interpolation')
                 else: arb_y_pol = XYZtoSPH(arb_y)
 
-                for i in range(self._numHKL):
+                for i,h in enumerate(hkls):
 
                     x_pf = copy.deepcopy(arb_y_pol[:,1]*np.cos(arb_y_pol[:,0]))
                     y_pf = copy.deepcopy(arb_y_pol[:,1]*np.sin(arb_y_pol[:,0]))
 
                     self.data[i] = abs(griddata(np.array((x_pf,y_pf)).T, files[i], (inter_x,inter_y), method=intMethod, fill_value=0.05))                
-
+                    self.hkl[i] = h
+                    
             else:
 
                 for i,h in enumerate(hkls):
@@ -536,7 +537,6 @@ class poleFigure(object):
 
         """
         export pfs for MTEX
-        
         uses .jul format
         """
 
@@ -551,12 +551,12 @@ class poleFigure(object):
 
             fname = os.path.join(location,fname)
 
+            print(fname)
             writeArr = np.column_stack((np.rad2deg(np.ravel(self.alpha)),
                                         np.rad2deg(np.ravel(self.beta)),
                                         np.ravel(self.data[hi])))
         
             with open(fname,'w') as f:
-
                 f.write('pyTex output\n')
                 f.write(' alpha\tbeta\tintensity')
                 np.savetxt(f,
@@ -694,7 +694,7 @@ class bunge( OD ):
         
         out = np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights)).T
         
-        with open(fname, 'w') as file:
+        with open(fname, 'a') as file:
             file.write('#phi1\tPhi\tphi2\tweight\n')
             np.savetxt(file,
                         out,
@@ -711,6 +711,27 @@ class bunge( OD ):
 
         return np.mean(self.weights**2)
 
+    def _plotPF( self, hkl ):
+        
+        pass
+        
+        # """ recalculate full pole figures """
+        # wgts = {}
+        
+        # for fi in range(numPoles):
+            
+        #     recalc_pf_full[i][fi] = np.zeros(len(xyz_pf))
+    
+        #     for yi in range(len(xyz_pf)):
+                
+        #         if yi in pf_od_full[fi]: #pf_cell is defined
+                    
+        #             od_cells = np.array(pf_od_full[fi][yi]['cell'])
+    
+        #             recalc_pf_full[i][fi][yi] = ( 1 / np.sum(pf_od_full[fi][yi]['weight']) ) * np.sum( pf_od_full[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
+            
+        # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
+        # recalc_pf_full[i].normalize()  
 
 class rodrigues( OD ):
     
