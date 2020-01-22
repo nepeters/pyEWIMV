@@ -17,14 +17,11 @@ this goes scattering vector -> intersection in bunge
 
 import os,sys
 from math import pi
-import json
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 from tqdm import tqdm
 import rowan as quat
-
-from pymatgen.core import Lattice, Structure
 
 sys.path.append('/home/nate/projects/pyTex/')
 from pyTex import poleFigure, bunge
@@ -39,8 +36,8 @@ P = 1
 crystalSym = 'm-3m'
 sampleSym = '1'
 cellSize = np.deg2rad(5)
-theta = np.deg2rad(5)
-sampleName = 'Al_NRSF2_5x5'
+theta = np.deg2rad(7)
+sampleName = 'Al_peakInt_5x7'
 
 """ NRSF2 .jul """
 
@@ -60,9 +57,9 @@ pf = poleFigure(pfs, hkls, crystalSym, 'jul')
 # hkls = []
 # files = []
 
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
+# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
 # # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
 # # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
 
 # for file in os.listdir(datadir):
@@ -79,7 +76,7 @@ pf = poleFigure(pfs, hkls, crystalSym, 'jul')
 #     hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
 #     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
-# rot = R.from_euler('XZY',(13,-90,90), degrees=True).as_dcm()
+# rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
 # pf = poleFigure(files,hkls,crystalSym,'nd')
 
 """ rotate """
@@ -555,11 +552,11 @@ for i in tqdm(range(iterations),position=0):
     calc_od[i+1].normalize() 
      
 cl = np.arange(0,7.5,0.5)       
-# recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma',proj='none')
+recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma_r',proj='none')
 # calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
 print(calc_od[iterations-1].index())
-calc_od[iterations-1].export('/home/nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')
-recalc_pf_full[iterations-1].export('/home/nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports',sampleName=sampleName)
+calc_od[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')
+recalc_pf_full[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports',sampleName=sampleName)
 
 
 # %%
@@ -587,6 +584,63 @@ recalc_pf_full[iterations-1].export('/home/nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV e
 # recalc_pf_test = poleFigure(recalc_pf_test, pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
 # recalc_pf_test.normalize()  
 # recalc_pf_test.plot(pfs=3,contourlevels=cl,cmap='magma',proj='none')
+
+# %%
+
+### 3D ODF plot ###
+
+import mayavi.mlab as mlab
+from tvtk.util import ctf
+from matplotlib.pyplot import cm
+
+mlab.figure(figure='1',bgcolor=(0.75,0.75,0.75))
+
+#reshape pts
+data = calc_od[iterations-1].weights.reshape(calc_od[iterations-1].phi1cen.shape)
+#round small values (<1E-5)
+data[data < 1E-5] = 0
+
+# calc_od[iterations-1].phi1cen,calc_od[iterations-1].Phicen,calc_od[iterations-1].phi2cen,
+
+# cont = mlab.contour3d(data,colormap='magma',opacity=0.25,contours=25)
+
+data_grid = mlab.pipeline.scalar_field(data)
+
+# vol = mlab.pipeline.volume(scalars, vmin=0.5, vmax=0.9,color=(1,0,0))
+
+contours = mlab.pipeline.contour_surface(data_grid,
+                                         contours=list(np.linspace(0,np.max(data),30)),
+                                         transparent=True)
+
+# ax = mlab.axes(color=(0,0,0),
+#                xlabel='φ1',
+#                ylabel='Φ',
+#                zlabel='φ2',
+#                )  
+# ax.label_text_property.font_family = 'arial'
+# ax.label_text_property.font_size = 7
+
+# phi2ax = mlab.quiver3d(0,0,0,20,0,0,line_width=1,scale_factor=0.5,color=(1,0,0),mode='arrow')
+# Phiax  = mlab.quiver3d(0,0,0,0,20,0,line_width=1,scale_factor=0.5,color=(0,1,0),mode='arrow')
+# phi1ax = mlab.quiver3d(0,0,0,0,0,20,line_width=1,scale_factor=0.5,color=(0,0,1),mode='arrow')
+
+# cbar = mlab.scalarbar(cont)
+# cbar.shadow = True
+# cbar.number_of_labels = 10
+# #adjust label position
+# cbar.label_text_property.justification = 'centered'
+# cbar.scalar_bar.text_pad = 10
+# cbar.scalar_bar.unconstrained_font_size = True
+# cbar.label_text_property.italic = False
+# cbar.label_text_property.font_size = 20
+# #turn off parallel projection
+# mlab.gcf().scene.parallel_projection = False
+
+#setup correct view
+
+mlab.view(azimuth=50,elevation=None)
+mlab.show(stop=True)
+
 
 # %%
 
