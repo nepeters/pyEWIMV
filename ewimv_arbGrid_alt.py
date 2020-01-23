@@ -555,8 +555,8 @@ cl = np.arange(0,7.5,0.5)
 recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma_r',proj='none')
 # calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
 print(calc_od[iterations-1].index())
-calc_od[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')
-recalc_pf_full[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports',sampleName=sampleName)
+# calc_od[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')
+# recalc_pf_full[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports',sampleName=sampleName)
 
 
 # %%
@@ -602,15 +602,13 @@ data[data < 1E-5] = 0
 
 # calc_od[iterations-1].phi1cen,calc_od[iterations-1].Phicen,calc_od[iterations-1].phi2cen,
 
-# cont = mlab.contour3d(data,colormap='magma',opacity=0.25,contours=25)
+x, y, z = np.ogrid[-10:10:20j, -10:10:20j, -10:10:20j]
+s = np.sin(x*y*z)/(x*y*z)
+mlab.pipeline.volume(mlab.pipeline.scalar_field(s))
 
-data_grid = mlab.pipeline.scalar_field(data)
-
-# vol = mlab.pipeline.volume(scalars, vmin=0.5, vmax=0.9,color=(1,0,0))
-
-contours = mlab.pipeline.contour_surface(data_grid,
-                                         contours=list(np.linspace(0,np.max(data),30)),
-                                         transparent=True)
+# contours = mlab.pipeline.contour_surface(data_grid,
+#                                          contours=list(np.linspace(0,np.max(data),30)),
+#                                          transparent=True)
 
 # ax = mlab.axes(color=(0,0,0),
 #                xlabel='φ1',
