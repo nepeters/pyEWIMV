@@ -60,7 +60,7 @@ brass_y = brass.apply(symHKL[0])
 
 pi2 = pi/2
 
-polar_stepN = 15
+polar_stepN = 3
 polar_step = pi2 / (polar_stepN-1)
 
 polar = np.arange(0,polar_stepN) * polar_step
@@ -82,7 +82,17 @@ for azi_n,pol in zip(azi_stepN,polar):
 
     pts.append(np.array((x,y,z)).T)
 
-xyz_pf = np.vstack(pts) 
+xyz_pf = np.vstack(pts)
+
+""" custom point """
+
+x_cust = np.sin(np.deg2rad(42)) * np.cos(np.deg2rad(309))
+y_cust = np.sin(np.deg2rad(42)) * np.sin(np.deg2rad(309))
+z_cust = np.cos(np.deg2rad(42)) 
+
+xyz_pf = np.append(xyz_pf, np.array((x_cust,y_cust,z_cust)).T[None,:], axis=0)
+
+# %%
 
 @jit(nopython=True,parallel=True)
 def quatMetricNumba(a, b):
@@ -219,6 +229,7 @@ for yi,by in enumerate(xyz_pf):
     
     # brass_y2[:,:,yi] = by
     HxY[yi] = np.cross(symHKL[0],by)
+    HxY[yi] = HxY[yi] / np.linalg.norm(HxY[yi],axis=1)[:,None]
     ome[yi] = np.arccos(np.dot(symHKL[0],by))
     
     q0[yi] = {}
@@ -278,7 +289,7 @@ import mayavi.mlab as mlab
 
 mlab.figure(bgcolor=(1,1,1))
 
-pf_num = 0
+pf_num = 14
 
 ## grid ##
 gd = mlab.points3d(bungeAngs[:,0],bungeAngs[:,1],bungeAngs[:,2],scale_factor=1,mode='point',color=(0,0,0))
@@ -305,7 +316,7 @@ gd2.actor.property.point_size = 7
 ## manual fibre ##
 gd3 = mlab.points3d(brassFibre_e[0][pf_num][:,0],brassFibre_e[0][pf_num][:,1],brassFibre_e[0][pf_num][:,2],scale_factor=1,mode='point',color=(0,1,0))
 gd3.actor.property.render_points_as_spheres = True
-gd3.actor.property.point_size = 7
+gd3.actor.property.point_size = 5
 
 # plt_list = list(brassFibre[pf_num].keys())
 # plt_list.sort()

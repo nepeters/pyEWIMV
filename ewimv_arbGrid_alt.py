@@ -41,43 +41,43 @@ sampleName = 'Al_peakInt_5x7'
 
 """ NRSF2 .jul """
 
-data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
-hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
+# data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
+# hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
 
-pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
-pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
-pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
+# pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
+# pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
+# pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
 
-pfs = [pf222path,pf311path,pf400path]
-rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
-pf = poleFigure(pfs, hkls, crystalSym, 'jul')
+# pfs = [pf222path,pf311path,pf400path]
+# rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
+# pf = poleFigure(pfs, hkls, crystalSym, 'jul')
 
 """ peak-fitted pole figures """
 
-# hkls = []
-# files = []
+hkls = []
+files = []
 
-# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
-# # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
-# # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
+# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
+datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+# datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
 
-# for file in os.listdir(datadir):
+for file in os.listdir(datadir):
     
-#     pfName = file.split(')')[0].split('(')[1]
+    pfName = file.split(')')[0].split('(')[1]
     
-#     try:
-#         hkls.append(tuple([int(c) for c in pfName]))
-#         files.append(os.path.join(datadir,file))
-#     except: #not hkls
-#         continue
+    try:
+        hkls.append(tuple([int(c) for c in pfName]))
+        files.append(os.path.join(datadir,file))
+    except: #not hkls
+        continue
     
-#     sortby = [sum([c**2 for c in h]) for h in hkls]
-#     hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
-#     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
+    sortby = [sum([c**2 for c in h]) for h in hkls]
+    hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
+    files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
-# rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
-# pf = poleFigure(files,hkls,crystalSym,'nd')
+rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
+pf = poleFigure(files,hkls,crystalSym,'nd')
 
 """ rotate """
 
@@ -153,10 +153,10 @@ pi2 = pi/2
 polar_stepN = 15
 polar_step = pi2 / (polar_stepN-1)
 
-polar = np.arange(0,polar_stepN) * polar_step
+polar = np.arange(0.5,polar_stepN) * polar_step
 r = np.sin(polar)
 azi_stepN = np.ceil(2.0*pi*r / polar_step)
-azi_stepN[0] = 0.9995 #single point at poles
+azi_stepN[0] = 5 #single point at poles
 azi_step = 2*pi / azi_stepN
 
 pts = []
@@ -173,6 +173,14 @@ for azi_n,pol in zip(azi_stepN,polar):
     pts.append(np.array((x,y,z)).T)
 
 xyz_pf = np.vstack(pts) 
+
+""" custom point """
+
+x_cust = np.sin(np.deg2rad(42)) * np.cos(np.deg2rad(309))
+y_cust = np.sin(np.deg2rad(42)) * np.sin(np.deg2rad(309))
+z_cust = np.cos(np.deg2rad(42)) 
+
+xyz_pf = np.append(xyz_pf, np.array((x_cust,y_cust,z_cust)).T[None,:], axis=0)
 
 fibre_full_e = {}
 fibre_full_q = {}
@@ -600,15 +608,15 @@ data = calc_od[iterations-1].weights.reshape(calc_od[iterations-1].phi1cen.shape
 #round small values (<1E-5)
 data[data < 1E-5] = 0
 
-# calc_od[iterations-1].phi1cen,calc_od[iterations-1].Phicen,calc_od[iterations-1].phi2cen,
-
 #needs work
 # vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(data), vmin=0, vmax=0.8)
 # vol.volume_mapper_type = 'FixedPointVolumeRayCastMapper'
 
 cont = mlab.pipeline.contour_surface(mlab.pipeline.scalar_field(data),
-                                     contours=list(np.linspace(0,np.max(data),30)),
+                                     contours=list(np.linspace(2,np.max(data),10)),
                                      transparent=True)
+
+out = mlab.outline()
 
 ax = mlab.axes(color=(0,0,0),
                xlabel='phi2',
@@ -618,28 +626,51 @@ ax = mlab.axes(color=(0,0,0),
                        0, np.rad2deg(calc_od[iterations-1]._Phimax),
                        0, np.rad2deg(calc_od[iterations-1]._phi1max)])  
 
+ax.axes.number_of_labels = 5
+ax.axes.corner_offset = 0.04
+#font size doesn't work @ v4.7.1
+ax.axes.font_factor = 1
+#adjust ratio of font size between axis title/label?
+ax.label_text_property.line_offset = 3
+#axis labels
 ax.label_text_property.font_family = 'arial'
-ax.label_text_property.font_size = 1
-ax.title_text_property.font_size = 1
-
+ax.label_text_property.shadow = True
+ax.label_text_property.bold = True
+ax.label_text_property.italic = False
+#axis titles
+ax.title_text_property.shadow = True
+ax.title_text_property.bold = True
+ax.title_text_property.italic = False
 
 cbar = mlab.scalarbar(cont)
 cbar.shadow = True
+cbar.use_default_range = False
+cbar.data_range = np.array([ 5, 40.4024208 ])
 cbar.number_of_labels = 10
 #adjust label position
 cbar.label_text_property.justification = 'centered'
 cbar.label_text_property.font_family = 'arial'
 cbar.scalar_bar.text_pad = 10
-cbar.scalar_bar.unconstrained_font_size = False
+cbar.scalar_bar.unconstrained_font_size = True
 cbar.label_text_property.italic = False
 cbar.label_text_property.font_size = 20
 #turn off parallel projection
 mlab.gcf().scene.parallel_projection = False
 
-#setup correct view
-mlab.view(azimuth=50,elevation=None)
-mlab.show(stop=True)
+""" add fibre """
 
+tubePts = np.rad2deg( bungeAngs[nn_gridPts_full[0][50].astype(int)] )
+
+gd3 = mlab.points3d(tubePts[:,2] / 5,
+                    tubePts[:,1] / 5,
+                    tubePts[:,0] / 5,
+                    mode='point',
+                    color=(0,0,0))
+
+gd3.actor.property.render_points_as_spheres = True
+gd3.actor.property.point_size = 5
+
+mlab.show(stop=True)
 
 # %%
 
