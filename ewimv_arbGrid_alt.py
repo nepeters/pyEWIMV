@@ -602,40 +602,41 @@ data[data < 1E-5] = 0
 
 # calc_od[iterations-1].phi1cen,calc_od[iterations-1].Phicen,calc_od[iterations-1].phi2cen,
 
-x, y, z = np.ogrid[-10:10:20j, -10:10:20j, -10:10:20j]
-s = np.sin(x*y*z)/(x*y*z)
-mlab.pipeline.volume(mlab.pipeline.scalar_field(s))
+#needs work
+# vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(data), vmin=0, vmax=0.8)
+# vol.volume_mapper_type = 'FixedPointVolumeRayCastMapper'
 
-# contours = mlab.pipeline.contour_surface(data_grid,
-#                                          contours=list(np.linspace(0,np.max(data),30)),
-#                                          transparent=True)
+cont = mlab.pipeline.contour_surface(mlab.pipeline.scalar_field(data),
+                                     contours=list(np.linspace(0,np.max(data),30)),
+                                     transparent=True)
 
-# ax = mlab.axes(color=(0,0,0),
-#                xlabel='φ1',
-#                ylabel='Φ',
-#                zlabel='φ2',
-#                )  
-# ax.label_text_property.font_family = 'arial'
-# ax.label_text_property.font_size = 7
+ax = mlab.axes(color=(0,0,0),
+               xlabel='phi2',
+               ylabel='Phi',
+               zlabel='phi1',
+               ranges=[0, np.rad2deg(calc_od[iterations-1]._phi2max),
+                       0, np.rad2deg(calc_od[iterations-1]._Phimax),
+                       0, np.rad2deg(calc_od[iterations-1]._phi1max)])  
 
-# phi2ax = mlab.quiver3d(0,0,0,20,0,0,line_width=1,scale_factor=0.5,color=(1,0,0),mode='arrow')
-# Phiax  = mlab.quiver3d(0,0,0,0,20,0,line_width=1,scale_factor=0.5,color=(0,1,0),mode='arrow')
-# phi1ax = mlab.quiver3d(0,0,0,0,0,20,line_width=1,scale_factor=0.5,color=(0,0,1),mode='arrow')
+ax.label_text_property.font_family = 'arial'
+ax.label_text_property.font_size = 1
+ax.title_text_property.font_size = 1
 
-# cbar = mlab.scalarbar(cont)
-# cbar.shadow = True
-# cbar.number_of_labels = 10
-# #adjust label position
-# cbar.label_text_property.justification = 'centered'
-# cbar.scalar_bar.text_pad = 10
-# cbar.scalar_bar.unconstrained_font_size = True
-# cbar.label_text_property.italic = False
-# cbar.label_text_property.font_size = 20
-# #turn off parallel projection
-# mlab.gcf().scene.parallel_projection = False
+
+cbar = mlab.scalarbar(cont)
+cbar.shadow = True
+cbar.number_of_labels = 10
+#adjust label position
+cbar.label_text_property.justification = 'centered'
+cbar.label_text_property.font_family = 'arial'
+cbar.scalar_bar.text_pad = 10
+cbar.scalar_bar.unconstrained_font_size = False
+cbar.label_text_property.italic = False
+cbar.label_text_property.font_size = 20
+#turn off parallel projection
+mlab.gcf().scene.parallel_projection = False
 
 #setup correct view
-
 mlab.view(azimuth=50,elevation=None)
 mlab.show(stop=True)
 
