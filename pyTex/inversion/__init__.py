@@ -18,10 +18,10 @@ import h5py as _h5
 import rowan as _quat
 from numba import jit
 
-from ..base import poleFigure as _poleFigure
-from ..base import bunge as _bunge
-from ..utils import XYZtoSPH as _XYZtoSPH
-from ..orientation import quat2eu as _quat2eu
+from pyTex.base import poleFigure as _poleFigure
+from pyTex.base import bunge as _bunge
+from pyTex.utils import XYZtoSPH as _XYZtoSPH
+from pyTex.orientation import quat2eu as _quat2eu
 
 __all__ = ['wimv',
            'e_wimv']
@@ -38,10 +38,13 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
         iterations : number of iterations
     """
     
-    pf_grid, alp, bet = pfs.grid(full=True, ret_ab=True)
+    fullPFgrid, alp, bet = pfs.grid(pfs.res,
+                                 radians=True,
+                                 cen=True,
+                                 ret_ab=True)
 
     xyz = {}   
-    pol = {}
+    sph = {}
 
     a_bins = _np.histogram_bin_edges(_np.arange(0,_np.pi/2+pfs.res,pfs.res),18)
     b_bins = _np.histogram_bin_edges(_np.arange(0,2*_np.pi+pfs.res,pfs.res),72)
@@ -62,21 +65,23 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
         # Mx3xN array | M - hkl multi. N - # of unique g
         xyz[fi] = _np.dot(fam,orient_dist.g)
 
-        # stereographic projection
-        pol[fi] = _XYZtoSPH(xyz[fi])
+        sph[fi] = _XYZtoSPH(xyz[fi],proj='none')
         
         od_pf[fi] = {}
         pf_od[fi] = {}
         
         for od_cell in _np.ravel(orient_dist.bungeList):
             
-            ai = _np.searchsorted(a_bins, pol[fi][:,1,int(od_cell)], side='left')
-            bi = _np.searchsorted(b_bins, pol[fi][:,0,int(od_cell)], side='left')
+            ai = _np.searchsorted(a_bins, sph[fi][:,1,int(od_cell)], side='left')
+            bi = _np.searchsorted(b_bins, sph[fi][:,0,int(od_cell)], side='left')
             
+            #value directly at pi/2
+            ai = _np.where(ai==18, 17, ai)
+
             #value directly at 2pi
             bi = _np.where(bi==72, 0, bi)
         
-            pfi = pf_grid[ai.astype(int),bi.astype(int)] #pole figure index
+            pfi = fullPFgrid[ai.astype(int),bi.astype(int)] #pole figure index
             
             od_pf[fi][od_cell] = pfi
                 
@@ -106,17 +111,16 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
             
             for fi in range(numPoles): 
                     
-                for pf_cell in _np.ravel(pf_grid):
+                for pf_cell in _np.ravel(fullPFgrid):
                     
-                    try:
+                    if pf_cell in pf_od[fi]:
+
                         od_cells = _np.array(pf_od[fi][pf_cell])
-                        ai, bi = _np.divmod(pf_cell, pf_grid.shape[1])
-                    except:
-                        continue
+                        ai, bi = _np.divmod(pf_cell, fullPFgrid.shape[1])
                     
-                    if pf_cell < pfs.data[fi].shape[0]*pfs.data[fi].shape[1]: #inside of measured PF range
-                        
-                        od_data[od_cells.astype(int)] *= pfs.data[fi][int(ai),int(bi)]
+                        if pf_cell < pfs.data[fi].shape[0]*pfs.data[fi].shape[1]: #inside of measured PF range
+                            
+                            od_data[od_cells.astype(int)] *= pfs.data[fi][int(ai),int(bi)]
                 
                 """ loop over od_cells (alternative) """
             #    for od_cell in _np.ravel(orient_dist.bungeList):
@@ -131,7 +135,6 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
                             
                 calc_od[0][:,fi] = _np.power(od_data,(1/numHKLs[fi]))
                 # calc_od[0][:,fi] = _np.power(od_data,1)
-
                 
             calc_od[0] = _np.product(calc_od[0],axis=1)**(1/numPoles)
             #place into OD object
@@ -139,16 +142,16 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
             calc_od[0].normalize()
 
         """ recalculate pole figures """
-        recalc_pf[i] = _np.zeros((pf_grid.shape[0],pf_grid.shape[1],numPoles))
+        recalc_pf[i] = _np.zeros((fullPFgrid.shape[0],fullPFgrid.shape[1],numPoles))
         
         for fi in range(numPoles):
             
-            for pf_cell in _np.ravel(pf_grid):
+            for pf_cell in _np.ravel(fullPFgrid):
                 
                 if pf_cell in pf_od[fi]: #pf_cell is defined
                     
                     od_cells = _np.array(pf_od[fi][pf_cell])
-                    ai, bi = _np.divmod(pf_cell, pf_grid.shape[1])
+                    ai, bi = _np.divmod(pf_cell, fullPFgrid.shape[1])
                     recalc_pf[i][int(ai),int(bi),fi] = ( 1 / len(od_cells) ) * _np.sum( calc_od[i].weights[od_cells.astype(int)] )
             
         recalc_pf[i] = _poleFigure(recalc_pf[i], pfs.hkl, orient_dist.cs, 'recalc', resolution=5)
@@ -180,17 +183,17 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
         
         for fi in range(numPoles):
                 
-            for pf_cell in _np.ravel(pf_grid):
+            for pf_cell in _np.ravel(fullPFgrid):
                 
-                try:
-                    od_cells = _np.array(pf_od[fi][pf_cell])
-                    ai, bi = _np.divmod(pf_cell, pf_grid.shape[1])
-                except: continue
+                if pf_cell in pf_od[fi]:
 
-                if pf_cell < pfs.data[fi].shape[0]*pfs.data[fi].shape[1]: #inside of measured PF range
-                    
-                    if recalc_pf[i].data[fi][int(ai),int(bi)] == 0: continue
-                    else: od_data[od_cells.astype(int)] *= ( pfs.data[fi][int(ai),int(bi)] / recalc_pf[i].data[fi][int(ai),int(bi)] )
+                    od_cells = _np.array(pf_od[fi][pf_cell])
+                    ai, bi = _np.divmod(pf_cell, fullPFgrid.shape[1])
+
+                    if pf_cell < pfs.data[fi].shape[0]*pfs.data[fi].shape[1]: #inside of measured PF range
+                        
+                        if recalc_pf[i].data[fi][int(ai),int(bi)] == 0: continue
+                        else: od_data[od_cells.astype(int)] *= ( pfs.data[fi][int(ai),int(bi)] / recalc_pf[i].data[fi][int(ai),int(bi)] )
             
             """ loop over od_cells (alternative) """
         #    for od_cell in _tqdm(_np.ravel(orient_dist.bungeList)):

@@ -59,9 +59,8 @@ files = []
 
 # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
 # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
 # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
-datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
 
 for file in os.listdir(datadir):
     
@@ -147,17 +146,17 @@ refl_wgt = calc_NDreflWeights(def_al, refls)
 
 # hkl_str = [''.join(tuple(map(str,h))) for h in hkls]
 
-# """ calculate pf grid XYZ for fibre """
+""" calculate reduced pf grid XYZ for fibre """
 
 # pi2 = pi/2
 
 # polar_stepN = 15
 # polar_step = pi2 / (polar_stepN-1)
 
-# polar = np.arange(0.5,polar_stepN) * polar_step
+# polar = np.arange(0,polar_stepN) * polar_step
 # r = np.sin(polar)
 # azi_stepN = np.ceil(2.0*pi*r / polar_step)
-# azi_stepN[0] = 5 #single point at poles
+# azi_stepN[0] = 0.9995 #single point at poles
 # azi_step = 2*pi / azi_stepN
 
 # pts = []
@@ -172,32 +171,22 @@ refl_wgt = calc_NDreflWeights(def_al, refls)
 #     z = np.cos(pol)
 
 #     pts.append(np.array((x,y,z)).T)
-
-# xyz_pf = np.vstack(pts) 
+# xyz_pf = np.vstack(pts)
 
 """ calculate 5x5 pf grid XYZ for fibre """
 
-pf_grid, alp, bet = pf.grid(res=np.deg2rad(5),
-                            radians=True,
-                            cen=True,
-                            ret_ab=True)
+pf_grid, alp, bet = pf.grid(full=True, ret_ab=True)
 
 #calculate pole figure y's
-sph = np.array((np.ravel(alp),np.ravel(bet))).T
+sph = np.array(np.divmod(np.ravel(pf_grid),pf_grid.shape[1])).T
+sph = sph * pf.res
+sph[:,0] = np.where(sph[:,0] == 0, 0.004363323, sph[:,0]) #1/4deg tilt off center to avoid issues
 
 #convert to xyz
 xyz_pf = np.zeros((sph.shape[0],3))
 xyz_pf[:,0] = np.sin( sph[:,0] ) * np.cos( sph[:,1] )
 xyz_pf[:,1] = np.sin( sph[:,0] ) * np.sin( sph[:,1] )
 xyz_pf[:,2] = np.cos( sph[:,0] ) 
-
-""" custom point """
-
-x_cust = np.sin(0.556) * np.cos(np.deg2rad(162.4+180))
-y_cust = np.sin(0.556) * np.sin(np.deg2rad(162.4+180))
-z_cust = np.cos(0.556) 
-
-xyz_pf = np.append(xyz_pf, np.array((x_cust,y_cust,z_cust)).T[None,:], axis=0)
 
 fibre_full_e = {}
 fibre_full_q = {}
@@ -315,9 +304,11 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
             fz = (eu_fib[:,0] <= od._phi1max) & (eu_fib[:,1] <= od._Phimax) & (eu_fib[:,2] <= od._phi2max)
             fz_idx = np.nonzero(fz)
             
-            fibre_e[fi][yi] = eu_fib[fz]    
-            fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
-            fibre_q[fi][yi] = qfib[fib_idx]
+            fibre_e[fi][yi] = eu_fib
+    
+            fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))
+            
+            fibre_q[fi][yi] = qfib
             
             """ reduce geodesic query size """
             qfib_pos = np.copy(qfib[fib_idx])
@@ -532,8 +523,7 @@ for i in tqdm(range(iterations),position=0):
         ##for reduced grid
         # recalc_pf_full[i][fi] = np.zeros(len(xyz_pf))
 
-        # for yi in range(len(xyz_pf)):
-        for yi in np.ravel(pf_grid):
+        for yi in range(len(xyz_pf)):
             
             if yi in pf_od_full[fi]: #pf_cell is defined
                 
@@ -624,89 +614,56 @@ print(calc_od[iterations-1].index())
 
 ### 3D ODF plot ###
 
-# import mayavi.mlab as mlab
-# from tvtk.util import ctf
-# from matplotlib.pyplot import cm
+import mayavi.mlab as mlab
+from matplotlib.pyplot import cm
 
-# mlab.figure(figure='1',bgcolor=(0.75,0.75,0.75))
+mlab.figure(figure='1',bgcolor=(0.75,0.75,0.75))
 
-# #reshape pts
-# data = calc_od[iterations-1].weights.reshape(calc_od[iterations-1].phi1cen.shape)
-# #round small values (<1E-5)
-# data[data < 1E-5] = 0
+#reshape pts
+data = calc_od[iterations-1].weights.reshape(calc_od[iterations-1].phi1cen.shape)
+#round small values (<1E-5)
+data[data < 1E-5] = 0
 
-# #needs work
-# # vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(data), vmin=0, vmax=0.8)
-# # vol.volume_mapper_type = 'FixedPointVolumeRayCastMapper'
+# calc_od[iterations-1].phi1cen,calc_od[iterations-1].Phicen,calc_od[iterations-1].phi2cen,
 
-# cont = mlab.pipeline.contour_surface(mlab.pipeline.scalar_field(data),
-#                                       contours=list(np.linspace(2,np.max(data),10)),
-#                                       transparent=True)
+#needs work
+# vol = mlab.pipeline.volume(mlab.pipeline.scalar_field(data), vmin=0, vmax=0.8)
+# vol.volume_mapper_type = 'FixedPointVolumeRayCastMapper'
 
-# out = mlab.outline()
+cont = mlab.pipeline.contour_surface(mlab.pipeline.scalar_field(data),
+                                     contours=list(np.linspace(0,np.max(data),30)),
+                                     transparent=True)
 
-# ax = mlab.axes(color=(0,0,0),
-#                 xlabel='phi2',
-#                 ylabel='Phi',
-#                 zlabel='phi1',
-#                 ranges=[0, np.rad2deg(calc_od[iterations-1]._phi2max),
-#                         0, np.rad2deg(calc_od[iterations-1]._Phimax),
-#                         0, np.rad2deg(calc_od[iterations-1]._phi1max)])  
+ax = mlab.axes(color=(0,0,0),
+               xlabel='phi2',
+               ylabel='Phi',
+               zlabel='phi1',
+               ranges=[0, np.rad2deg(calc_od[iterations-1]._phi2max),
+                       0, np.rad2deg(calc_od[iterations-1]._Phimax),
+                       0, np.rad2deg(calc_od[iterations-1]._phi1max)])  
 
-# ax.axes.number_of_labels = 5
-# ax.axes.corner_offset = 0.04
-# #font size doesn't work @ v4.7.1
-# ax.axes.font_factor = 1
-# #adjust ratio of font size between axis title/label?
-# ax.label_text_property.line_offset = 3
-# #axis labels
-# ax.label_text_property.font_family = 'arial'
-# ax.label_text_property.shadow = True
-# ax.label_text_property.bold = True
-# ax.label_text_property.italic = False
-# #axis titles
-# ax.title_text_property.shadow = True
-# ax.title_text_property.bold = True
-# ax.title_text_property.italic = False
+ax.label_text_property.font_family = 'arial'
+ax.label_text_property.font_size = 1
+ax.title_text_property.font_size = 1
 
-# cbar = mlab.scalarbar(cont)
-# cbar.shadow = True
-# # cbar.use_default_range = False
-# # cbar.data_range = np.array([ 5, 40.4024208 ])
-# cbar.number_of_labels = 10
-# #adjust label position
-# cbar.label_text_property.justification = 'centered'
-# cbar.label_text_property.font_family = 'arial'
-# cbar.scalar_bar.text_pad = 10
-# cbar.scalar_bar.unconstrained_font_size = True
-# cbar.label_text_property.italic = False
-# cbar.label_text_property.font_size = 20
-# #turn off parallel projection
-# mlab.gcf().scene.parallel_projection = False
 
-# """ add fibre """
-# tubePts = np.rad2deg( bungeAngs[nn_gridPts_full[0][1368].astype(int)] )
-# fibrePts = np.rad2deg( fibre_full_e[0][1368] )
+cbar = mlab.scalarbar(cont)
+cbar.shadow = True
+cbar.number_of_labels = 10
+#adjust label position
+cbar.label_text_property.justification = 'centered'
+cbar.label_text_property.font_family = 'arial'
+cbar.scalar_bar.text_pad = 10
+cbar.scalar_bar.unconstrained_font_size = False
+cbar.label_text_property.italic = False
+cbar.label_text_property.font_size = 20
+#turn off parallel projection
+mlab.gcf().scene.parallel_projection = False
 
-# gd3 = mlab.points3d(tubePts[:,2] / 5,
-#                     tubePts[:,1] / 5,
-#                     tubePts[:,0] / 5,
-#                     mode='point',
-#                     color=(0,0,0))
+#setup correct view
+mlab.view(azimuth=50,elevation=None)
+mlab.show(stop=True)
 
-# gd3.actor.property.render_points_as_spheres = True
-# gd3.actor.property.point_size = 5
-
-# gd4 = mlab.points3d(fibrePts[:,2] / 5,
-#                     fibrePts[:,1] / 5,
-#                     fibrePts[:,0] / 5,
-#                     mode='point',
-#                     color=(1,0,0)) 
-
-# gd4.actor.property.render_points_as_spheres = True
-# gd4.actor.property.point_size = 9
-
-# mlab.show(stop=True)
 
 # %%
 
@@ -816,23 +773,3 @@ print(calc_od[iterations-1].index())
 # #        gd.actor.property.point_size = 5    
 
 # mlab.show(stop=True)
-
-# %%
-
-        # q1_n = [quat.from_axis_angle(h, omega) for h in fam]
-    
-        # for yi,y in enumerate(it):
-            
-        #     axis = np.cross(fam,y)
-        #     angle = np.arccos(np.dot(fam,y))
-            
-        #     q0_n = quat.from_axis_angle(axis, angle)
-        #     # q0_n = quat.normalize(q0)
-            
-        #     qfib = np.zeros((len(q1_n[0]),len(q0_n),4))
-            
-        #     for sym_eq,(qA,qB) in enumerate(zip(q0_n,q1_n)):
-                
-        #         temp = quat.multiply(qA, qB)
-                
-        #         qfib[:,sym_eq,:] = temp
