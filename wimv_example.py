@@ -9,13 +9,14 @@ Created on Thu Nov 28 10:16:57 2019
 import sys,os
 import numpy as np
 
-from tqdm import tqdm as _tqdm
+# from tqdm import tqdm as _tqdm
 
 filepath = os.path.dirname(os.path.abspath(__file__))
 
 from pyTex import poleFigure as _poleFigure
 from pyTex import bunge as _bunge
 from pyTex.inversion import wimv
+from pyTex.inversion import _wimv_test
 
 from pyTex.utils import XYZtoSPH as _XYZtoSPH
 from pyTex.orientation import quat2eu as _quat2eu
@@ -53,7 +54,8 @@ orient_dist = _bunge(cellSize, crystalSym, sampleSym)
 
 # pf_grid = pf.grid(full=True)
 
-recalc_pf, calc_od, pf_od, od_pf, prnt_str = wimv(pfs, orient_dist, ret_pointer=True )
+# recalc_pf, calc_od, pf_od, od_pf, prnt_str = wimv(pfs, orient_dist, ret_pointer=True )
+recalc_pf, calc_od = _wimv_test(pfs, orient_dist)
 
 cl = np.arange(0,9.5,0.5)
 recalc_pf[11].plot(contourlevels=cl)

@@ -13,10 +13,25 @@ inversion module
 import os as _os
 
 import numpy as _np
-from tqdm import tqdm as _tqdm
+
 import h5py as _h5
 import rowan as _quat
 from numba import jit
+
+# #determine if ipython -> import tqdm.notebook
+# try:
+#     from IPython.Debugger import Tracer
+#     debug = Tracer()
+#     from tqdm import tqdm as _tqdm
+# except ImportError:
+    
+#     pass # or set "debug" to something else or whatever
+
+try:
+    __IPYTHON__
+    from tqdm.notebook import tqdm as _tqdm
+except NameError:
+    from tqdm import tqdm as _tqdm
 
 from pyTex.base import poleFigure as _poleFigure
 from pyTex.base import bunge as _bunge
@@ -25,6 +40,8 @@ from pyTex.orientation import quat2eu as _quat2eu
 
 __all__ = ['wimv',
            'e_wimv']
+
+""" internal functions """
 
 def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
     
@@ -217,7 +234,154 @@ def wimv( pfs, orient_dist, iterations=12, ret_pointer=False ):
 
     if ret_pointer is True: return recalc_pf, calc_od, pf_od, od_pf, prnt_str
     else: return recalc_pf, calc_od
+
+def _wimv_test( pfs, orient_dist, iterations=12 ):
+
+    """
+    perform WIMV inversion
+    fixed grid in PF space requiredpointer
     
+    # TODO: remove requirement to pre-generate odf
+
+    input:
+        exp_pfs    : poleFigure object
+        orient_dist: orientDist object
+        iterations : number of iterations
+    """
+    
+    """ calculate pointer """
+
+    orient_dist._calcPointer( 'wimv', pfs )
+
+    """ done with pointer generation """
+
+    od_data = _np.ones( orient_dist.bungeList.shape[0]*orient_dist.bungeList.shape[1]*orient_dist.bungeList.shape[2] )
+    calc_od = {}
+    recalc_pf = {}
+
+    numPoles = pfs._numHKL
+    numHKLs = [len(fam) for fam in pfs.symHKL]
+
+    fullPFgrid = pfs.grid(pfs.res,
+                          radians=True,
+                          cen=True)
+
+    for i in _tqdm(range(iterations),desc='Performing WIMV iterations',position=0,leave=True):
+        
+        """ first iteration, skip recalc of PF """
+        
+        if i == 0: #first iteration is direct from PFs
+            
+            od_data = _np.ones( orient_dist.bungeList.shape[0]*orient_dist.bungeList.shape[1]*orient_dist.bungeList.shape[2] )
+            calc_od[0] = _np.zeros( (od_data.shape[0], numPoles) )        
+            
+            for fi in range(numPoles): 
+                    
+                for pf_cell in _np.ravel(fullPFgrid):
+
+                    if pf_cell in orient_dist.pointer['full']['pf to od'][fi]:
+
+                        od_cells = _np.array(orient_dist.pointer['full']['pf to od'][fi][pf_cell])
+                        ai, bi = _np.divmod(pf_cell, fullPFgrid.shape[1])
+                    
+                        if pf_cell < pfs.data[fi].shape[0]*pfs.data[fi].shape[1]: #inside of measured PF range
+                            
+                            od_data[od_cells.astype(int)] *= pfs.data[fi][int(ai),int(bi)]
+                
+                """ loop over od_cells (alternative) """
+            #    for od_cell in _np.ravel(orient_dist.bungeList):
+                   
+            #        pf_cells = orient_dist.pointer['full']['od to pf'][fi][od_cell]
+                   
+            #        pf_cellMax = pf.data[fi].shape[0]*pf.data[fi].shape[1]
+            #        pf_cells = pf_cells[pf_cells < pf_cellMax]
+                   
+            #        ai, bi = _np.divmod(pf_cells, pf_grid.shape[1])
+            #        od_data[int(od_cell)] = _np.product( pf.data[fi][ai.astype(int),bi.astype(int)] )            
+                            
+                calc_od[0][:,fi] = _np.power(od_data,(1/numHKLs[fi]))
+                # calc_od[0][:,fi] = _np.power(od_data,1)
+                
+            calc_od[0] = _np.product(calc_od[0],axis=1)**(1/numPoles)
+            #place into OD object
+            calc_od[0] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[0])
+            calc_od[0].normalize()
+
+        """ recalculate pole figures """
+        recalc_pf[i] = _np.zeros((fullPFgrid.shape[0],fullPFgrid.shape[1],numPoles))
+        
+        for fi in range(numPoles):
+            
+            for pf_cell in _np.ravel(fullPFgrid):
+                
+                if pf_cell in orient_dist.pointer['full']['pf to od'][fi]: #pf_cell is defined
+                    
+                    od_cells = _np.array(orient_dist.pointer['full']['pf to od'][fi][pf_cell])
+                    ai, bi = _np.divmod(pf_cell, fullPFgrid.shape[1])
+                    recalc_pf[i][int(ai),int(bi),fi] = ( 1 / len(od_cells) ) * _np.sum( calc_od[i].weights[od_cells.astype(int)] )
+            
+        recalc_pf[i] = _poleFigure(recalc_pf[i], pfs.hkl, orient_dist.cs, 'recalc', resolution=5)
+        recalc_pf[i].normalize()
+        
+        """ compare recalculated to experimental """
+            
+        RP_err = {}
+        prnt_str = None
+        
+        _np.seterr(divide='ignore')
+
+        for fi in range(numPoles):
+            
+            expLim = pfs.data[fi].shape
+            RP_err[fi] = _np.abs( recalc_pf[i].data[fi][:expLim[0],:expLim[1]] - pfs.data[fi] ) / recalc_pf[i].data[fi][:expLim[0],:expLim[1]]
+            RP_err[fi][_np.isinf(RP_err[fi])] = 0
+            RP_err[fi] = _np.sqrt(_np.mean(RP_err[fi]**2))
+            
+            if prnt_str is None: prnt_str = 'RP Error: {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
+            else: prnt_str += ' | {:.4f}'.format(_np.round(RP_err[fi],decimals=4))
+            
+        _tqdm.write(prnt_str)
+            
+        """ (i+1)th inversion """
+
+        od_data = _np.ones( orient_dist.bungeList.shape[0]*orient_dist.bungeList.shape[1]*orient_dist.bungeList.shape[2] )
+        calc_od[i+1] = _np.zeros( (od_data.shape[0], numPoles) )        
+        
+        for fi in range(numPoles):
+                
+            for pf_cell in _np.ravel(fullPFgrid):
+                
+                if pf_cell in orient_dist.pointer['full']['pf to od'][fi]:
+
+                    od_cells = _np.array(orient_dist.pointer['full']['pf to od'][fi][pf_cell])
+                    ai, bi = _np.divmod(pf_cell, fullPFgrid.shape[1])
+
+                    if pf_cell < pfs.data[fi].shape[0]*pfs.data[fi].shape[1]: #inside of measured PF range
+                        
+                        if recalc_pf[i].data[fi][int(ai),int(bi)] == 0: continue
+                        else: od_data[od_cells.astype(int)] *= ( pfs.data[fi][int(ai),int(bi)] / recalc_pf[i].data[fi][int(ai),int(bi)] )
+            
+            """ loop over od_cells (alternative) """
+        #    for od_cell in _tqdm(_np.ravel(orient_dist.bungeList)):
+               
+        #        pf_cells = orient_dist.pointer['full']['od to pf'][fi][od_cell]
+               
+        #        pf_cellMax = pf.data[fi].shape[0]*pf.data[fi].shape[1]
+        #        pf_cells = pf_cells[pf_cells < pf_cellMax]
+               
+        #        ai, bi = _np.divmod(pf_cells, pf_grid.shape[1])
+        #        od_data[int(od_cell)] = _np.product( pf.data[fi][ai.astype(int),bi.astype(int)] / recalc_pf[i].data[fi][ai.astype(int), bi.astype(int)] )
+                    
+            calc_od[i+1][:,fi] = _np.power(od_data,(1/numHKLs[fi]))
+        
+        calc_od[i+1] = calc_od[i].weights * _np.power(_np.product(calc_od[i+1],axis=1),(0.8/numPoles))
+        
+        #place into OD object
+        calc_od[i+1] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[i+1])
+        calc_od[i+1].normalize()    
+
+    return recalc_pf, calc_od    
+
 def e_wimv( exp_pfs, orient_dist ):
 
     """
@@ -230,6 +394,8 @@ def e_wimv( exp_pfs, orient_dist ):
         orient_dist: orientDist object
         
     """
+
+    pass
 
 """
 generate HDF5 file containing fibres/distances for given grid
@@ -252,18 +418,7 @@ def genFibreH5(cellSize, hkl_str, uni_hkls_idx, symHKL_loop, xyz_pf, omega, qgri
 
     return
 
-@jit(nopython=True,parallel=False)
-def quatMetricNumba(a, b):
-    
-    """ from DOI 10.1007/s10851-009-0161-2, #4 """
-    
-    dist = _np.zeros((len(a),len(b)))
-    
-    for bi in range(len(b)):
-        
-        dist[:,bi] = 1 - _np.abs(_np.dot(a,b[bi]))
-    
-    return dist
+
 
 def _calcFibreHDF5(hfam, yset, omega, qgrid, od, h5fname, h5gname):
     

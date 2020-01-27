@@ -11,7 +11,7 @@ orientation module
 """
 
 import numpy as _np
-from numba import jit
+from numba import jit as _jit
 
 
 __all__ = ['eu2om',
@@ -642,3 +642,16 @@ def quat2eu(quat, P=-1):
     return phi1,Phi,phi2
 #    return case1, case2, case3
 
+#TODO: get rid of need for numba
+@_jit(nopython=True,parallel=False)
+def quatMetricNumba(a, b):
+    
+    """ from DOI 10.1007/s10851-009-0161-2, #4 """
+    
+    dist = _np.zeros((len(a),len(b)))
+    
+    for bi in range(len(b)):
+        
+        dist[:,bi] = 1 - _np.abs(_np.dot(a,b[bi]))
+    
+    return dist

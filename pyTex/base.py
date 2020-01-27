@@ -20,8 +20,27 @@ from scipy.interpolate import griddata as _griddata
 import matplotlib.pyplot as _plt
 import mayavi.mlab as _mlab
 import xrdtools
+import rowan as _quat
+
+# #determine if ipython -> import tqdm.notebook
+# try:
+#     from IPython.Debugger import Tracer
+#     debug = Tracer()
+#     from tqdm import tqdm as _tqdm
+# except ImportError:
+#     from tqdm.notebook import tqdm as _tqdm
+#     pass # or set "debug" to something else or whatever
+
+try:
+    __IPYTHON__
+    from tqdm.notebook import tqdm as _tqdm
+except NameError:
+    from tqdm import tqdm as _tqdm
 
 from .orientation import eu2om as _eu2om
+from .orientation import eu2quat as _eu2quat
+from .orientation import quat2eu as _quat2eu
+from .orientation import quatMetricNumba as _quatMetric
 from .utils import symmetrise as _symmetrise
 from .utils import normalize as _normalize
 from .utils import XYZtoSPH as _XYZtoSPH
@@ -486,7 +505,7 @@ class poleFigure(object):
 
             if d.shape[0] < 18: 
 
-                print('warning: only preliminary normalization for incomplete pole figs')
+                # _tqdm.write('warning: only preliminary normalization for incomplete pole figs')
 
                 temp = _np.sum( _np.ravel(d) * _np.ravel(self.cellVolume) ) / _np.sum( _np.ravel(self.cellVolume) )
 
@@ -597,7 +616,7 @@ class poleFigure(object):
                            newline='\n')
 
     @staticmethod                      
-    def grid( res, radians=False, cen=False, ret_ab=False, ret_steps=True ):
+    def grid( res, radians=False, cen=False, ret_ab=False, ret_steps=False ):
         
         """
         Returns ndarray of full grid points on pole figure
@@ -664,78 +683,6 @@ class pointer ( object ):
     
     def __init__( self, pfs, orient_dist, tube=False, tube_prop=None ):
 
-        """
-        create pointer object 
-        """
-
-        full_pf_grid, alp, bet = pfs.grid(full=True, ret_ab=True)
-
-        a_bins = _np.histogram_bin_edges(_np.arange(0,_np.pi/2+pfs.res,pfs.res),18)
-        b_bins = _np.histogram_bin_edges(_np.arange(0,2*_np.pi+pfs.res,pfs.res),72)
-
-        #dict | key:od cell# value:pf cell#s
-        self.od_pf = {}
-        #dict | key:pf_cell# value:od cell#s
-        self.pf_od = {}
-
-        numPoles = pfs._numHKL
-        numHKLs = [len(fam) for fam in pfs.symHKL]
-
-        if tube is False: #no tube projection
-
-            pass       
-
-        elif tube is True: #tube projection
-
-            if tube_prop is None: raise ValueError('please supply tube radius/exponent/pts/dist')
-            else:
-
-                odwgts_tot = _np.zeros( ( len(hkls), od.bungeList.shape[0]*od.bungeList.shape[1]*od.bungeList.shape[2] ) )
-
-                test = []
-
-                for hi, h in enumerate(hkls):
-                    
-                    pf_od[hi] = {}
-                    pf_od_full[hi] = {}
-                    
-                    for yi in range(len(tube_prop['points'][hi].keys())):
-                        
-                        od_cells = tube_prop['points'][hi][yi]
-
-                        #handle no od_cells
-                        if len(od_cells) == 0: continue
-                        else:
-
-                            scaled_dist = tube_prop['dist'][hi][yi]
-                            weights = 1 / ( ( abs(scaled_dist) )**tube_prop['exponent'] )
-                            
-                            if _np.any(weights < 0): raise ValueError('neg weight')
-                            if _np.any(weights == 0): raise ValueError('zero weight')
-                            
-                            pf_od[hi][yi] = {'cell': od_cells, 'weight': weights}
-                            
-                            odwgts_tot[hi,od_cells.astype(int)] += weights
-                        
-                    for yi in range(len(nn_gridPts_full[hi].keys())):
-                        
-                        od_cells = nn_gridPts_full[hi][yi]
-
-                        #handle no od_cells
-                        if len(od_cells) == 0: continue
-                        else:
-
-                            scaled_dist = nn_gridDist_full[hi][yi]
-                            weights = 1 / ( ( scaled_dist )**tube_prop['exponent'] )
-                            
-                            if _np.any(weights < 0): raise ValueError('neg weight')
-                            if _np.any(weights == 0): raise ValueError('zero weight')
-                            
-                            pf_od_full[hi][yi] = {'cell': od_cells, 'weight': weights}
-                        
-                odwgts_tot = _np.where(odwgts_tot == 0, 1, odwgts_tot)
-                odwgts_tot = 1 / odwgts_tot
-
         pass
 
 class OD( object ):
@@ -767,6 +714,8 @@ class bunge( OD ):
     def __init__( self, cellSize, crystalSym, sampleSym, weights=None, pointer=None, centered=True ):
         
         super().__init__( crystalSym, sampleSym )
+
+        self.res = cellSize
         
         # set boundary in Bunge space (not rigorous for cubic)
         if sampleSym == '1': self._phi1max = _np.deg2rad(360)
@@ -795,14 +744,19 @@ class bunge( OD ):
 
         self.g, self.bungeList = _eu2om((self.phi1cen,self.Phicen,self.phi2cen),out='mdarray')
         
-        self.res = cellSize
-        
         ## vol integral of sin(Phi) dPhi dphi1 dphi2 
         self.volume = (-_np.cos(self._Phimax) +_np.cos(0)) * self._phi1max * self._phi2max
         #for centered grid
         if centered: 
             
             self.cellVolume = self.res * self.res * ( _np.cos( self.Phicen - (self.res/2) ) - _np.cos( self.Phicen + (self.res/2) ) )
+            
+            temp = _np.zeros(( _np.product(self.phi1cen.shape ) , 3))
+            # quaternion grid
+            for ang_i, md_i in enumerate(_np.ndindex(self.phi1cen.shape)):
+                temp[ang_i,:] = _np.array( ( self.phi1cen[md_i], self.Phicen[md_i], self.phi2cen[md_i] ) )
+            self.q_grid = _eu2quat(temp).T
+            
             self.centered = True
 
         else: #for uncentered grid
@@ -833,6 +787,13 @@ class bunge( OD ):
             delta_Phi[Phi_max] = ( _np.cos( self.Phi[Phi_zero] - (self.res/2) ) - _np.cos( self.Phi[Phi_zero] ) )
 
             self.cellVolume = dphi1_dphi2 * delta_Phi 
+
+            temp = _np.zeros(( _np.product(self.phi1.shape ) , 3))
+            # quaternion grid
+            for ang_i, md_i in enumerate(_np.ndindex(self.phi1.shape)):
+                temp[ang_i,:] = _np.array( ( self.phi1[md_i], self.Phi[md_i], self.phi2[md_i] ) )
+            self.q_grid = _eu2quat(temp).T
+
             self.centered = False
 
         if weights is None: self.weights = _np.zeros_like(self.bungeList)
@@ -891,6 +852,8 @@ class bunge( OD ):
 
         return od
 
+    """ modifiers """
+
     def normalize( self ):
 
         temp = _np.sum( self.weights * _np.ravel(self.cellVolume) ) / _np.sum( _np.ravel(self.cellVolume) )
@@ -915,21 +878,283 @@ class bunge( OD ):
                         delimiter='\t',
                         newline='\n')
 
-    def index( self, print=False ):
+    """ metrics """
+
+    def index( self, cellVolume=None ):
 
         """
         calculate texture index
-
+        mean squared norm of the OD (normalized to volume)
+        https://doi.org/10.1107/S002188989700811X
         """
 
-        return _np.mean(self.weights**2)
+        if cellVolume is None:
+            return _np.sum( _np.ravel( self.cellVolume ) * self.weights**2 ) / _np.sum( _np.ravel( self.cellVolume ) )
+        else:
+            return _np.sum( _np.ravel( cellVolume ) * self.weights**2 ) / _np.sum( _np.ravel( cellVolume ) )
+
+    def entropy( self, cellVolume=None ):
+
+        """
+        calculate entropy (texture disorder)
+        f(g)ln(f(g))Δg - normalized to volume
+        https://doi.org/10.1107/S002188989700811X
+        """
+
+        if cellVolume is None:
+            return -_np.sum( _np.ravel( self.cellVolume ) * self.weights * _np.log( self.weights ) ) / _np.sum( _np.ravel( self.cellVolume ) )
+        else:
+            return -_np.sum( _np.ravel( cellVolume ) * self.weights * _np.log( self.weights ) ) / _np.sum( _np.ravel( cellVolume ) )
+
+    """ e-wimv specific sub-routines """
+
+    def _calcPath( self, path_type, symHKL, yset, phi, rad, q_tree, euc_rad):
+
+        """
+        calculate paths through orientation
+        
+        inputs:
+            -path_type    - full, arb, custom
+            -symHKL  -  
+            -yset    - set of y
+            -phi     - angular range [0 2π]
+            -rad     - radius of tube
+            -q_tree  - scipy KDTree object of q_grid
+            -euc_rad - euclidean distance (quaternion) for radius of tube 
+        """
+        
+        cphi = _np.cos(phi/2)
+        sphi = _np.sin(phi/2)
+        
+        q0 = {}
+        q = {}
+        qf = {}
+        
+        axis = {}
+        omega = {}
+        
+        path_e = {}
+        path_q = {}
+        
+        gridPts = {}
+        gridDist = {}
+
+        egrid_trun = {}
+            
+        for fi,fam in enumerate(_tqdm(symHKL),desc='Calculating paths'):
+            
+            path_e[fi] = {}
+            path_q[fi] = {}
+            
+            gridPts[fi] = {}
+            gridDist[fi] = {}
+            
+            egrid_trun[fi] = {}
+            
+            q0[fi] = {}
+            q[fi] = {}
+            
+            axis[fi] = {}
+            omega[fi] = {}
+            
+            """ set proper iterator """
+            if isinstance(yset,dict): it = yset[fi]
+            else: it = yset
+            
+            for yi,y in enumerate(it): 
+                
+                axis[fi][yi] = _np.cross(fam,y)
+                axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+                omega[fi][yi] = _np.arccos(_np.dot(fam,y))
+                
+                q0[fi][yi] = {}
+                q[fi][yi] = {}
+                qf[yi] = {}
+                qfib = _np.zeros((len(phi),len(fam),4))
+                
+                for hi,HxY in enumerate(axis[fi][yi]):
+                
+                    q0[fi][yi][hi] = _np.hstack( [ _np.cos(omega[fi][yi][hi]/2), _np.sin(omega[fi][yi][hi]/2) * HxY ] )
+                    q[fi][yi][hi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
+                    
+                    qf[yi][hi] = _quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
+                
+                    for qi in range(qf[yi][hi].shape[0]):
+                        
+                        qfib[qi,hi,:] = qf[yi][hi][qi,:]
+                
+                phi1, Phi, phi2 = _quat2eu(qfib)
+                
+                phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #bring back to 0 - 2pi
+                Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #bring back to 0 - pi
+                phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #bring back to 0 - 2pi
+                
+                eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
+                eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
+        
+                fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
+                fz_idx = _np.nonzero(fz)
+                
+                path_e[fi][yi] = eu_fib[fz]    
+                fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
+                path_q[fi][yi] = qfib[fib_idx]
+                
+                """ reduce geodesic query size """
+                qfib_pos = _np.copy(qfib[fib_idx])
+                qfib_pos[qfib_pos[:,0] < 0] *= -1
+                
+                query = _np.concatenate(q_tree.query_radius(qfib_pos,euc_rad))
+                query_uni = _np.unique(query)
+                qgrid_trun = self.q_grid[query_uni]
+                qgrid_trun_idx = _np.arange(len(self.q_grid))[query_uni] #store indexes to retrieve original grid pts later
+                
+                """ distance calc """
+                temp = _quatMetric(qgrid_trun,qfib[fib_idx])
+                """ find tube """
+                tube = (temp <= rad)
+                temp = _np.column_stack((_np.argwhere(tube)[:,0],temp[tube]))
+                
+                """ round very small values """
+                temp = _np.round(temp, decimals=7)
+                
+                """ move values at zero to very small (1E-5) """
+                temp[:,1] = _np.where(temp[:,1] == 0, 1E-5, temp[:,1])
+                
+                """ sort by min distance """
+                temp = temp[_np.argsort(temp[:,1],axis=0)]
+                """ return unique pts (first in list) """
+                uni_pts = _np.unique(temp[:,0],return_index=True)
+                
+                gridPts[fi][yi] = qgrid_trun_idx[uni_pts[0].astype(int)]
+                gridDist[fi][yi] = temp[uni_pts[1],1]
+                
+                # egrid_trun[fi][yi] = bungeAngs[query_uni]
+
+        path_opt = {'full': 'full',
+                    'arb': 'arb',
+                    'custom': 'custom'}
+
+        opt = path_opt.get(path_type, lambda: 'Unknown path type')       
+
+        if opt == 'Unknown path type': raise ValueError('Invalid path type specified..')
+
+        self.paths = {}
+        self.paths[opt] = {'grid points':gridPts,
+                           'grid distances':gridDist,
+                           'euler path':path_e,
+                           'quat path':path_q}
+
+    def _calcPointer( self, inv_method, pfs, tube_exp=None ):
+
+        """
+        calculate pointer dictionaries
+
+        both for e-wimv & wimv
+        """
+
+        if inv_method == 'e-wimv' and hasattr(self,'paths'):
+
+            self.pointer = {}
+
+            for p_type, p in self.paths.items():
+
+                pf_od = {}
+                odwgts_tot = _np.zeros( ( len(pfs.hkls), self.bungeList.shape[0]*self.bungeList.shape[1]*self.bungeList.shape[2] ) )
+
+                test = []
+
+                for hi, h in _tqdm(enumerate(pfs.hkls),desc='Calculating '+p_type+' pointer'):
+                    
+                    pf_od[hi] = {}
+                    
+                    for yi in range(len(p['grid points'][hi].keys())):
+                        
+                        od_cells = p['grid points'][hi][yi]
+
+                        #handle no od_cells
+                        if len(od_cells) == 0: continue
+                        else:
+
+                            scaled_dist = p['grid distances'][hi][yi]
+                            weights = 1 / ( ( abs(scaled_dist) )**tube_exp )
+                            
+                            if _np.any(weights < 0): raise ValueError('neg weight')
+                            if _np.any(weights == 0): raise ValueError('zero weight')
+                            
+                            pf_od[hi][yi] = {'cell': od_cells, 'weight': weights}
+                            
+                            odwgts_tot[hi,od_cells.astype(int)] += weights
+                        
+                odwgts_tot = _np.where(odwgts_tot == 0, 1, odwgts_tot)
+                odwgts_tot = 1 / odwgts_tot
+
+                self.pointer[p_type] = {'pf to od':pf_od,
+                                        'od weights':odwgts_tot}
+
+        elif inv_method == 'wimv':
+
+            self.pointer = {}
+
+            fullPFgrid, alp, bet = pfs.grid(pfs.res,
+                                            radians=True,
+                                            cen=True,
+                                            ret_ab=True)
+
+            xyz = {}   
+            sph = {}
+            od_pf = {}
+            pf_od = {}
+
+            a_bins = _np.histogram_bin_edges(_np.arange(0,_np.pi/2+pfs.res,pfs.res),18)
+            b_bins = _np.histogram_bin_edges(_np.arange(0,2*_np.pi+pfs.res,pfs.res),72)
+
+            for fi,fam in enumerate(_tqdm(pfs.symHKL,desc='Calculating pointer')):
+        
+                # Mx3xN array | M - hkl multi. N - # of unique g
+                xyz[fi] = _np.dot(fam,self.g)
+
+                sph[fi] = _XYZtoSPH(xyz[fi],proj='none')
+                
+                od_pf[fi] = {}
+                pf_od[fi] = {}
+                
+                for od_cell in _np.ravel(self.bungeList):
+                    
+                    ai = _np.searchsorted(a_bins, sph[fi][:,1,int(od_cell)], side='left')
+                    bi = _np.searchsorted(b_bins, sph[fi][:,0,int(od_cell)], side='left')
+                    
+                    #value directly at pi/2
+                    ai = _np.where(ai==18, 17, ai)
+
+                    #value directly at 2pi
+                    bi = _np.where(bi==72, 0, bi)
+                
+                    pfi = fullPFgrid[ai.astype(int),bi.astype(int)] #pole figure index
+                    
+                    od_pf[fi][od_cell] = pfi
+                        
+                    for p in pfi:
+                        
+                        try:
+                            pf_od[fi][p].append(od_cell)
+                            
+                        except:
+                            pf_od[fi][p] = []
+                            pf_od[fi][p].append(od_cell)
+
+            self.pointer['full'] = {'pf to od':pf_od,
+                                    'od to pf':od_pf,
+                                    'poles':xyz,
+                                    'poles - sph':sph} 
+
+        elif inv_method == 'e-wimv' and hasattr(self,'paths') is False: raise ValueError('please calculate paths first')
 
     def _calcPF( self, hkl ):
 
         """
         recalculate pole figures
         """
-        
+
         pass
 
     def _calcIPF( self, hkl ):
@@ -963,7 +1188,7 @@ class bunge( OD ):
                 pltX = pltX.reshape(pltX.shape[1:])
                 pltY = pltY.reshape(pltY.shape[1:])
                 
-                pltWgt = _np._copy(self.weights)
+                pltWgt = _np.copy(self.weights)
                 pltWgt = pltWgt.reshape(self.Phicen.shape)
                 pltWgt = pltWgt[section_id,:,:]
                 pltWgt = pltWgt.reshape(pltWgt.shape[1:])
@@ -971,7 +1196,7 @@ class bunge( OD ):
             pt = ax.contourf(pltX,pltY,pltWgt,cmap=cmap)
             fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04) 
 
-    def plot3d( self ):
+    def plot3d( self, n_contours=10, contour_range=None ):
 
         """
         3d plot using Mayavi (VTK)
@@ -980,7 +1205,9 @@ class bunge( OD ):
         fig = _mlab.figure(figure='1',bgcolor=(0.75,0.75,0.75))
 
         #reshape pts
-        data = _np.copy(self.weights.reshape(self.phi1.shape))
+        if self.centered: data = _np.copy(self.weights.reshape(self.phi1cen.shape))
+        else: data = _np.copy(self.weights.reshape(self.phi1.shape))
+        
         #round small values (<1E-5)
         data[data < 1E-5] = 0
 
@@ -988,10 +1215,13 @@ class bunge( OD ):
         # vol = _mlab.pipeline.volume(_mlab.pipeline.scalar_field(data), vmin=0, vmax=0.8)
         # vol.volume_mapper_type = 'FixedPointVolumeRayCastMapper'
 
+        # TODO: add option for custom contours?
+        #plot contours
         cont = _mlab.pipeline.contour_surface(_mlab.pipeline.scalar_field(data),
-                                            contours=list(_np.linspace(2,_np.max(data),10)),
+                                            contours=list(_np.linspace(0,_np.max(data),n_contours)),
                                             transparent=True)
 
+        #plot grid outline box
         _mlab.outline()
 
         ax = _mlab.axes(color=(0,0,0),
@@ -1004,7 +1234,7 @@ class bunge( OD ):
 
         ax.axes.number_of_labels = 5
         ax.axes.corner_offset = 0.04
-        #font size doesn't work @ v4.7.1
+        #font size doesn't work @ mayavi v4.7.1
         ax.axes.font_factor = 1
         #adjust ratio of font size between axis title/label?
         ax.label_text_property.line_offset = 3
@@ -1018,10 +1248,15 @@ class bunge( OD ):
         ax.title_text_property.bold = True
         ax.title_text_property.italic = False
 
+        #colorbar key
         cbar = _mlab.scalarbar(cont)
         cbar.shadow = True
-        # cbar.use_default_range = False
-        # cbar.data_range = np.array([ 5, 40.4024208 ])
+
+        if contour_range:
+            cbar.use_default_range = False
+            if isinstance(contour_range,_np.ndarray): cbar.data_range = contour_range
+            else: cbar.data_range = _np.array(contour_range)
+            
         cbar.number_of_labels = 10
         #adjust label position
         cbar.label_text_property.justification = 'centered'
@@ -1046,7 +1281,6 @@ class rodrigues( OD ):
     def __init__( self, gridPtSize, crystalSym, sampleSym ):
                  
         super(rodrigues, self).__init__( crystalSym, sampleSym )
-        
         
 ### TESTING ###
         

@@ -41,44 +41,44 @@ sampleName = 'Al_peakInt_5x7'
 
 """ NRSF2 .jul """
 
-# data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
-# hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
+data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
+hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
 
-# pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
-# pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
-# pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
+pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
+pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
+pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
 
-# pfs = [pf222path,pf311path,pf400path]
-# rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
-# pf = poleFigure(pfs, hkls, crystalSym, 'jul')
+pfs = [pf222path,pf311path,pf400path]
+rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
+pf = poleFigure(pfs, hkls, crystalSym, 'jul')
 
 """ peak-fitted pole figures """
 
-hkls = []
-files = []
+# hkls = []
+# files = []
 
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
-# datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
-datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
+# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
+# # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
+# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+# # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
+# datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
 
-for file in os.listdir(datadir):
+# for file in os.listdir(datadir):
     
-    pfName = file.split(')')[0].split('(')[1]
+#     pfName = file.split(')')[0].split('(')[1]
     
-    try:
-        hkls.append(tuple([int(c) for c in pfName]))
-        files.append(os.path.join(datadir,file))
-    except: #not hkls
-        continue
+#     try:
+#         hkls.append(tuple([int(c) for c in pfName]))
+#         files.append(os.path.join(datadir,file))
+#     except: #not hkls
+#         continue
     
-    sortby = [sum([c**2 for c in h]) for h in hkls]
-    hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
-    files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
+#     sortby = [sum([c**2 for c in h]) for h in hkls]
+#     hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
+#     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
-rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
-pf = poleFigure(files,hkls,crystalSym,'nd')
+# rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
+# pf = poleFigure(files,hkls,crystalSym,'nd')
 
 """ rotate """
 
@@ -249,7 +249,6 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
     q = {}
     qf = {}
     
-    
     axis = {}
     omega = {}
     
@@ -293,9 +292,9 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
             qfib = np.zeros((len(phi),len(fam),4))
             
             for hi,HxY in enumerate(axis[fi][yi]):
-                
-                q0[fi][yi][hi] = quat.normalize(np.hstack( [ np.cos(omega[fi][yi][hi]/2), np.sin(omega[fi][yi][hi]/2) * HxY ] ))
-                q[fi][yi][hi]  = quat.normalize(np.hstack( [ cphi[:, np.newaxis], np.tile( y, (len(cphi),1) ) * sphi[:, np.newaxis] ] ))
+            
+                q0[fi][yi][hi] = np.hstack( [ np.cos(omega[fi][yi][hi]/2), np.sin(omega[fi][yi][hi]/2) * HxY ] )
+                q[fi][yi][hi]  = np.hstack( [ cphi[:, np.newaxis], np.tile( y, (len(cphi),1) ) * sphi[:, np.newaxis] ] )
                 
                 qf[yi][hi] = quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
             
@@ -587,7 +586,7 @@ for i in tqdm(range(iterations),position=0):
     calc_od[i+1].normalize() 
      
 cl = np.arange(0,7.5,0.5)       
-recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='magma_r',proj='none')
+recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
 # calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
 print(calc_od[iterations-1].index())
 # calc_od[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')
