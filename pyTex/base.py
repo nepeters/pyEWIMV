@@ -17,25 +17,13 @@ from math import ceil as _ceil
 
 import numpy as _np 
 from scipy.interpolate import griddata as _griddata
+from sklearn.neighbors import KDTree as _KDTree
 import matplotlib.pyplot as _plt
 import mayavi.mlab as _mlab
 import xrdtools
 import rowan as _quat
 
-# #determine if ipython -> import tqdm.notebook
-# try:
-#     from IPython.Debugger import Tracer
-#     debug = Tracer()
-#     from tqdm import tqdm as _tqdm
-# except ImportError:
-#     from tqdm.notebook import tqdm as _tqdm
-#     pass # or set "debug" to something else or whatever
-
-try:
-    __IPYTHON__
-    from tqdm.notebook import tqdm as _tqdm
-except NameError:
-    from tqdm import tqdm as _tqdm
+from tqdm.auto import tqdm as _tqdm
 
 from .orientation import eu2om as _eu2om
 from .orientation import eu2quat as _eu2quat
@@ -62,7 +50,7 @@ class poleFigure(object):
     pole figure constructor
     """
     
-    def __init__( self, files, hkls, cs, pf_type, subtype=None, names=None, resolution=None, arb_y=None ):
+    def __init__( self, files, hkls, cs, pf_type, subtype=None, names=None, resolution=None, arb_y=None, centered=False ):
         
         """
         list of file names
@@ -77,7 +65,7 @@ class poleFigure(object):
         if pf_type == 'xrdml':
             
             self.data = {}
-            self.hkl = hkls
+            self.hkls = hkls
             self.twotheta = {}
             self._numHKL = len(hkls)
             
@@ -150,7 +138,7 @@ class poleFigure(object):
             self.data = {}
             self.y = {}
             self.y_pol = {}
-            self.hkl = hkls
+            self.hkls = hkls
             self._numHKL = len(hkls)
 
             for i,(f,h) in enumerate(zip(files,hkls)):
@@ -174,7 +162,7 @@ class poleFigure(object):
             self.data = {}
             self.y = {}
             self.y_pol = {}
-            self.hkl = hkls
+            self.hkls = hkls
             self._numHKL = len(hkls)
 
             for i,(f,h) in enumerate(zip(files,hkls)):
@@ -202,23 +190,43 @@ class poleFigure(object):
         elif pf_type == 'recalc': 
             
             self.data = {}
-            self.hkl = {}
+            self.hkls = {}
             self._numHKL = len(hkls)
 
             #equal grid spacing
             if resolution is None: self.res = None
             else: self.res = resolution
 
-            #polar
-            self._alphasteps = _np.arange(self.res/2,
-                                          ( 90 - (self.res/2) ) + self.res,
-                                          self.res)
-            #azimuth
-            self._betasteps = _np.arange(self.res/2,
-                                         ( 360 - (self.res/2) ) + self.res,
-                                         self.res)
+            if centered is True:
+
+                #polar
+                self._alphasteps = _np.arange(self.res/2,
+                                            ( 90 - (self.res/2) ) + self.res,
+                                            self.res)
+                #azimuth
+                self._betasteps = _np.arange(self.res/2,
+                                            ( 360 - (self.res/2) ) + self.res,
+                                            self.res)
+
+            elif centered is False:
+
+                #polar
+                self._alphasteps = _np.arange(0,
+                                              90 + self.res,
+                                              self.res)
+                #azimuth
+                self._betasteps = _np.arange(2.5,
+                                             357.5 + self.res,
+                                             self.res)            
+            
             #grids
             self.alpha, self.beta = _np.meshgrid(self._alphasteps,self._betasteps,indexing='ij')
+
+            self.y_pol = {}
+
+            for i,h in enumerate(hkls):
+
+                self.y_pol[i] = _np.deg2rad(_np.array((_np.ravel(self.alpha),_np.ravel(self.beta))).T)
 
             #convert to rad
             self.alpha = _np.deg2rad(self.alpha)
@@ -246,7 +254,7 @@ class poleFigure(object):
                     y_pf = _copy.deepcopy(arb_y_pol[:,1]*_np.sin(arb_y_pol[:,0]))
 
                     self.data[i] = abs(_griddata(_np.array((x_pf,y_pf)).T, files[i], (inter_x,inter_y), method=intMethod, fill_value=0.05))                
-                    self.hkl[i] = h
+                    self.hkls[i] = h
                     
             else:
 
@@ -254,7 +262,7 @@ class poleFigure(object):
                                     
                     #reuse files variable... may not be clear
                     self.data[i] = files[:,:,i]
-                    self.hkl[i] = h
+                    self.hkls[i] = h
                     
             self.subtype = 'recalc'
                 
@@ -270,7 +278,7 @@ class poleFigure(object):
             self.data = {}
             self.y = {}
             self.y_pol = {}
-            self.hkl = hkls
+            self.hkls = hkls
             self._numHKL = len(hkls)
 
             for i,(f,h) in enumerate(zip(files,hkls)):
@@ -297,6 +305,12 @@ class poleFigure(object):
             self.subtype = 'nd_poleFig'
             self.symHKL = _symmetrise(cs,hkls)
             self.symHKL = _normalize(self.symHKL)            
+
+        elif pf_type == 'blank':
+
+            self.hkls = hkls
+            self.cs = cs
+            self.symHKL = _symmetrise(cs,hkls)
 
         else: raise NotImplementedError('pf type not recognized')
         
@@ -336,7 +350,7 @@ class poleFigure(object):
                 
                 ax.set_yticklabels([])
                 ax.set_xticklabels([])
-                ax.set_ylim([0,_np.max(plt_alpha)])
+                ax.set_ylim([0,1.4142])
                 ax.set_theta_zero_location(x_direction) 
 
                 plt_data = _np.concatenate((self.data[n], self.data[n][:, 0:1]), axis=1)
@@ -426,6 +440,7 @@ class poleFigure(object):
                         bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
                 
             _plt.tight_layout()
+            _plt.show()
 
     def correct( self, bkgd=None, defocus=None ):
 
@@ -529,7 +544,7 @@ class poleFigure(object):
 
                     self.data[i] = ( 1 / norm ) * d
 
-    def _interpolate( self, res, grid=None, intMethod='cubic' ):
+    def _interpolate( self, res, grid=None, intMethod='linear' ):
 
         """
         interpolate data points to normal grid | (res x res) cell size
@@ -538,26 +553,26 @@ class poleFigure(object):
         not working
         """        
 
-        if self.subtype != 'nd_poleFig': raise ValueError('only supported for nd currently')
-
         self.input_data = _copy.deepcopy(self.data)
         self.res = res
 
         if grid is None:
 
-            self.y_pol = {}
-
+            if hasattr(self,'y_pol'): pass
+            else: 
+                self.y_pol = {}
+                for i in range(self._numHKL): self.y_pol[i] = _XYZtoSPH(self.y[i],proj='none') 
+                
             #polar
             self._alphasteps = _np.arange(0,_np.pi/2+self.res,self.res)
             #azimuth
-            self._betasteps = _np.arange(_np.deg2rad(2.5),2*_np.pi+self.res,self.res)
+            self._betasteps = _np.arange(0,2*_np.pi,self.res)
             #grids
             self.alpha, self.beta = _np.meshgrid(self._alphasteps,self._betasteps,indexing='ij')
 
             for i in range(self._numHKL):
 
-                self.y_pol[i] = _XYZtoSPH(self.y[i])
-                self.data[i] = abs(_griddata(self.y_pol[i], self.data[i], (self.beta,self.alpha), method=intMethod, fill_value=0.05))
+                self.data[i] = abs(_griddata(self.y_pol[i], _np.ravel(self.data[i]), (self.alpha,self.beta), method=intMethod, fill_value=0.05))
 
             self.cellVolume = self.res * ( _np.cos( self.alpha - (self.res/2) ) - _np.cos( self.alpha + (self.res/2) ) ) 
 
@@ -592,7 +607,7 @@ class poleFigure(object):
 
         if not _os.path.exists(location): _os.mkdir(location)
 
-        for hi,h in self.hkl.items():
+        for hi,h in self.hkls.items():
             
             hstr = ''.join([str(i) for i in h])
 
@@ -608,7 +623,7 @@ class poleFigure(object):
         
             with open(fname,'w') as f:
                 f.write('pyTex output\n')
-                f.write(' alpha\tbeta\tintensity')
+                f.write(' alpha\tbeta\tintensity\n')
                 _np.savetxt(f,
                            writeArr,
                            fmt=('%.6f','%.6f','%.6f'),
@@ -616,7 +631,7 @@ class poleFigure(object):
                            newline='\n')
 
     @staticmethod                      
-    def grid( res, radians=False, cen=False, ret_ab=False, ret_steps=False ):
+    def grid( res, radians=False, centered=False, ret_ab=False, ret_steps=False ):
         
         """
         Returns ndarray of full grid points on pole figure
@@ -628,6 +643,7 @@ class poleFigure(object):
         
         k = 0
 
+        #define bounds
         if radians is True:
             beta_max = 2*_np.pi
             alpha_max = _np.pi/2
@@ -637,12 +653,15 @@ class poleFigure(object):
             beta_max = 360
             alpha_max = 90
 
-        if cen is True:
+        #centered grid
+        if centered is True:
             start = res/2
             alpha_max = alpha_max - (res/2)
             beta_max = beta_max - (res/2)
         else:
             start = 0
+            if radians is True: beta_max = 2*_np.pi - _np.deg2rad(5)
+            elif radians is False: beta_max = 355
 
         #azimuth
         betasteps = _np.arange(start,beta_max+res,res)
@@ -664,6 +683,8 @@ class poleFigure(object):
         if ret_ab is True: return pf_grid, alp, bet
         elif ret_steps is True: return pf_grid, alphasteps, betasteps
         else: return pf_grid 
+
+
 
 class inversePoleFigure(object):
 
@@ -908,7 +929,7 @@ class bunge( OD ):
 
     """ e-wimv specific sub-routines """
 
-    def _calcPath( self, path_type, symHKL, yset, phi, rad, q_tree, euc_rad):
+    def _calcPath( self, path_type, symHKL, yset, phi, rad, euc_rad, q_tree, hkls_loop_idx=None):
 
         """
         calculate paths through orientation
@@ -938,18 +959,14 @@ class bunge( OD ):
         
         gridPts = {}
         gridDist = {}
-
-        egrid_trun = {}
             
-        for fi,fam in enumerate(_tqdm(symHKL),desc='Calculating paths'):
+        for fi,fam in enumerate(_tqdm(symHKL,desc='Calculating paths')):
             
             path_e[fi] = {}
             path_q[fi] = {}
             
             gridPts[fi] = {}
             gridDist[fi] = {}
-            
-            egrid_trun[fi] = {}
             
             q0[fi] = {}
             q[fi] = {}
@@ -964,7 +981,12 @@ class bunge( OD ):
             for yi,y in enumerate(it): 
                 
                 axis[fi][yi] = _np.cross(fam,y)
-                axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+
+                try:
+                    axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+                except FloatingPointError:
+                    return axis[fi][yi]
+                
                 omega[fi][yi] = _np.arccos(_np.dot(fam,y))
                 
                 q0[fi][yi] = {}
@@ -998,53 +1020,103 @@ class bunge( OD ):
                 path_e[fi][yi] = eu_fib[fz]    
                 fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
                 path_q[fi][yi] = qfib[fib_idx]
+
+                """ euclidean distance calculation - KDTree """
                 
-                """ reduce geodesic query size """
                 qfib_pos = _np.copy(qfib[fib_idx])
                 qfib_pos[qfib_pos[:,0] < 0] *= -1
                 
-                query = _np.concatenate(q_tree.query_radius(qfib_pos,euc_rad))
-                query_uni = _np.unique(query)
-                qgrid_trun = self.q_grid[query_uni]
-                qgrid_trun_idx = _np.arange(len(self.q_grid))[query_uni] #store indexes to retrieve original grid pts later
+                # returns tuple - first array are points, second array is distances
+                query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
+            
+                # concatenate arrays
+                query = _np.column_stack([_np.concatenate(ar) for ar in query])
                 
-                """ distance calc """
-                temp = _quatMetric(qgrid_trun,qfib[fib_idx])
-                """ find tube """
-                tube = (temp <= rad)
-                temp = _np.column_stack((_np.argwhere(tube)[:,0],temp[tube]))
+                # round very small values
+                query = _np.round(query, decimals=7)
                 
-                """ round very small values """
-                temp = _np.round(temp, decimals=7)
+                # move values at zero to very small (1E-5)
+                query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
                 
-                """ move values at zero to very small (1E-5) """
-                temp[:,1] = _np.where(temp[:,1] == 0, 1E-5, temp[:,1])
+                # sort by minimum distance - unique function takes first appearance of index
+                query_sort = query[_np.argsort(query[:,1],axis=0)]
                 
-                """ sort by min distance """
-                temp = temp[_np.argsort(temp[:,1],axis=0)]
-                """ return unique pts (first in list) """
-                uni_pts = _np.unique(temp[:,0],return_index=True)
+                # return unique points
+                uni_pts = _np.unique(query_sort[:,0],return_index=True)
                 
-                gridPts[fi][yi] = qgrid_trun_idx[uni_pts[0].astype(int)]
-                gridDist[fi][yi] = temp[uni_pts[1],1]
+                gridPts[fi][yi] = uni_pts[0].astype(int)
+                gridDist[fi][yi] = query_sort[uni_pts[1],1]
+
+                """ geodesic distance calculation - dot product """
+                
+                # """ reduce geodesic query size """
+                # qfib_pos = _np.copy(qfib[fib_idx])
+                # qfib_pos[qfib_pos[:,0] < 0] *= -1
+                
+                # query = _np.concatenate(q_tree.query_radius(qfib_pos,euc_rad))
+                # query_uni = _np.unique(query)
+                # qgrid_trun = self.q_grid[query_uni]
+                # qgrid_trun_idx = _np.arange(len(self.q_grid))[query_uni] #store indexes to retrieve original grid pts later
+                
+                # """ distance calc """
+                # temp = _quatMetric(qgrid_trun,qfib[fib_idx])
+                # """ find tube """
+                # tube = (temp <= rad)
+                # temp = _np.column_stack((_np.argwhere(tube)[:,0],temp[tube]))
+                
+                # """ round very small values """
+                # temp = _np.round(temp, decimals=7)
+                
+                # """ move values at zero to very small (1E-5) """
+                # temp[:,1] = _np.where(temp[:,1] == 0, 1E-5, temp[:,1])
+                
+                # """ sort by min distance """
+                # temp = temp[_np.argsort(temp[:,1],axis=0)]
+                # """ return unique pts (first in list) """
+                # uni_pts = _np.unique(temp[:,0],return_index=True)
+                
+                # gridPts[fi][yi] = qgrid_trun_idx[uni_pts[0].astype(int)]
+                # gridDist[fi][yi] = temp[uni_pts[1],1]
                 
                 # egrid_trun[fi][yi] = bungeAngs[query_uni]
 
-        path_opt = {'full': 'full',
-                    'arb': 'arb',
-                    'custom': 'custom'}
+        try:
+            self.paths[path_type] = {'grid points':gridPts,
+                               'grid distances':gridDist,
+                               'euler path':path_e,
+                               'quat path':path_q}
+        except AttributeError: 
+            self.paths = {}
+            self.paths[path_type] = {'grid points':gridPts,
+                                     'grid distances':gridDist,
+                                     'euler path':path_e,
+                                     'quat path':path_q}
 
-        opt = path_opt.get(path_type, lambda: 'Unknown path type')       
+        # TODO: better way to handle this?
+        if path_type == 'full_trun':
 
-        if opt == 'Unknown path type': raise ValueError('Invalid path type specified..')
+            self.paths.pop('full_trun')
 
-        self.paths = {}
-        self.paths[opt] = {'grid points':gridPts,
-                           'grid distances':gridDist,
-                           'euler path':path_e,
-                           'quat path':path_q}
+            path_e_full = {}
+            path_q_full = {}
 
-    def _calcPointer( self, inv_method, pfs, tube_exp=None ):
+            gridPts_full = {}
+            gridDist_full = {}
+
+            #did not calculate duplicate paths (multi orders of reflections) must re-assign
+            for i,hi in enumerate(hkls_loop_idx):
+
+                gridPts_full[i] = gridPts[hi]
+                gridDist_full[i] = gridDist[hi]
+                path_e_full[i] = path_e[hi]
+                path_q_full[i] = path_q[hi]
+
+            self.paths['full'] = {'grid points':gridPts_full,
+                                     'grid distances':gridDist_full,
+                                     'euler path':path_e_full,
+                                     'quat path':path_q_full}
+
+    def _calcPointer( self, inv_method, pfs, tube_exp=1 ):
 
         """
         calculate pointer dictionaries
@@ -1149,13 +1221,109 @@ class bunge( OD ):
 
         elif inv_method == 'e-wimv' and hasattr(self,'paths') is False: raise ValueError('please calculate paths first')
 
-    def _calcPF( self, hkl ):
+    def _calcPF( self, hkls, tube_rad, tube_exp, tube_proj=True ):
 
         """
         recalculate pole figures
+
+        input list of hkls
         """
 
-        pass
+        """ dummy pole figure - change this """
+
+        fullPFgrid, alp, bet = poleFigure.grid(res=_np.deg2rad(5),
+                                               radians=True,
+                                               cen=True,
+                                               ret_ab=True)
+
+        #calculate pole figure y's
+        sph = _np.array((_np.ravel(alp),_np.ravel(bet))).T
+        #offset (001) direction to prevent errors during path calculation
+        sph[:,0] = _np.where(sph[:,0] == 0, _np.deg2rad(0.25), sph[:,0])
+
+        #convert to xyz
+        xyz_pf = _np.zeros((sph.shape[0],3))
+        xyz_pf[:,0] = _np.sin( sph[:,0] ) * _np.cos( sph[:,1] )
+        xyz_pf[:,1] = _np.sin( sph[:,0] ) * _np.sin( sph[:,1] )
+        xyz_pf[:,2] = _np.cos( sph[:,0] ) 
+
+        _tqdm.write(str(xyz_pf.shape))
+
+        #TODO: clean this up
+        # if hasattr(self,'pointer') is False or 'full' not in self.pointer:
+
+        """ use sklearn KDTree for reduction of points for query (euclidean) """
+
+        #throw q_grid into positive hemisphere (SO3) for euclidean distance
+        qgrid_pos = _np.copy(self.q_grid)
+        qgrid_pos[qgrid_pos[:,0] < 0] *= -1
+        tree = _KDTree(qgrid_pos)
+
+        #gnomic rotation angle
+        rad = ( 1 - _np.cos(tube_rad) ) / 2
+        #euclidean rotation angle
+        euc_rad = 4*_np.sin(tube_rad)**2
+
+        # rotations around y (integration variable along path)
+        phi = _np.linspace(0,2*_np.pi,73)
+
+        """ search for unique hkls to save time during path calculation """
+
+        hkls = _normalize(_np.vstack(hkls))
+        pfs = poleFigure([],hkls,self.cs,'blank')
+
+        hkls_loop, uni_hkls_idx, hkls_loop_idx = _np.unique(hkls,axis=0,return_inverse=True,return_index=True)
+
+        if len(uni_hkls_idx) < len(hkls): 
+            #time can be saved by only calculating paths for unique reflections
+            symHKL_loop = _symmetrise(self.cs, hkls_loop)
+            symHKL_loop = _normalize(symHKL_loop)
+
+            #calculate paths
+            self._calcPath('full_trun', symHKL_loop, xyz_pf, phi, rad, euc_rad, tree, hkls_loop_idx=hkls_loop_idx)
+
+        #time can't be saved.. calculate all paths
+        else: self._calcPath('full', pfs.symHKL, xyz_pf, phi, rad, euc_rad, tree)     
+
+        """ calculate pointer """
+
+        self._calcPointer('e-wimv', pfs, tube_exp=tube_exp)
+
+        """ recalculate full pole figures """
+        ##for reduced grid
+        # recalc_pf_full[i] = {}
+
+        numPoles = len(hkls)
+
+        #for 5x5 grid
+        recalc_pf = _np.zeros((fullPFgrid.shape[0],fullPFgrid.shape[1],numPoles))
+        
+        for fi in range(numPoles):
+            
+            ##for reduced grid
+            # recalc_pf_full[i][fi] = _np.zeros(len(xyz_pf))
+
+            # for yi in range(len(xyz_pf)):
+            for yi in _np.ravel(fullPFgrid):
+                
+                if yi in self.pointer['full']['pf to od'][fi]: #pf_cell is defined
+                    
+                    od_cells = _np.array(self.pointer['full']['pf to od'][fi][yi]['cell'])
+
+                    ##for reduced grid
+                    # recalc_pf_full[i][fi][yi] = ( 1 / _np.sum(self.pointer['full']['pf to od'][fi][yi]['weight']) ) * _np.sum( self.pointer['full']['pf to od'][fi][yi]['weight'] * self.weights[od_cells.astype(int)] )
+                    
+                    #for 5x5 grid
+                    ai, bi = _np.divmod(yi, fullPFgrid.shape[1])
+                    recalc_pf[int(ai),int(bi),fi] = ( 1 / _np.sum(self.pointer['full']['pf to od'][fi][yi]['weight']) ) * _np.sum( self.pointer['full']['pf to od'][fi][yi]['weight'] * self.weights[od_cells.astype(int)] )
+            
+        #for reduced grid    
+        # recalc_pf_full[i] = _poleFigure(recalc_pf_full[i], pfs.hkls, self.cs, 'recalc', resolution=5, arb_y=xyz_pf)
+        #for 5x5 grid
+        recalc_pf = poleFigure(recalc_pf, hkls, self.cs, 'recalc', resolution=5, centered=True)
+        recalc_pf.normalize()
+
+        return recalc_pf
 
     def _calcIPF( self, hkl ):
 
@@ -1168,6 +1336,26 @@ class bunge( OD ):
         """
 
         pass
+
+    @staticmethod
+    def calcDiff( orient_dist1, orient_dist2, type='L1' ):
+
+        """
+        calculate difference odfs
+        """
+
+        #check for dimensionality match
+        if orient_dist1.cs != orient_dist1.cs: raise ValueError('crystal symmetry mismatch')
+        if orient_dist1.ss != orient_dist1.ss: raise ValueError('sample symmetry mismatch')
+
+        if type == 'l1':
+            diff = _np.abs( orient_dist1.weights - orient_dist2.weights ) 
+        if type == 'RP': #TODO: check this? 
+            diff = 0.5 * _np.sum( _np.abs( orient_dist1.weights - orient_dist2.weights) ) 
+
+        return bunge(orient_dist1.cellSize,orient_dist1.cs,orient_dist1.ss,weights=diff)
+
+    """ plotting """
 
     def sectionPlot( self, sectionAxis, sectionVal, cmap='magma_r' ):
         

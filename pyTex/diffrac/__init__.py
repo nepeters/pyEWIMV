@@ -101,6 +101,8 @@ def calc_NDreflWeights(npy_materialDef, hkls):
             
             str_fac[fi] *= norm
             
+            if abs(str_fac[fi]-1) < 1E-3: str_fac[fi] = 1
+
         return str_fac
     
     else: raise ValueError('supplied mat def not valid')

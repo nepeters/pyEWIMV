@@ -36,49 +36,50 @@ P = 1
 crystalSym = 'm-3m'
 sampleSym = '1'
 cellSize = np.deg2rad(5)
-theta = np.deg2rad(7)
+theta = np.deg2rad(10)
 sampleName = 'Al_peakInt_5x7'
 
 """ NRSF2 .jul """
 
-data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
-hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
+# data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
+# hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
 
-pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
-pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
-pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
+# pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
+# pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
+# pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
 
-pfs = [pf222path,pf311path,pf400path]
-rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
-pf = poleFigure(pfs, hkls, crystalSym, 'jul')
+# pfs = [pf222path,pf311path,pf400path]
+# rot = R.from_euler('XZX', (90,90,90), degrees=True).as_dcm()
+# pf = poleFigure(pfs, hkls, crystalSym, 'jul')
 
 """ peak-fitted pole figures """
 
-# hkls = []
-# files = []
+hkls = []
+files = []
 
-# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
-# # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
-# # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
+# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
+# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+# datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
 # datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
+datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures integ int Al absCorr/combined'
 
-# for file in os.listdir(datadir):
+for file in os.listdir(datadir):
     
-#     pfName = file.split(')')[0].split('(')[1]
+    pfName = file.split(')')[0].split('(')[1]
     
-#     try:
-#         hkls.append(tuple([int(c) for c in pfName]))
-#         files.append(os.path.join(datadir,file))
-#     except: #not hkls
-#         continue
+    try:
+        hkls.append(tuple([int(c) for c in pfName]))
+        files.append(os.path.join(datadir,file))
+    except: #not hkls
+        continue
     
-#     sortby = [sum([c**2 for c in h]) for h in hkls]
-#     hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
-#     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
+    sortby = [sum([c**2 for c in h]) for h in hkls]
+    hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
+    files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
-# rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
-# pf = poleFigure(files,hkls,crystalSym,'nd')
+rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
+pf = poleFigure(files,hkls,crystalSym,'nd')
 
 """ rotate """
 
@@ -104,11 +105,11 @@ hkls_loop, uni_hkls_idx, hkls_loop_idx = np.unique(hkls,axis=0,return_inverse=Tr
 symHKL_loop = symmetrise(crystalSym, hkls_loop)
 symHKL_loop = normalize(symHKL_loop)
 
-symOps = genSymOps(crystalSym)
-symOps = np.unique(np.swapaxes(symOps,2,0),axis=0)
-
 """ only use proper rotations """
 """ complicated, simplify? """
+
+symOps = genSymOps(crystalSym)
+symOps = np.unique(np.swapaxes(symOps,2,0),axis=0)
 
 proper = np.where( np.linalg.det(symOps) == 1 ) #proper orthogonal
 quatSymOps = quat.from_matrix(symOps[proper])
@@ -235,8 +236,11 @@ qgrid_pos = np.copy(qgrid)
 qgrid_pos[qgrid_pos[:,0] < 0] *= -1
 tree = KDTree(qgrid_pos)
 
-rad = ( 1 - np.cos(theta) ) / 2
-euc_rad = 4*np.sin(theta)**2
+# rad = ( 1 - np.cos(theta) ) / 2
+# euc_rad = 4*np.sin(theta)**2
+
+rad = np.sqrt( 2 * ( 1 - np.cos(0.5*theta) ) )
+euc_rad = np.sqrt( 4 * np.sin(0.25*theta)**2 )
 
 fibre_marc = {}
     
@@ -317,35 +321,63 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
             fibre_e[fi][yi] = eu_fib[fz]    
             fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
             fibre_q[fi][yi] = qfib[fib_idx]
+                    
+            """ euclidean distance calculation - KDTree """
             
-            """ reduce geodesic query size """
             qfib_pos = np.copy(qfib[fib_idx])
             qfib_pos[qfib_pos[:,0] < 0] *= -1
             
-            query = np.concatenate(tree.query_radius(qfib_pos,euc_rad))
-            query_uni = np.unique(query)
-            qgrid_trun = qgrid[query_uni]
-            qgrid_trun_idx = np.arange(len(qgrid))[query_uni] #store indexes to retrieve original grid pts later
+            # returns tuple - first array are points, second array is distances
+            query = tree.query_radius(qfib_pos,euc_rad,return_distance=True)
+        
+            # concatenate arrays
+            query = np.column_stack([np.concatenate(ar) for ar in query])
             
-            """ distance calc """
-            temp = quatMetricNumba(qgrid_trun,qfib[fib_idx])
-            """ find tube """
-            tube = (temp <= rad)
-            temp = np.column_stack((np.argwhere(tube)[:,0],temp[tube]))
+            # round very small values
+            query = np.round(query, decimals=7)
             
-            """ round very small values """
-            temp = np.round(temp, decimals=7)
+            # move values at zero to very small (1E-5)
+            query[:,1] = np.where(query[:,1] == 0, 1E-5, query[:,1])            
             
-            """ move values at zero to very small (1E-5) """
-            temp[:,1] = np.where(temp[:,1] == 0, 1E-5, temp[:,1])
+            # sort by minimum distance - unique function takes first appearance of index
+            query_sort = query[np.argsort(query[:,1],axis=0)]
             
-            """ sort by min distance """
-            temp = temp[np.argsort(temp[:,1],axis=0)]
-            """ return unique pts (first in list) """
-            uni_pts = np.unique(temp[:,0],return_index=True)
+            # return unique points
+            uni_pts = np.unique(query_sort[:,0],return_index=True)
             
-            nn_gridPts[fi][yi] = qgrid_trun_idx[uni_pts[0].astype(int)]
-            nn_gridDist[fi][yi] = temp[uni_pts[1],1]
+            nn_gridPts[fi][yi] = uni_pts[0].astype(int)
+            nn_gridDist[fi][yi] = query_sort[uni_pts[1],1]
+            
+            """ geodesic distance calculation - dot product """            
+            
+            # """ reduce geodesic query size """
+            # qfib_pos = np.copy(qfib[fib_idx])
+            # qfib_pos[qfib_pos[:,0] < 0] *= -1
+            
+            # query = np.concatenate(tree.query_radius(qfib_pos,euc_rad))
+            # query_uni = np.unique(query)
+            # qgrid_trun = qgrid[query_uni]
+            # qgrid_trun_idx = np.arange(len(qgrid))[query_uni] #store indexes to retrieve original grid pts later
+            
+            # """ distance calc """
+            # temp = quatMetricNumba(qgrid_trun,qfib[fib_idx])
+            # """ find tube """
+            # tube = (temp <= rad)
+            # temp = np.column_stack((np.argwhere(tube)[:,0],temp[tube]))
+            
+            # """ round very small values """
+            # temp = np.round(temp, decimals=7)
+            
+            # """ move values at zero to very small (1E-5) """
+            # temp[:,1] = np.where(temp[:,1] == 0, 1E-5, temp[:,1])
+            
+            # """ sort by min distance """
+            # temp = temp[np.argsort(temp[:,1],axis=0)]
+            # """ return unique pts (first in list) """
+            # uni_pts = np.unique(temp[:,0],return_index=True)
+            
+            # nn_gridPts[fi][yi] = qgrid_trun_idx[uni_pts[0].astype(int)]
+            # nn_gridDist[fi][yi] = temp[uni_pts[1],1]
             
             # egrid_trun[fi][yi] = bungeAngs[query_uni]
             
@@ -354,11 +386,33 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
 nn_gridPts, nn_gridDist, fibre_e, axis, omega = calcFibre(pf.symHKL,pf.y,qgrid,phi,rad,tree,euc_rad)
 tempPts_full, tempDist_full, tempFibre_e, dump, dump2  = calcFibre(symHKL_loop,xyz_pf,qgrid,phi,rad,tree,euc_rad)
 
+# od._calcPath('full',symHKL_loop,xyz_pf,phi,rad,euc_rad,tree)
+# od._calcPath('arb',pf.symHKL,pf.y,phi,rad,euc_rad,tree)
+
 for i,hi in enumerate(hkls_loop_idx):
 
     nn_gridPts_full[i] = tempPts_full[hi]
     nn_gridDist_full[i] = tempDist_full[hi]
     fibre_full_e[i] = tempFibre_e[hi]
+    
+# # %%
+# #comparison
+    
+# for k,v in od.paths['arb']['grid distances'].items():
+    
+#     if k in nn_gridDist:
+        
+#         for k2,v2 in od.paths['arb']['grid distances'][k].items():
+            
+#             if k2 in nn_gridDist[k]:
+                
+#                 if np.allclose(v2,nn_gridDist[k][k2]): continue
+#                 else: raise ValueError
+                
+#     else: raise ValueError
+    
+    
+# od._calcPointer('e-wimv',pf,tube_exp=1)
     
 # %%        
 
@@ -417,6 +471,24 @@ for hi, h in enumerate(hkls):
 odwgts_tot = np.where(odwgts_tot == 0, 1, odwgts_tot)
 odwgts_tot = 1 / odwgts_tot
 
+
+# # %%
+
+# for k,v in od.pointer['arb']['pf to od'].items():
+    
+#     if k in pf_od:
+        
+#         for k2,v2 in od.pointer['arb']['pf to od'][k].items():
+            
+#             if k2 in pf_od[k]:
+                
+#                 if np.allclose(pf_od[k][k2]['cell'],od.pointer['arb']['pf to od'][k][k2]['cell']): continue
+#                 else: raise ValueError
+                
+#             else: raise ValueError
+                
+#     else: raise ValueError
+
 # %%
     
 """ e-wimv iteration start """
@@ -432,7 +504,7 @@ recalc_pf_full = {}
 numPoles = pf._numHKL
 numHKLs = [len(fam) for fam in pf.symHKL]
 
-iterations = 9
+iterations = 10
 
 for i in tqdm(range(iterations),position=0):
     
@@ -454,8 +526,8 @@ for i in tqdm(range(iterations),position=0):
                 if yi in pf_od[fi]:
                     
                     od_cells = pf_od[fi][yi]['cell']
-                    wgts = pf_od[fi][yi]['weight']                   
-            
+                    wgts = pf_od[fi][yi]['weight']      
+                    
                     temp[od_cells.astype(int), yi] *= abs(pf.data[fi][yi])
             
             """ zero to 1E-5 """
@@ -499,7 +571,7 @@ for i in tqdm(range(iterations),position=0):
     #             ai, bi = np.divmod(pf_cell, pf_grid.shape[1])
     #             recalc_pf_full[i][int(ai),int(bi),fi] = ( 1 / np.sum(pf_od_full[fi][pf_cell]['weight']) ) * np.sum( pf_od_full[fi][pf_cell]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
         
-    # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
+    # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkls, od.cs, 'recalc', resolution=5)
     # recalc_pf_full[i].normalize()
 
     """ compare recalculated to experimental """
@@ -545,9 +617,9 @@ for i in tqdm(range(iterations),position=0):
                 recalc_pf_full[i][int(ai),int(bi),fi] = ( 1 / np.sum(pf_od_full[fi][yi]['weight']) ) * np.sum( pf_od_full[fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )
         
     #for reduced grid    
-    # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
+    # recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkls, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
     #for 5x5 grid
-    recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkl, od.cs, 'recalc', resolution=5)
+    recalc_pf_full[i] = poleFigure(recalc_pf_full[i], pf.hkls, od.cs, 'recalc', resolution=5)
     recalc_pf_full[i].normalize()    
         
     """ (i+1)th inversion """
@@ -587,11 +659,10 @@ for i in tqdm(range(iterations),position=0):
      
 cl = np.arange(0,7.5,0.5)       
 recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
-# calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
+# # calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
 print(calc_od[iterations-1].index())
 # calc_od[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')
 # recalc_pf_full[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports',sampleName=sampleName)
-
 
 # %%
 
@@ -615,7 +686,7 @@ print(calc_od[iterations-1].index())
 
 #             recalc_pf_test[fi][yi] = ( 1 / np.sum(pf_od_full[fi][yi]['weight']) ) * np.sum( pf_od_full[fi][yi]['weight'] * od_noSS.weights[od_cells.astype(int)] )
     
-# recalc_pf_test = poleFigure(recalc_pf_test, pf.hkl, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
+# recalc_pf_test = poleFigure(recalc_pf_test, pf.hkls, od.cs, 'recalc', resolution=5, arb_y=xyz_pf)
 # recalc_pf_test.normalize()  
 # recalc_pf_test.plot(pfs=3,contourlevels=cl,cmap='magma',proj='none')
 
