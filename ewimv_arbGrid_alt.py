@@ -36,7 +36,7 @@ P = 1
 crystalSym = 'm-3m'
 sampleSym = '1'
 cellSize = np.deg2rad(5)
-theta = np.deg2rad(10)
+theta = np.deg2rad(7)
 sampleName = 'Al_peakInt_5x7'
 
 """ NRSF2 .jul """
@@ -79,7 +79,7 @@ for file in os.listdir(datadir):
     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
 rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_dcm()
-pf = poleFigure(files,hkls,crystalSym,'nd')
+pf = poleFigure(files,hkls,crystalSym,'sparse')
 
 """ rotate """
 
@@ -102,8 +102,8 @@ symHKL = symmetrise(crystalSym, hkls)
 """ search for unique hkls to save time """
 
 hkls_loop, uni_hkls_idx, hkls_loop_idx = np.unique(hkls,axis=0,return_inverse=True,return_index=True)
-symHKL_loop = symmetrise(crystalSym, hkls_loop)
-symHKL_loop = normalize(symHKL_loop)
+# symHKL_loop = symmetrise(crystalSym, hkls_loop)
+symHKL_loop = normalize(hkls_loop)
 
 """ only use proper rotations """
 """ complicated, simplify? """
@@ -114,7 +114,7 @@ symOps = np.unique(np.swapaxes(symOps,2,0),axis=0)
 proper = np.where( np.linalg.det(symOps) == 1 ) #proper orthogonal
 quatSymOps = quat.from_matrix(symOps[proper])
 quatSymOps = np.tile(quatSymOps[:,:,np.newaxis],(1,1,len(phi)))
-quatSymOps = quatSymOps.transpose((2,0,1))
+quatSymOps = quatSymOps.transpose((0,2,1))
 
 """ gen quats from bunge grid """
 
@@ -126,25 +126,25 @@ for ii,i in enumerate(np.ndindex(od.phi1cen.shape)):
 
 qgrid = eu2quat(bungeAngs).T
 
-""" refl weights """
+# """ refl weights """
 
-def_al = {'name': 'Al',
-          'composition': [dict(ion='Al', pos=[0, 0, 0]),
-                          dict(ion='Al', pos=[0.5, 0, 0.5]),
-                          dict(ion='Al', pos=[0.5, 0.5, 0]),
-                          dict(ion='Al', pos=[0, 0.5, 0.5])],
-          'lattice': dict(abc=[4.0465, 4.0465, 4.0465], abg=[90, 90, 90]),
-          'debye-waller': False,
-          'massNorm': False}
+# def_al = {'name': 'Al',
+#           'composition': [dict(ion='Al', pos=[0, 0, 0]),
+#                           dict(ion='Al', pos=[0.5, 0, 0.5]),
+#                           dict(ion='Al', pos=[0.5, 0.5, 0]),
+#                           dict(ion='Al', pos=[0, 0.5, 0.5])],
+#           'lattice': dict(abc=[4.0465, 4.0465, 4.0465], abg=[90, 90, 90]),
+#           'debye-waller': False,
+#           'massNorm': False}
 
-refl_wgt = calc_NDreflWeights(def_al, refls)
+# refl_wgt = calc_NDreflWeights(def_al, refls)
 
-# """ ones for refl_wgt """
+""" ones for refl_wgt """
 
-# refl_wgt = {}
+refl_wgt = {}
 
-# for hi,h in enumerate(hkls):
-#     refl_wgt[hi] = 1
+for hi,h in enumerate(hkls):
+    refl_wgt[hi] = 1
 
 # hkl_str = [''.join(tuple(map(str,h))) for h in hkls]
 
@@ -178,27 +178,29 @@ refl_wgt = calc_NDreflWeights(def_al, refls)
 
 """ calculate 5x5 pf grid XYZ for fibre """
 
-pf_grid, alp, bet = pf.grid(res=np.deg2rad(5),
-                            radians=True,
-                            cen=True,
-                            ret_ab=True)
+pf_grid, alp, bet, xyz_pf = pf.genGrid(res=np.deg2rad(5),
+                                       radians=True,
+                                       centered=False,
+                                       ret_ab=True,
+                                       ret_xyz=True,
+                                       offset=True)
 
-#calculate pole figure y's
-sph = np.array((np.ravel(alp),np.ravel(bet))).T
+# #calculate pole figure y's
+# sph = np.array((np.ravel(alp),np.ravel(bet))).T
 
-#convert to xyz
-xyz_pf = np.zeros((sph.shape[0],3))
-xyz_pf[:,0] = np.sin( sph[:,0] ) * np.cos( sph[:,1] )
-xyz_pf[:,1] = np.sin( sph[:,0] ) * np.sin( sph[:,1] )
-xyz_pf[:,2] = np.cos( sph[:,0] ) 
+# #convert to xyz
+# xyz_pf = np.zeros((sph.shape[0],3))
+# xyz_pf[:,0] = np.sin( sph[:,0] ) * np.cos( sph[:,1] )
+# xyz_pf[:,1] = np.sin( sph[:,0] ) * np.sin( sph[:,1] )
+# xyz_pf[:,2] = np.cos( sph[:,0] ) 
 
-""" custom point """
+# """ custom point """
 
-x_cust = np.sin(0.556) * np.cos(np.deg2rad(162.4+180))
-y_cust = np.sin(0.556) * np.sin(np.deg2rad(162.4+180))
-z_cust = np.cos(0.556) 
+# x_cust = np.sin(0.556) * np.cos(np.deg2rad(162.4+180))
+# y_cust = np.sin(0.556) * np.sin(np.deg2rad(162.4+180))
+# z_cust = np.cos(0.556) 
 
-xyz_pf = np.append(xyz_pf, np.array((x_cust,y_cust,z_cust)).T[None,:], axis=0)
+# xyz_pf = np.append(xyz_pf, np.array((x_cust,y_cust,z_cust)).T[None,:], axis=0)
 
 fibre_full_e = {}
 fibre_full_q = {}
@@ -244,7 +246,7 @@ euc_rad = np.sqrt( 4 * np.sin(0.25*theta)**2 )
 
 fibre_marc = {}
     
-def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
+def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad,quatSymOps):
     
     cphi = np.cos(phi/2)
     sphi = np.sin(phi/2)
@@ -287,26 +289,40 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
         for yi,y in enumerate(it): 
             
             axis[fi][yi] = np.cross(fam,y)
-            axis[fi][yi] = axis[fi][yi] / np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+            axis[fi][yi] = axis[fi][yi] / np.linalg.norm(axis[fi][yi],axis=-1)
             omega[fi][yi] = np.arccos(np.dot(fam,y))
             
-            q0[fi][yi] = {}
-            q[fi][yi] = {}
-            qf[yi] = {}
-            qfib = np.zeros((len(phi),len(fam),4))
+            q0[fi][yi] = np.hstack( [ np.cos(omega[fi][yi]/2), np.sin(omega[fi][yi]/2) * axis[fi][yi] ] )
+            q[fi][yi]  = np.hstack( [ cphi[:, np.newaxis], np.tile( y, (len(cphi),1) ) * sphi[:, np.newaxis] ] )
+            qf[yi] = quat.multiply(q[fi][yi], q0[fi][yi])
+            # qfib = quat.multiply(quatSymOps, qf[yi])
+            qfib = quat.multiply(qf[yi], quatSymOps)
+            qfib = qfib.transpose((1,0,2))
             
-            for hi,HxY in enumerate(axis[fi][yi]):
-            
-                q0[fi][yi][hi] = np.hstack( [ np.cos(omega[fi][yi][hi]/2), np.sin(omega[fi][yi][hi]/2) * HxY ] )
-                q[fi][yi][hi]  = np.hstack( [ cphi[:, np.newaxis], np.tile( y, (len(cphi),1) ) * sphi[:, np.newaxis] ] )
-                
-                qf[yi][hi] = quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
-            
-                for qi in range(qf[yi][hi].shape[0]):
-                    
-                    qfib[qi,hi,:] = qf[yi][hi][qi,:]
-              
             phi1, Phi, phi2 = quat2eu(qfib)
+            
+            """ old way """
+            # axis[fi][yi] = np.cross(fam,y)
+            # axis[fi][yi] = axis[fi][yi] / np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+            # omega[fi][yi] = np.arccos(np.dot(fam,y))
+            
+            # q0[fi][yi] = {}
+            # q[fi][yi] = {}
+            # qf[yi] = {}
+            # qfib = np.zeros((len(phi),len(fam),4))
+            
+            # for hi,HxY in enumerate(axis[fi][yi]):
+            
+            #     q0[fi][yi][hi] = np.hstack( [ np.cos(omega[fi][yi][hi]/2), np.sin(omega[fi][yi][hi]/2) * HxY ] )
+            #     q[fi][yi][hi]  = np.hstack( [ cphi[:, np.newaxis], np.tile( y, (len(cphi),1) ) * sphi[:, np.newaxis] ] )
+                
+            #     qf[yi][hi] = quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
+            
+            #     for qi in range(qf[yi][hi].shape[0]):
+                    
+            #         qfib[qi,hi,:] = qf[yi][hi][qi,:]
+              
+            # phi1, Phi, phi2 = quat2eu(qfib)
             
             phi1 = np.where(phi1 < 0, phi1 + 2*np.pi, phi1) #brnng back to 0 - 2pi
             Phi = np.where(Phi < 0, Phi + np.pi, Phi) #brnng back to 0 - pi
@@ -318,13 +334,15 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
             fz = (eu_fib[:,0] <= od._phi1max) & (eu_fib[:,1] <= od._Phimax) & (eu_fib[:,2] <= od._phi2max)
             fz_idx = np.nonzero(fz)
             
-            fibre_e[fi][yi] = eu_fib[fz]    
+            #pull only unique points? - not sure why there are repeated points, something with symmetry for certain hkls
+            #should only be ~73 points per path, but three fold symmetry is also present
+            fibre_e[fi][yi],uni_path_idx = np.unique(eu_fib[fz],return_index=True,axis=0)
             fib_idx = np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
-            fibre_q[fi][yi] = qfib[fib_idx]
+            fibre_q[fi][yi] = qfib[fib_idx][uni_path_idx]
                     
             """ euclidean distance calculation - KDTree """
             
-            qfib_pos = np.copy(qfib[fib_idx])
+            qfib_pos = np.copy(qfib[fib_idx][uni_path_idx])
             qfib_pos[qfib_pos[:,0] < 0] *= -1
             
             # returns tuple - first array are points, second array is distances
@@ -383,11 +401,11 @@ def calcFibre(symHKL,yset,qgrid,phi,rad,tree,euc_rad):
             
     return nn_gridPts, nn_gridDist, fibre_e, axis, omega
 
-nn_gridPts, nn_gridDist, fibre_e, axis, omega = calcFibre(pf.symHKL,pf.y,qgrid,phi,rad,tree,euc_rad)
-tempPts_full, tempDist_full, tempFibre_e, dump, dump2  = calcFibre(symHKL_loop,xyz_pf,qgrid,phi,rad,tree,euc_rad)
+nn_gridPts, nn_gridDist, fibre_e, axis, omega = calcFibre(pf._normHKLs,pf.y,qgrid,phi,rad,tree,euc_rad,quatSymOps)
+tempPts_full, tempDist_full, tempFibre_e, dump, dump2  = calcFibre(symHKL_loop,xyz_pf,qgrid,phi,rad,tree,euc_rad,quatSymOps)
 
 # od._calcPath('full',symHKL_loop,xyz_pf,phi,rad,euc_rad,tree)
-# od._calcPath('arb',pf.symHKL,pf.y,phi,rad,euc_rad,tree)
+# od._calcPath('arb',pf._symHKL,pf.y,phi,rad,euc_rad,tree)
 
 for i,hi in enumerate(hkls_loop_idx):
 
@@ -502,7 +520,7 @@ eps = 2
 recalc_pf_full = {}
     
 numPoles = pf._numHKL
-numHKLs = [len(fam) for fam in pf.symHKL]
+numHKLs = [len(fam) for fam in pf._symHKL]
 
 iterations = 10
 
@@ -658,7 +676,7 @@ for i in tqdm(range(iterations),position=0):
     calc_od[i+1].normalize() 
      
 cl = np.arange(0,7.5,0.5)       
-recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
+recalc_pf_full[iterations-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none',plt_type='scatter')
 # # calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
 print(calc_od[iterations-1].index())
 # calc_od[iterations-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports/'+sampleName+'.odf')

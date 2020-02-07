@@ -12,11 +12,11 @@ orientation module
 
 import os as _os
 
-
 __all__ = ['normalize',
            'genSym',
            'symmetrise',
            'XYZtoSPH',
+           'SPHtoXYZ'
            ]
 
 __location__ = _os.path.realpath(_os.path.join(_os.getcwd(), _os.path.dirname(__file__)))
@@ -25,10 +25,17 @@ __location__ = _os.path.realpath(_os.path.join(_os.getcwd(), _os.path.dirname(__
 general purpose functions
 """
 
+#data
 import numpy as _np
 import pandas as _pd
 
+#sym ops
 import spglib as _spglib
+
+#plotting
+import matplotlib.pyplot as _plt
+from mpl_toolkits.axes_grid1 import ImageGrid as _imgGrid
+import copy as _copy
 
 def normalize(v):
     
@@ -121,7 +128,123 @@ def symmetrise(cs,hkl):
 
         return symHKL
 
-### other utils ###
+### plotting util ###
+
+def _scatterPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, x_direction='N'):
+
+    """
+    wrapper for scatter
+    """
+
+    fig, axes = _plt.subplots(rows, cols, subplot_kw=dict(polar=True))
+
+    if proj == 'stereo': plt_alpha = (_np.pi/2)*_np.tan(_copy.deepcopy(alpha)/2)
+    elif proj == 'earea': plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
+    elif proj == 'none': plt_alpha = _copy.deepcopy(alpha)
+
+    #append start/end to create complete plots
+    dbeta = _np.diff(beta).mean()
+    plt_beta  = _np.concatenate( (beta, beta[:,-1][:,None] + dbeta), axis=1 )
+    plt_alpha = _np.concatenate( (plt_alpha,plt_alpha[:,0][:,None]), axis=1 )
+
+    for n,ax in enumerate(axes):
+
+        ax.set_yticklabels([])
+        ax.set_xticklabels([])
+        ax.set_ylim([0,_np.max(plt_alpha)])
+        ax.set_theta_zero_location(x_direction) 
+        ax.grid(False)
+
+        plt_data = _np.concatenate((data[n], data[n][:, 0:1]), axis=1)
+
+        pts = ax.scatter(plt_beta,
+                         plt_alpha,
+                         c=plt_data,
+                         s=6,
+                         cmap=cmap)
+
+        ax.text(0,_np.max(plt_alpha),axes_labels['X'],
+                fontsize=8,
+                va='center',
+                ha='center',
+                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+        ax.text(_np.pi/2,_np.max(plt_alpha),axes_labels['Y'],
+                fontsize=8,
+                va='center',
+                ha='center',
+                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+    fig.colorbar(pts, ax=axes.ravel().tolist(), fraction=0.046, pad=0.04)
+    _plt.show()
+
+def _contourPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, contourlevels, filled=True, x_direction='N'):
+
+    """ 
+    wrapper for contourf
+    """
+
+    fig, axes = _plt.subplots(rows, cols, subplot_kw=dict(polar=True))
+
+    if proj == 'stereo': plt_alpha = (_np.pi/2)*_np.tan(_copy.deepcopy(alpha)/2)
+    elif proj == 'earea': plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
+    elif proj == 'none': plt_alpha = _copy.deepcopy(alpha)
+
+    #append start/end to create complete plots
+    dbeta = _np.diff(beta).mean()
+    plt_beta  = _np.concatenate( (beta, beta[:,-1][:,None] + dbeta), axis=1 )
+    plt_alpha = _np.concatenate( (plt_alpha,plt_alpha[:,0][:,None]), axis=1 )
+
+    #equal colormap
+    if contourlevels is None: pass
+    elif isinstance(contourlevels,str) and contourlevels == 'equal': contourlevels = _np.arange(0,_np.ceil(_np.max([_np.max(d) for n,d in data.items()])),0.5)
+
+    for n,ax in enumerate(axes):
+
+        ax.set_yticklabels([])
+        ax.set_xticklabels([])
+        ax.set_ylim([0,_np.max(plt_alpha)])
+        ax.set_theta_zero_location(x_direction) 
+        ax.grid(False)
+
+        plt_data = _np.concatenate((data[n], data[n][:, 0:1]), axis=1)
+
+        if contourlevels is None:
+
+            cont = ax.contour(plt_beta,
+                              plt_alpha,
+                              plt_data,
+                              colors='k',
+                              linewidths=0.1 )
+
+            if filled: pt = ax.contourf(plt_beta,plt_alpha,plt_data,cmap=cmap)
+
+        elif contourlevels is not None:
+
+            cont = ax.contour(plt_beta,
+                              plt_alpha,
+                              plt_data,
+                              colors='k',
+                              linewidths=0.1,
+                              levels=contourlevels)
+
+            if filled: pt = ax.contourf(plt_beta,plt_alpha,plt_data,cmap=cmap,levels=contourlevels)
+
+        ax.text(0,_np.max(plt_alpha),axes_labels['X'],
+                fontsize=8,
+                va='center',
+                ha='center',
+                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+        ax.text(_np.pi/2,_np.max(plt_alpha),axes_labels['Y'],
+                fontsize=8,
+                va='center',
+                ha='center',
+                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+    fig.colorbar(pt, ax=axes.ravel().tolist(), fraction=0.046, pad=0.04)
+    _plt.show()
+
+### coordinate sys transform ###
 
 def XYZtoSPH( xyz, proj='stereo', upperOnly=True ):
     
@@ -190,3 +313,25 @@ def XYZtoSPH( xyz, proj='stereo', upperOnly=True ):
         sph[:,0] = _np.where(sph[:,0] < 0, sph[:,0] + 2*_np.pi, sph[:,0])
 
     return sph 
+
+def SPHtoXYZ( azimuth, polar, offset=False ):
+
+    """
+    sph to xyz
+    Nx1 arrays 
+    """
+
+    #xyz
+    sph = _np.array((_np.ravel(azimuth),_np.ravel(polar))).T
+
+    if offset:
+        #offset (001) direction to prevent errors during path calculation
+        sph[:,1] = _np.where(sph[:,1] == 0, _np.deg2rad(0.1), sph[:,1])
+
+    #convert to xyz
+    xyz = _np.zeros((sph.shape[0],3))
+    xyz[:,0] = _np.sin( sph[:,1] ) * _np.cos( sph[:,0] )
+    xyz[:,1] = _np.sin( sph[:,1] ) * _np.sin( sph[:,0] )
+    xyz[:,2] = _np.cos( sph[:,1] ) 
+
+    return xyz

@@ -635,9 +635,9 @@ def quat2eu(quat, P=-1):
         Phi[case3] = Phi_t
         phi2[case3] = phi2_t
 
-    phi1 = _np.round(phi1, decimals = 15)
-    Phi = _np.round(Phi, decimals = 15)
-    phi2 = _np.round(phi2, decimals = 15)
+    phi1 = _np.round(phi1, decimals = 8)
+    Phi = _np.round(Phi, decimals = 8)
+    phi2 = _np.round(phi2, decimals = 8)
 
     return phi1,Phi,phi2
 #    return case1, case2, case3

@@ -72,11 +72,11 @@ def wimv( pfs, orient_dist, iterations=12 ):
     recalc_pf = {}
 
     numPoles = pfs._numHKL
-    numHKLs = [len(fam) for fam in pfs.symHKL]
+    numHKLs = [len(fam) for fam in pfs._symHKL]
 
-    fullPFgrid = pfs.grid(pfs.res,
+    fullPFgrid = pfs.genGrid(pfs.res,
                           radians=True,
-                          cen=True)
+                          centered=False)
 
     for i in _tqdm(range(iterations),desc='Performing WIMV iterations',position=0,leave=True):
         
@@ -213,30 +213,21 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
     phi = _np.linspace(0,2*_np.pi,73)
 
     _np.seterr(divide='ignore')
-
-    refls = _symmetrise(orient_dist.cs, pfs.hkls)
     
     # handle reflection weights
     if rad_type == 'xrd': pass #TODO: implement this
-    elif rad_type == 'nd': refl_wgt = _calc_NDreflWeights(crystal_dict, refls) #based on ND
+    elif rad_type == 'nd': refl_wgt = _calc_NDreflWeights(crystal_dict, pfs.refls) #based on ND
     elif rad_type == 'none': refl_wgt = _np.ones((1, len(pfs.hkls))) #all ones
     else: raise ValueError('Please specify either xrd or nd or none (all = 1)')
 
     """ calculate 5x5 pf grid XYZ for paths """
 
-    fullPFgrid, alp, bet = pfs.grid(res=_np.deg2rad(5),
-                                   radians=True,
-                                   cen=True,
-                                   ret_ab=True)
-
-    #calculate pole figure y's
-    sph = _np.array((_np.ravel(alp),_np.ravel(bet))).T
-
-    #convert to xyz
-    xyz_pf = _np.zeros((sph.shape[0],3))
-    xyz_pf[:,0] = _np.sin( sph[:,0] ) * _np.cos( sph[:,1] )
-    xyz_pf[:,1] = _np.sin( sph[:,0] ) * _np.sin( sph[:,1] )
-    xyz_pf[:,2] = _np.cos( sph[:,0] ) 
+    fullPFgrid, alp, bet, xyz_pf = pfs.genGrid(res=_np.deg2rad(5),
+                                            radians=True,
+                                            centered=False,
+                                            ret_ab=True,
+                                            ret_xyz=True,
+                                            offset=True)
 
     """ use sklearn KDTree for reduction of points for query (euclidean) """
 
@@ -251,7 +242,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
     euc_rad = _np.sqrt( 4 * _np.sin(0.25*tube_rad)**2 )
 
     #calculate arbitrary paths
-    orient_dist._calcPath('arb', pfs.symHKL, pfs.y, phi, rad, euc_rad, tree)
+    orient_dist._calcPath('arb', pfs._normHKLs, pfs.y, phi, rad, euc_rad, tree)
 
     """ search for unique hkls to save time during path calculation """
 
@@ -259,14 +250,14 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
 
     if len(uni_hkls_idx) < len(pfs.hkls): 
         #time can be saved by only calculating paths for unique reflections
-        symHKL_loop = _symmetrise(orient_dist.cs, hkls_loop)
-        symHKL_loop = _normalize(symHKL_loop)
+        # symHKL_loop = _symmetrise(orient_dist.cs, hkls_loop)
+        # symHKL_loop = _normalize(symHKL_loop)
 
         #calculate paths
-        orient_dist._calcPath('full_trun', symHKL_loop, xyz_pf, phi, rad, euc_rad, tree, hkls_loop_idx=hkls_loop_idx)
+        orient_dist._calcPath('full_trun', hkls_loop, xyz_pf, phi, rad, euc_rad, tree, hkls_loop_idx=hkls_loop_idx)
 
     #time can't be saved.. calculate all paths
-    else: orient_dist._calcPath('full', pfs.symHKL, xyz_pf, phi, rad, euc_rad, tree)     
+    else: orient_dist._calcPath('full', pfs._normHKLs, xyz_pf, phi, rad, euc_rad, tree)     
 
     """ calculate pointer """
 
@@ -282,7 +273,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
     recalc_pf_full = {}
         
     numPoles = pfs._numHKL
-    numHKLs = [len(fam) for fam in pfs.symHKL]
+    numHKLs = [len(fam) for fam in pfs._symHKL]
 
     for i in _tqdm(range(iterations),position=0,desc='Performing E-WIMV iterations'):
         
@@ -334,7 +325,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
                     od_cells = _np.array(orient_dist.pointer['arb']['pf to od'][fi][yi]['cell'])
 
                     #( 1 / (2*_np.pi) ) *
-                    recalc_pf[i][fi][yi] = ( 1 / sum(orient_dist.pointer['arb']['pf to od'][fi][yi]['weight']) ) * _np.sum( orient_dist.pointer['arb']['pf to od'][fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )    
+                    recalc_pf[i][fi][yi] = ( 1 / (2*_np.pi) ) * ( 1 / sum(orient_dist.pointer['arb']['pf to od'][fi][yi]['weight']) ) * _np.sum( orient_dist.pointer['arb']['pf to od'][fi][yi]['weight'] * calc_od[i].weights[od_cells.astype(int)] )    
 
         """ compare recalculated to experimental """
         

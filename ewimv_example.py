@@ -46,7 +46,7 @@ cellSize = np.deg2rad(5)
 od = bunge(cellSize, crystalSym, sampleSym)
 
 #tube radius
-theta = np.deg2rad(8)
+theta = np.deg2rad(7)
 #tube exponent
 tube_exp = 1
 
@@ -91,7 +91,7 @@ for file in os.listdir(datadir):
     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
 
-pf = poleFigure(files,hkls,crystalSym,'nd')
+pf = poleFigure(files,hkls,crystalSym,'sparse')
 
 rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_matrix()
 
@@ -99,26 +99,26 @@ rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_matrix()
 pf.rotate(rot)
 
 #perform E-WIMV iterations
-recalc_pf, calc_od = e_wimv( pf, od, theta, tube_exp, rad_type, def_al, iterations=10 )
+recalc_pf, calc_od = e_wimv( pf, od, theta, tube_exp, rad_type, def_al, iterations=8 )
 final_iter = max(list(calc_od.keys()))
 
 #plot recalculated pole figures
-# cl = np.arange(0,10.5,0.5)
-# recalc_pf[9].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
+cl = np.arange(0,10.5,0.5)
+recalc_pf[final_iter-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
 
 #plot ODF section
 # calc_od[iterations-1].sectionPlot('phi2',np.deg2rad(90))
 
 #calculate texture index & entropy
 print(sampleName)
-print('iterations: '+str(final_iter))
-print(calc_od[final_iter].index())
-print(calc_od[final_iter].entropy())
+print('iterations: '+str(final_iter-1))
+print(calc_od[final_iter-1].index())
+print(calc_od[final_iter-1].entropy())
 
 ## export data
-# calc_od[final_iter].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf')
-# recalc_pf[final_iter].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
+calc_od[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
+# recalc_pf[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 
 
-
+test = np.mean( calc_od[final_iter-1].weights**2 )
 
