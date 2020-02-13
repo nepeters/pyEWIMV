@@ -763,6 +763,9 @@ class bunge( OD ):
 
         # TODO: handle other than 5deg grid - has same number of values, but with duplicates
         od = bunge(cellSize,crystalSym,sampleSym,centered=False)
+        
+        # override edge corrections
+        od.cellVolume = od.res * od.res * ( _np.cos( od.Phi - ( od.res/2 ) ) - _np.cos( od.Phi + ( od.res/2 ) ) )
 
         weights = _np.zeros_like(od.phi1)
 
@@ -792,8 +795,12 @@ class bunge( OD ):
             
     def export( self, fname, vol_norm ):
         
-        if vol_norm is True: out = _np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights*self.cellVolume.flatten())).T
-        elif vol_norm is False: out = _np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights)).T
+        if self.centered:            
+            if vol_norm is True: out = _np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights*self.cellVolume.flatten())).T
+            elif vol_norm is False: out = _np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights)).T
+        elif self.centered is False:
+            if vol_norm is True: out = _np.array((self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten(),self.weights*self.cellVolume.flatten())).T
+            elif vol_norm is False: out = _np.array((self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten(),self.weights)).T            
         
         with open(fname, 'w') as file:
             file.write('#phi1\tPhi\tphi2\tweight\n')
@@ -820,7 +827,7 @@ class bunge( OD ):
     def strength( self ):
 
         """
-        square root of texture index (F)
+        square root of texture index (F), norm
         https://doi.org/10.1107/S002188989700811X
         """        
 

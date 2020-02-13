@@ -14,27 +14,30 @@ from pyTex import bunge
 import numpy as np
 
 crystalSym = 'm-3m'
-sampleSym = '1'
+sampleSym = 'mmm'
 cellSize = np.deg2rad(5)
 
-od_file = '/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/MAUD EWIMV exports/NOMAD_Al_4Datasets_NoSSabs_odf_5res'
+od_file = '/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/MAUD EWIMV exports/'
+sampleName = 'NOMAD_Al_4Datasets_SSabs_MAUD_5res.odf'
 
-maud_od = bunge.loadMAUD(od_file,
+maud_od = bunge.loadMAUD(od_file+sampleName,
                          np.deg2rad(5),
                          'm-3m',
                          '1')
 
 cV = maud_od.res * maud_od.res * ( np.cos( maud_od.Phi - ( maud_od.res/2 ) ) - np.cos( maud_od.Phi + ( maud_od.res/2 ) ) )
 
-print(maud_od.index(cellVolume=cV))
-print(maud_od.entropy(cellVolume=cV))
+print(maud_od.index())
+print(maud_od.entropy())
 # maud_od.plot3d()
 
 tube_rad = np.deg2rad(8)
 tube_exp = 1
 hkls = [(1,1,1),(3,1,1),(2,2,0)]
 
-recalc_pf = maud_od._calcPF( hkls, tube_rad, tube_exp, tube_proj=True )
+test = maud_od.export(od_file+'NOMAD_Al_4Datasets_SSabs_MTEX_5res.odf',vol_norm=True)
+
+# recalc_pf = maud_od._calcPF( hkls, tube_rad, tube_exp, tube_proj=True )
 
 # cl = np.arange(0,8.5,0.5)
 # recalc_pf.plot(contourlevels=cl,proj='earea')
