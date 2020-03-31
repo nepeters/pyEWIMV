@@ -32,6 +32,9 @@ import pandas as _pd
 #sym ops
 import spglib as _spglib
 
+#rotations - easy
+from scipy.spatial.transform import Rotation as _R
+
 #plotting
 import matplotlib.pyplot as _plt
 from mpl_toolkits.axes_grid1 import ImageGrid as _imgGrid
@@ -87,7 +90,17 @@ def genSymOps(cs):
         symOps = _np.swapaxes(symOps,0,2)
         symOps = _np.swapaxes(symOps,0,1)
 
-        return symOps
+    elif cs == 'mmm':
+
+        spg_tbl = _pd.read_csv(spgtbl_path, sep="\t")
+        # use spacegroup #225
+        hall_num = spg_tbl[spg_tbl['Table No.'] == 47]['Serial No.'].iloc[0]
+        symOps = _spglib.get_symmetry_from_database(hall_num)['rotations']
+
+        symOps = _np.swapaxes(symOps,0,2)
+        symOps = _np.swapaxes(symOps,0,1)        
+    
+    return symOps
 
 def symmetrise(cs,hkl):
 
@@ -128,7 +141,111 @@ def symmetrise(cs,hkl):
 
         return symHKL
 
+### scattering vector ###
+
+def calcScatVec( v, r, sample_r=None ):
+
+    """
+    v' = r * v 
+    passive rotation supplied as matrix, or scipy Rotation inst.
+
+    returns earea proj, xyz, sph
+    """
+
+    ## check on r, sample_r
+
+    if isinstance(r, _np.ndarray):
+        assert r.shape == (3,3)
+        r = _R.from_matrix(r)
+    elif isinstance(r, _R): pass
+    else: raise ValueError('rotation not valid')
+
+    if sample_r is not None:
+
+        if isinstance(sample_r, _np.ndarray):
+            assert sample_r.shape == (3,3)
+            sample_r = _R.from_matrix(sample_r)
+        elif isinstance(sample_r, _R): pass
+        else: raise ValueError('sample rotation not valid')
+    
+    #default to the identity matrix
+    else: sample_r = _R.identity()
+
+    a = _np.linalg.norm(v,axis=1)
+    norm = _np.sqrt((2*a**2)-(2*a*v[:,2]))
+
+    vp = _copy.deepcopy(v)
+    vp[:,2] = vp[:,2] - a
+    
+    sv = (1/norm[:,None]) * sample_r.apply(r.apply(vp))
+
+    return XYZtoSPH(_copy.deepcopy(sv),proj='earea',SNS=True), sv, XYZtoSPH(_copy.deepcopy(sv),SNS=True)
+
 ### plotting util ###
+
+def _sparseScatterPlot( polar, data, cols, rows, proj, cmap, axes_labels, x_direction='N'):
+
+    """
+    wrapper for plt.scatter
+    sparse data
+    """
+
+    fig, axes = _plt.subplots(rows, cols, subplot_kw=dict(polar=True))
+
+
+    # find min/max for all
+    mx = 0
+    mn = 1E9
+
+    for n,ax in enumerate(axes):
+
+        if _np.max(data[n]) > mx: mx = _np.max(data[n])
+        if _np.min(data[n]) < mn: mn = _np.min(data[n])
+
+    for n,ax in enumerate(axes):
+
+        alpha = _copy.deepcopy(polar[n][:,1])
+        plt_beta = _copy.deepcopy(polar[n][:,0])
+
+        if proj == 'stereo': 
+            plt_alpha = _np.tan(_copy.deepcopy(alpha)/2)
+            max_alpha = 1
+        elif proj == 'earea': 
+            plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
+            max_alpha = _np.sqrt(2)
+        elif proj == 'none': 
+            plt_alpha = _copy.deepcopy(alpha)
+            max_alpha = _np.pi/2        
+
+        ax.set_yticklabels([])
+        ax.set_xticklabels([])
+        ax.set_ylim([0,max_alpha])
+        ax.set_theta_zero_location(x_direction) 
+        ax.grid(False)
+
+        norm = _plt.Normalize(vmin=mn, vmax=mx)
+
+        pts = ax.scatter(plt_beta,
+                         plt_alpha,
+                         c=data[n],
+                         s=6,
+                         cmap=cmap,
+                         norm=norm)
+
+        ax.text(0,max_alpha,axes_labels['X'],
+                fontsize=8,
+                va='center',
+                ha='center',
+                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+        ax.text(max_alpha,max_alpha,axes_labels['Y'],
+                fontsize=8,
+                va='center',
+                ha='center',
+                bbox=dict(facecolor='white', edgecolor='black', boxstyle='round'))
+
+    fig.colorbar(pts, ax=axes.ravel().tolist(), fraction=0.046, pad=0.04)
+    _plt.show()
 
 def _scatterPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, x_direction='N'):
 
@@ -138,9 +255,15 @@ def _scatterPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, x_dire
 
     fig, axes = _plt.subplots(rows, cols, subplot_kw=dict(polar=True))
 
-    if proj == 'stereo': plt_alpha = (_np.pi/2)*_np.tan(_copy.deepcopy(alpha)/2)
-    elif proj == 'earea': plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
-    elif proj == 'none': plt_alpha = _copy.deepcopy(alpha)
+    if proj == 'stereo': 
+        plt_alpha = _np.tan(_copy.deepcopy(alpha)/2)
+        max_alpha = 1
+    elif proj == 'earea': 
+        plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
+        max_alpha = _np.sqrt(2)
+    elif proj == 'none': 
+        plt_alpha = _copy.deepcopy(alpha)
+        max_alpha = _np.pi/2
 
     #append start/end to create complete plots
     dbeta = _np.diff(beta).mean()
@@ -151,7 +274,7 @@ def _scatterPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, x_dire
 
         ax.set_yticklabels([])
         ax.set_xticklabels([])
-        ax.set_ylim([0,_np.max(plt_alpha)])
+        ax.set_ylim([0,max_alpha])
         ax.set_theta_zero_location(x_direction) 
         ax.grid(False)
 
@@ -186,9 +309,15 @@ def _contourPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, contou
 
     fig, axes = _plt.subplots(rows, cols, subplot_kw=dict(polar=True))
 
-    if proj == 'stereo': plt_alpha = (_np.pi/2)*_np.tan(_copy.deepcopy(alpha)/2)
-    elif proj == 'earea': plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
-    elif proj == 'none': plt_alpha = _copy.deepcopy(alpha)
+    if proj == 'stereo': 
+        plt_alpha = 1*_np.tan(_copy.deepcopy(alpha)/2)
+        max_alpha = 1
+    elif proj == 'earea': 
+        plt_alpha = 2*_np.sin(_copy.deepcopy(alpha)/2)
+        max_alpha = _np.sqrt(2)
+    elif proj == 'none': 
+        plt_alpha = _copy.deepcopy(alpha)
+        max_alpha = _np.pi/2
 
     #append start/end to create complete plots
     dbeta = _np.diff(beta).mean()
@@ -203,7 +332,7 @@ def _contourPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, contou
 
         ax.set_yticklabels([])
         ax.set_xticklabels([])
-        ax.set_ylim([0,_np.max(plt_alpha)])
+        ax.set_ylim([0,max_alpha])
         ax.set_theta_zero_location(x_direction) 
         ax.grid(False)
 
@@ -246,19 +375,35 @@ def _contourPlot( alpha, beta, data, cols, rows, proj, cmap, axes_labels, contou
 
 ### coordinate sys transform ###
 
-def XYZtoSPH( xyz, proj='stereo', upperOnly=True ):
+def XYZtoSPH( xyz, proj='none', upperOnly=True, SNS=False ):
     
+    """
+    coordinate system
+    xy: in-plane
+    z:  north (up)
+
+    x,y,z - supplied in that order
+    """
+
+    if SNS: #SNS coordinate system
+        up = 1
+        ip = (0, 2)
+    else:
+        up = 2
+        ip = (0, 1)
+
+    #3D array
     if len(xyz.shape) == 3:
 
         ## invert with -y ##
 
         if upperOnly is True:
 
-            for i in range( xyz.shape[2] ):
+            for i in range( xyz.shape[up] ):
             
                 temp = xyz[:,:,i]
                 
-                neg_idx = _np.where(temp[:,2] < 0)
+                neg_idx = _np.where(temp[:,up] < 0)
                 
                 xyz[neg_idx,:,i] = -xyz[neg_idx,:,i]
 
@@ -278,14 +423,14 @@ def XYZtoSPH( xyz, proj='stereo', upperOnly=True ):
 
         sph = _np.zeros((xyz.shape[0],2,xyz.shape[2]))
         
-        xy = _np.power(xyz[:,0,:],2) + _np.power(xyz[:,1,:],2)
-        sph1 = _np.arctan2(_np.sqrt(xy), xyz[:,2,:]) #alpha
+        inplane = _np.power(xyz[:,ip[0],:],2) + _np.power(xyz[:,ip[1],:],2)
+        sph1 = _np.arctan2(_np.sqrt(inplane), xyz[:,up,:]) #alpha
         
-        if proj == 'stereo': sph1 = (_np.pi/2)*_np.tan(sph1/2)
+        if proj == 'stereo': sph1 = _np.tan(sph1/2)
         elif proj == 'earea': sph1 = 2*_np.sin(sph1/2)
         elif proj == 'none': pass
         
-        sph0 = _np.arctan2(xyz[:,1,:], xyz[:,0,:]) #beta  
+        sph0 = _np.arctan2(xyz[:,ip[1],:], xyz[:,ip[0],:]) #beta  
         # move all angles between 0-2π
         sph0 = _np.where(sph0 < 0, sph0 + 2*_np.pi, sph0) 
         
@@ -298,18 +443,18 @@ def XYZtoSPH( xyz, proj='stereo', upperOnly=True ):
 
         if upperOnly is True:
 
-            xyz[xyz[:,2] < 0] = -xyz[xyz[:,2] < 0]
+            xyz[xyz[:,up] < 0] = -xyz[xyz[:,up] < 0]
         
         sph = _np.zeros((len(xyz),2))
-        xy = _np.power(xyz[:,1],2) + _np.power(xyz[:,0],2)
+        inplane = _np.power(xyz[:,ip[1]],2) + _np.power(xyz[:,ip[0]],2)
         
-        sph[:,1] = _np.arctan2(_np.sqrt(xy), xyz[:,2])
-        if proj == 'stereo': sph[:,1] = (_np.pi/2)*_np.tan(sph[:,1]/2)
+        sph[:,1] = _np.arctan2(_np.sqrt(inplane), xyz[:,up])
+        if proj == 'stereo': sph[:,1] = _np.tan(sph[:,1]/2)
         elif proj == 'earea': sph[:,1] = 2*_np.sin(sph[:,1]/2)
         elif proj == 'none': pass
         
         # eliminate large values
-        sph[:,0] = _np.arctan2(xyz[:,0], xyz[:,1])
+        sph[:,0] = _np.arctan2(xyz[:,ip[1]], xyz[:,ip[0]])
         sph[:,0] = _np.where(sph[:,0] < 0, sph[:,0] + 2*_np.pi, sph[:,0])
 
     return sph 
@@ -335,3 +480,107 @@ def SPHtoXYZ( azimuth, polar, offset=False ):
     xyz[:,2] = _np.cos( sph[:,1] ) 
 
     return xyz
+
+""" homogenization """
+
+def voigt2tensor( voigt, compliance=False):
+
+    """
+    thanks jishnu
+    """
+
+    Atensor = _np.zeros([3, 3, 3, 3])
+    fact=1
+    for i in range(3):
+        for j in range(3):
+            ## assigning the index m according to conversion table
+            if ((i==0 and j==0)): m = 0
+            if  ((i==1 and j==1)): m = 1
+            if  ((i==2 and j==2)): m = 2
+            if  (((i==1 and j==2)) or ((i==2 and j==1))): m = 3
+            if  (((i==0 and j==2)) or ((i==2 and j==0))): m = 4
+            if  (((i==0 and j==1)) or ((i==1 and j==0))): m = 5
+            
+            for k in range(3):
+                for l in range(3):
+                    ## assigning the index n according to conversion table
+                    if k==0 and l==0: n = 0
+                    if  k==1 and l==1: n = 1
+                    if  k==2 and l==2: n = 2
+                    if  ((k==1 and l==2) or (k==2 and l==1)): n = 3
+                    if  ((k==0 and l==2) or (k==2 and l==0)): n = 4
+                    if  ((k==0 and l==1) or (k==1 and l==0)): n = 5
+                    
+                    ## assigning the tensor values accordingly
+                    if compliance is True:
+                        if (m>=3) or (n>=3): fact = 2
+                    if compliance is True:
+                        if (m>=3) and (n>=3): fact = 4
+                    
+                    Atensor[i,j,k,l]=voigt[m,n]/fact
+                    fact = 1
+
+            
+    return Atensor
+
+def tensor2voigt( tensor, compliance=False):
+
+    """
+    convert a 4th rank tensor into Voigt notation
+    thanks jishnu
+    """
+    A_voigt = _np.zeros([6, 6])
+    fact = 1
+    for m in range(6):
+        for n in range(6):
+            # assigning the index i and j according to conversion table
+            if (n==0):
+                i = 0
+                j = 0
+            elif (n==1): 
+                i = 1
+                j = 1
+            elif  (n==2): 
+                i = 2
+                j = 2
+            elif  (n==3): 
+                i = 1
+                j = 2
+            elif  (n==4): 
+                i = 0
+                j = 2
+            elif  (n==5): 
+                i = 0
+                j = 1
+            
+            # assigning the index k and l according to conversion table
+            if (m==0): 
+                k = 0
+                l = 0
+            elif  (m==1): 
+                k = 1
+                l = 1
+            elif  (m==2):
+                k = 2
+                l = 2
+            elif  (m==3):
+                k = 1
+                l = 2
+            elif  (m==4):
+                k = 0
+                l = 2
+            elif  (m==5): 
+                k = 0
+                l = 1
+            
+            if compliance is True:
+                if ((m>=3) or (n>=3)): fact = 2
+            if compliance is True:
+                if ((m>=3) and (n>=3)): fact = 4
+
+            A_voigt[m,n] = fact*tensor[i,j,k,l]
+            fact = 1
+            
+    return A_voigt
+        
+    

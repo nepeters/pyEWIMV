@@ -13,6 +13,7 @@ texture base
 import os as _os
 import sys as _sys
 import copy as _copy
+import time as _time
 
 import numpy as _np 
 from scipy.interpolate import griddata as _griddata
@@ -34,7 +35,10 @@ from .utils import XYZtoSPH as _XYZtoSPH
 from .utils import SPHtoXYZ as _SPHtoXYZ
 from .utils import _contourPlot
 from .utils import _scatterPlot
+from .utils import _sparseScatterPlot
 from .utils import genSymOps as _genSymOps
+from .utils import tensor2voigt as _tensor2voigt, voigt2tensor as _voigt2tensor
+from .orientation import om2quat as _om2quat
 
 ### general functions ###
 ### block print from xrdtools ###
@@ -174,8 +178,11 @@ class poleFigure(object):
                     temp = _np.genfromtxt(f)
 
                     self.data[i] = temp[:,2]
-                    self.y_pol[i] = temp[:,:2]
-                    self.y[i] = _SPHtoXYZ( self.y_pol[i][:,0], self.y_pol[i][:,1] )
+                    # self.y_pol[i] = temp[:,:2]
+                    # self.y[i] = _SPHtoXYZ( self.y_pol[i][:,1], self.y_pol[i][:,0] )
+                    self.y[i] = _SPHtoXYZ( temp[:,1], temp[:,0] )
+                    self.y_pol[i] = _XYZtoSPH( self.y[i] )
+
                     
             self.subtype = 'mtex'         
 
@@ -286,7 +293,7 @@ class poleFigure(object):
 
         else: raise NotImplementedError('pf type not recognized')
         
-    def plot( self, plt_type='contour', proj='stereo', cmap='magma_r', contourlevels='equal', pfs='all', x_direction='N', axes_labels='XY' ):
+    def plot( self, plt_type='contour', proj='earea', cmap='magma_r', contourlevels='equal', pfs='all', x_direction='N', axes_labels='XY' ):
         
         """
         plotting utility
@@ -306,16 +313,31 @@ class poleFigure(object):
         if axes_labels == 'XY': axes_labels = {'X':'X', 'Y':'Y'}
         else: pass
 
-        if plt_type == 'scatter': 
-            _scatterPlot( self.alpha,
-                          self.beta,
-                          self.data,
-                          cols,
-                          rows,
-                          proj,
-                          cmap,
-                          axes_labels,
-                          x_direction='N')
+        if plt_type == 'scatter':
+            
+            if hasattr(self,'alpha'):
+                #TODO:fix this requirement - all under one scatter func
+                _scatterPlot( self.alpha,
+                            self.beta,
+                            self.data,
+                            cols,
+                            rows,
+                            proj,
+                            cmap,
+                            axes_labels,
+                            x_direction='N')
+            
+            else:
+
+                _sparseScatterPlot( self.y_pol,
+                                    self.data,
+                                    cols,
+                                    rows,
+                                    proj,
+                                    cmap,
+                                    axes_labels,
+                                    x_direction='N')
+
 
         elif plt_type == 'contour': 
             if self.subtype == 'poleFig' or self.subtype == 'recalc':
@@ -642,16 +664,29 @@ class bunge( OD ):
         self.res = cellSize
         
         # set boundary in Bunge space (not rigorous for cubic)
-        if sampleSym == '1': self._phi1max = _np.deg2rad(360)
-        elif sampleSym == 'm': self._phi1max = _np.deg2rad(180)
-        elif sampleSym == 'mmm': self._phi1max = _np.deg2rad(90)
-        else: raise ValueError('invalid sampleSym')
+        # if sampleSym == '1': self._phi1max = _np.deg2rad(360)
+        # elif sampleSym == 'm': self._phi1max = _np.deg2rad(180)
+        # elif sampleSym == 'mmm': self._phi1max = _np.deg2rad(360)
+        # else: raise ValueError('invalid sampleSym')
+
+        if '1' != sampleSym: 
+            tempOps = _genSymOps(sampleSym)
+            tempOps = _np.swapaxes(tempOps,2,0)
+            tempOps = tempOps[_np.where( _np.linalg.det(tempOps) == 1 )]
+            self.smpl_symOps = _quat.from_matrix(tempOps)
+        else: 
+            self.smpl_symOps = _quat.from_matrix(_np.identity(3))[None,:]
+
+        self._phi1max = _np.deg2rad(360)
 
         if crystalSym == 'm-3m' or crystalSym == '432': 
             self._Phimax = _np.deg2rad(90)
             self._phi2max = _np.deg2rad(90)
         elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
         else: raise ValueError('invalid crystalSym, only cubic so far..')
+
+        self.CS = crystalSym
+        self.SS = sampleSym
 
         # setup grid
         self._phi1range = _np.arange(0,self._phi1max+cellSize,cellSize)
@@ -723,11 +758,88 @@ class bunge( OD ):
         if weights is None: self.weights = _np.zeros_like(self.bungeList)
         else: self.weights = weights
 
+    @staticmethod
+    def _genGrid( res, _phi1max, _Phimax, _phi2max, centered=True, returnList=False ):
+
+        """
+        generate grids
+        """
+
+        # setup grid
+        _phi1range = _np.arange(0,_phi1max+res,res)
+        _Phirange = _np.arange(0,_Phimax+res,res)
+        _phi2range = _np.arange(0,_phi2max+res,res)
+
+        # centroid grid
+        _phi1cen_range = _np.arange( (res/2),( _phi1max-(res/2) )+res,res )
+        _Phicen_range = _np.arange( (res/2),( _Phimax-(res/2) )+res,res )
+        _phi2cen_range = _np.arange( (res/2),( _phi2max-(res/2) )+res,res )
+
+        phi2, Phi, phi1 = _np.meshgrid(_phi2range, _Phirange, _phi1range, indexing = 'ij')
+        phi2cen, Phicen, phi1cen = _np.meshgrid(_phi2cen_range, _Phicen_range, _phi1cen_range, indexing = 'ij')
+
+        g, bungeList = _eu2om((phi1cen,Phicen,phi2cen),out='mdarray')
+        
+        ## vol integral of sin(Phi) dPhi dphi1 dphi2 
+        volume = (-_np.cos(_Phimax) +_np.cos(0)) * _phi1max * _phi2max
+
+        #for centered grid
+        if centered: 
+            
+            cellVolume = res * res * ( _np.cos( Phicen - (res/2) ) - _np.cos( Phicen + (res/2) ) )
+            
+            temp = _np.zeros(( _np.product(phi1cen.shape ) , 3))
+            # quaternion grid
+            for ang_i, md_i in enumerate(_np.ndindex(phi1cen.shape)):
+                temp[ang_i,:] = _np.array( ( phi1cen[md_i], Phicen[md_i], phi2cen[md_i] ) )
+            q_grid = _eu2quat(temp).T
+
+        else: #for uncentered grid
+
+            g, bungeList = _eu2om((phi1,Phi,phi2),out='mdarray')
+
+            Phi_zero = (Phi == 0)
+            Phi_max = (Phi == _np.max(Phi))
+        
+            phi1_zero = (phi1 == 0)
+            phi1_max = (phi1 == _np.max(phi1))
+
+            phi2_zero = (phi2 == 0)
+            phi2_max = (phi2 == _np.max(phi2))
+
+            dphi1_dphi2 = _np.ones_like(bungeList) * res * res
+            #phi1 edge cases - 0.5*Δφ1 + Δφ2
+            dphi1_dphi2[phi1_zero+phi1_max] = 1.5*res
+            #phi2 edge cases - Δφ1 + 0.5*Δφ2
+            dphi1_dphi2[phi2_zero+phi2_max] = 1.5*res
+            #phi1 and phi2 edge case - 0.5*Δφ1 + 0.5*Δφ2
+            dphi1_dphi2[(phi2_zero+phi2_max)*(phi1_zero+phi1_max)] = res  
+
+            delta_Phi = _np.ones_like(bungeList) * ( _np.cos( Phi - (res/2) ) - _np.cos( Phi + (res/2) ) )
+            #Phi = 0
+            delta_Phi[Phi_zero] = ( _np.cos( Phi[Phi_zero] ) - _np.cos( Phi[Phi_zero] + (res/2) ) )
+            #Phi = max
+            delta_Phi[Phi_max] = ( _np.cos( Phi[Phi_zero] - (res/2) ) - _np.cos( Phi[Phi_zero] ) )
+
+            cellVolume = dphi1_dphi2 * delta_Phi 
+
+            temp = _np.zeros(( _np.product(phi1.shape ) , 3))
+            # quaternion grid
+            for ang_i, md_i in enumerate(_np.ndindex(phi1.shape)):
+                temp[ang_i,:] = _np.array( ( phi1[md_i], Phi[md_i], phi2[md_i] ) )
+            q_grid = _eu2quat(temp).T
+       
+
+        if returnList: return bungeList
+        else: return phi1, Phi, phi2
+
     @classmethod
-    def loadMAUD( cls, file, cellSize, crystalSym, sampleSym ):
+    def _loadMAUD( cls, file, cellSize, crystalSym, sampleSym ):
 
         """
         load in Beartex ODF exported from MAUD
+
+        not working - need to fix
         """
 
         # phi1 →
@@ -736,10 +848,16 @@ class bunge( OD ):
         # i  each 19 rows is new phi2 section
         # ↓
 
+        # he uses matthies.........!!!!!!!!!!!!!!!!!!!
+        # phi2 = gamma
+        # Phi  = beta
+        # phi1 = alpha
+
         with open(file,'r') as f:
 
             #read in odf data
             odf_str = f.readlines()
+            for line in odf_str: pass
             odf_txt = _np.genfromtxt(odf_str,skip_header=3)
             print('loaded ODF')
             print('header: "'+odf_str[0].strip('\n')+'"')
@@ -773,6 +891,8 @@ class bunge( OD ):
             for j,p in enumerate(od._Phirange):
                 for k,p1 in enumerate(od._phi1range):
                     
+
+
                     weights[i,j,k] = odf_txt[j+i*19,k]
 
         od.weights = _np.ravel(weights)
@@ -806,7 +926,7 @@ class bunge( OD ):
             file.write('#phi1\tPhi\tphi2\tweight\n')
             _np.savetxt(file,
                         out,
-                        fmt=('%.5f','%.5f','%.5f','%.5f'),
+                        fmt=('%.5f','%.5f','%.5f','%.10f'),
                         delimiter='\t',
                         newline='\n')
 
@@ -845,6 +965,77 @@ class bunge( OD ):
             return -_np.sum( _np.ravel( self.cellVolume ) * self.weights * _np.log( self.weights ) ) / _np.sum( _np.ravel( self.cellVolume ) )
         else:
             return -_np.sum( _np.ravel( cellVolume ) * self.weights * _np.log( self.weights ) ) / _np.sum( _np.ravel( cellVolume ) )
+
+    """ homogenization """
+
+    def reuss( self, compliance ):
+
+        """
+        Reuss bound
+        """
+
+        if compliance.shape != (6,6): raise ValueError('Voigt notation please')
+
+        scale = _copy.deepcopy((self.weights * self.cellVolume.flatten())) / _np.sum(self.weights * self.cellVolume.flatten()) 
+
+        Stensor = _voigt2tensor(compliance,compliance=True)
+        Stemp = _np.zeros([3,3,3,3])
+
+        for n,wgt in enumerate(scale):
+            
+            g_temp = _np.copy(self.g[:,:,n])
+            
+            Sten_Tr = _np.einsum('im,jn,ko,lp,mnop',g_temp,g_temp,g_temp,g_temp,Stensor)
+            Stemp += Sten_Tr*wgt
+
+        return _np.linalg.inv(_tensor2voigt(Stemp,compliance=True))
+
+    def voigt( self, stiffness ):
+
+        """
+        voigt bound 
+        """
+
+        if stiffness.shape != (6,6): raise ValueError('Voigt notation please')
+
+        scale = _copy.deepcopy((self.weights * self.cellVolume.flatten())) / _np.sum(self.weights * self.cellVolume.flatten()) 
+
+        Ctensor = _voigt2tensor(stiffness)
+        Ctemp = _np.zeros([3,3,3,3])
+
+        for n,wgt in enumerate(scale):
+            
+            g_temp = _np.copy(self.g[:,:,n])
+            
+            Cten_Tr = _np.einsum('im,jn,ko,lp,mnop',g_temp,g_temp,g_temp,g_temp,Ctensor)
+            Ctemp += Cten_Tr*wgt
+
+        return _tensor2voigt(Ctemp)        
+
+    def hill( self, elastic, stiffness=True ):
+
+        """
+        hill bound - default entry is stiffness in Voigt notation
+        """
+
+        if stiffness:
+
+            if elastic.shape != (6,6): raise ValueError('Voigt notation please')
+            
+            voigt = self.voigt(elastic)
+            reuss = self.reuss(_np.linalg.inv(elastic))
+
+            return 0.5*( voigt + reuss )
+
+        else: 
+
+            if elastic.shape != (6,6): raise ValueError('Voigt notation please')
+            
+            voigt = self.voigt(_np.linalg.inv(elastic))
+            reuss = self.reuss(elastic)
+
+            return 0.5*( voigt + reuss )    
+
 
     """ e-wimv specific sub-routines """
 
@@ -908,110 +1099,124 @@ class bunge( OD ):
             for yi,y in enumerate(it): 
                 
                 """ symmetry method """
-
+                t0 = _time.time()
                 #calculate path for single (hkl)
                 axis[fi][yi] = _np.cross(fam,y)
                 axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=-1)
                 omega[fi][yi] = _np.arccos(_np.dot(fam,y))
-                
+
                 q0[fi][yi] = _np.hstack( [ _np.cos(omega[fi][yi]/2), _np.sin(omega[fi][yi]/2) * axis[fi][yi] ] )
                 q[fi][yi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
                 qf[yi] = _quat.multiply(q[fi][yi], q0[fi][yi])
-                
-                #multiply by sym ops
-                qfib = _quat.multiply(qf[yi], quatSymOps)
-                #transpose to correct format for conversion
-                qfib = qfib.transpose((1,0,2))
-                
-                #convert to bunge euler
-                phi1, Phi, phi2 = _quat2eu(qfib)
-                
-                phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #brnng back to 0 - 2pi
-                Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #brnng back to 0 - pi
-                phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #brnng back to 0 - 2pi
-                
-                #fundamental zone calc (not true!)
-                eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
-                eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
-        
-                fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
-                fz_idx = _np.nonzero(fz)
-                
-                #pull only unique points? - not sure why there are repeated points, something with symmetry for certain hkls
-                #should only be ~73 points per path, but three fold symmetry is also present
-                path_e[fi][yi],uni_path_idx = _np.unique(eu_fib[fz],return_index=True,axis=0)
-                fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
-                path_q[fi][yi] = qfib[fib_idx][uni_path_idx]
 
-                """ loop method """
+                for smpl_symOp in self.smpl_symOps: 
 
-                # try:
-                #     axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=1)[:,None]
-                # except FloatingPointError:
-                #     return axis[fi][yi]
-                
-                # omega[fi][yi] = _np.arccos(_np.dot(fam,y))
-                
-                # q0[fi][yi] = {}
-                # q[fi][yi] = {}
-                # qf[yi] = {}
-                # qfib = _np.zeros((len(phi),len(fam),4))
-                
-                # for hi,HxY in enumerate(axis[fi][yi]):
-                
-                #     q0[fi][yi][hi] = _np.hstack( [ _np.cos(omega[fi][yi][hi]/2), _np.sin(omega[fi][yi][hi]/2) * HxY ] )
-                #     q[fi][yi][hi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
+                    #multiply by sym ops, first sample then crystal
+                    qf_smplSym = _quat.multiply(smpl_symOp, qf[yi])
+                    qfib = _quat.multiply(qf_smplSym, quatSymOps)
+                    #transpose to correct format for conversion
+                    qfib = qfib.transpose((1,0,2))
                     
-                #     qf[yi][hi] = _quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
-                
-                #     for qi in range(qf[yi][hi].shape[0]):
-                        
-                #         qfib[qi,hi,:] = qf[yi][hi][qi,:]
-                
-                # phi1, Phi, phi2 = _quat2eu(qfib)
-                
-                # phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #bring back to 0 - 2pi
-                # Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #bring back to 0 - pi
-                # phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #bring back to 0 - 2pi
-                
-                # eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
-                # eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
-        
-                # fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
-                # fz_idx = _np.nonzero(fz)
-                
-                # path_e[fi][yi] = eu_fib[fz]    
-                # fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
-                # path_q[fi][yi] = qfib[fib_idx]
-
-                """ euclidean distance calculation - KDTree """
-                
-                qfib_pos = _np.copy(qfib[fib_idx])
-                qfib_pos[qfib_pos[:,0] < 0] *= -1
-                
-                # returns tuple - first array are points, second array is distances
-                query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
+                    # #convert to bunge euler
+                    # phi1, Phi, phi2 = _quat2eu(qfib)
+                    
+                    # phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #brnng back to 0 - 2pi
+                    # Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #brnng back to 0 - pi
+                    # phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #brnng back to 0 - 2pi
+                    
+                    # #fundamental zone calc (not true!)
+                    # eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
+                    # eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
             
-                # concatenate arrays
-                query = _np.column_stack([_np.concatenate(ar) for ar in query])
-                
-                # round very small values
-                query = _np.round(query, decimals=7)
-                
-                # move values at zero to very small (1E-5)
-                query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
-                
-                # sort by minimum distance - unique function takes first appearance of index
-                query_sort = query[_np.argsort(query[:,1],axis=0)]
-                
-                # return unique points
-                uni_pts = _np.unique(query_sort[:,0],return_index=True)
-                
-                gridPts[fi][yi] = uni_pts[0].astype(int)
-                gridDist[fi][yi] = query_sort[uni_pts[1],1]
+                    # fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
+                    # fz_idx = _np.nonzero(fz)
+                    
+                    # #pull only unique points? - not sure why there are repeated points, something with symmetry for certain hkls
+                    # #should only be ~73 points per path, but three fold symmetry is also present
+                    # path_e[fi][yi],uni_path_idx = _np.unique(eu_fib[fz],return_index=True,axis=0)
+                    # fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
+                    # path_q[fi][yi] = qfib[fib_idx][uni_path_idx]
 
-                """ geodesic distance calculation - dot product """
+                    """ loop method """
+
+                    # try:
+                    #     axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+                    # except FloatingPointError:
+                    #     return axis[fi][yi]
+                    
+                    # omega[fi][yi] = _np.arccos(_np.dot(fam,y))
+                    
+                    # q0[fi][yi] = {}
+                    # q[fi][yi] = {}
+                    # qf[yi] = {}
+                    # qfib = _np.zeros((len(phi),len(fam),4))
+                    
+                    # for hi,HxY in enumerate(axis[fi][yi]):
+                    
+                    #     q0[fi][yi][hi] = _np.hstack( [ _np.cos(omega[fi][yi][hi]/2), _np.sin(omega[fi][yi][hi]/2) * HxY ] )
+                    #     q[fi][yi][hi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
+                        
+                    #     qf[yi][hi] = _quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
+                    
+                    #     for qi in range(qf[yi][hi].shape[0]):
+                            
+                    #         qfib[qi,hi,:] = qf[yi][hi][qi,:]
+                    
+                    # phi1, Phi, phi2 = _quat2eu(qfib)
+                    
+                    # phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #bring back to 0 - 2pi
+                    # Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #bring back to 0 - pi
+                    # phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #bring back to 0 - 2pi
+                    
+                    # eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
+                    # eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
+            
+                    # fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
+                    # fz_idx = _np.nonzero(fz)
+                    
+                    # path_e[fi][yi] = eu_fib[fz]    
+                    # fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
+                    # path_q[fi][yi] = qfib[fib_idx]
+
+                    """ euclidean distance calculation - KDTree """
+                    
+                #     qfib_pos = _np.copy(qfib[fib_idx])
+                #     qfib_pos[qfib_pos[:,0] < 0] *= -1
+                    
+                #     # returns tuple - first array are points, second array is distances
+                #     query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
                 
+                #     # concatenate arrays
+                #     query = _np.column_stack([_np.concatenate(ar) for ar in query])
+                    
+                #     # round very small values
+                #     query = _np.round(query, decimals=7)
+                    
+                #     # move values at zero to very small (1E-5)
+                #     query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
+                    
+                #     # sort by minimum distance - unique function takes first appearance of index
+                #     query_sort = query[_np.argsort(query[:,1],axis=0)]
+                    
+                #     # return unique points
+                #     uni_pts = _np.unique(query_sort[:,0],return_index=True)
+                    
+                #     if yi not in gridPts[fi]:
+
+                #         gridPts[fi][yi] = [uni_pts[0].astype(int)]
+                #         gridDist[fi][yi] = [query_sort[uni_pts[1],1]]
+                    
+                #     else:
+                        
+                #         gridPts[fi][yi].append(uni_pts[0].astype(int))
+                #         gridDist[fi][yi].append(query_sort[uni_pts[1],1])
+
+                # gridDist[fi][yi] = _np.concatenate(gridDist[fi][yi])
+                # gridPts[fi][yi]  = _np.concatenate(gridPts[fi][yi])
+                
+                t1 = _time.time()
+                print(t1-t0)
+                """ geodesic distance calculation - dot product """
                 # """ reduce geodesic query size """
                 # qfib_pos = _np.copy(qfib[fib_idx])
                 # qfib_pos[qfib_pos[:,0] < 0] *= -1
@@ -1087,6 +1292,21 @@ class bunge( OD ):
         both for e-wimv & wimv
         """
 
+        from scipy.spatial.transform import Rotation as R
+
+        if '1' not in self.SS: 
+            ## only works with 'mmm' yet
+            smplSymOps = _genSymOps(self.SS)
+            smplSymOps = _np.swapaxes(smplSymOps,2,0)
+            ## only select proper orthogonal
+            smplSymOps = smplSymOps[_np.where( _np.linalg.det(smplSymOps) == 1 )]
+
+        ## try to set pointer to all equivalent points
+        # if '1' in self.SS:
+
+            ## true fz is 90,90,90
+            # tmp_p1, tmp_P, tmp_p2 = bunge._genGrid(self.cellSize,np.deg2rad(90),self._Phimax,self._phi2max,centered=self.centered)
+
         if inv_method == 'e-wimv' and hasattr(self,'paths'):
 
             self.pointer = {}
@@ -1103,8 +1323,16 @@ class bunge( OD ):
                     pf_od[hi] = {}
                     
                     for yi in range(len(p['grid points'][hi].keys())):
-                        
+
                         od_cells = p['grid points'][hi][yi]
+
+                        # if '1' not in self.SS: od_cells = p['grid points'][hi][yi]
+                        # else:
+                        #     ### loop through each grid point, calculate sym. equivalent
+                        #     for cell in p['grid points'][hi][yi]:
+                                
+                        #         #retrieve orient. matrix
+                        #         g_temp = R.from_matrix(self.g[cell])
 
                         #handle no od_cells
                         if len(od_cells) == 0: continue
@@ -1329,14 +1557,24 @@ class bunge( OD ):
                 if sectionVal in self._phi2range: section_id = _np.where(self._phi2range == sectionVal)[0] - 1
                 else: raise ValueError('section must be in discrete grid')
         
-                pltX, pltY = _np.rad2deg(self.phi1cen[section_id,:,:]), _np.rad2deg(self.Phicen[section_id,:,:])
-                pltX = pltX.reshape(pltX.shape[1:])
-                pltY = pltY.reshape(pltY.shape[1:])
-                
-                pltWgt = _np.copy(self.weights)
-                pltWgt = pltWgt.reshape(self.Phicen.shape)
-                pltWgt = pltWgt[section_id,:,:]
-                pltWgt = pltWgt.reshape(pltWgt.shape[1:])
+                try: #see if centered
+                    pltX, pltY = _np.rad2deg(self.phi1cen[section_id,:,:]), _np.rad2deg(self.Phicen[section_id,:,:])
+                    pltX = pltX.reshape(pltX.shape[1:])
+                    pltY = pltY.reshape(pltY.shape[1:])
+                    pltWgt = _np.copy(self.weights)
+                    pltWgt = pltWgt.reshape(self.Phicen.shape)
+                    pltWgt = pltWgt[section_id,:,:]
+                    pltWgt = pltWgt.reshape(pltWgt.shape[1:])
+
+                except:
+                    pltX, pltY = _np.rad2deg(self.phi1[section_id,:,:]), _np.rad2deg(self.Phi[section_id,:,:])
+                    pltX = pltX.reshape(pltX.shape[1:])
+                    pltY = pltY.reshape(pltY.shape[1:])                    
+                    pltWgt = _np.copy(self.weights)
+                    pltWgt = pltWgt.reshape(self.Phi.shape)
+                    pltWgt = pltWgt[section_id,:,:]
+                    pltWgt = pltWgt.reshape(pltWgt.shape[1:])
+
             
             pt = ax.contourf(pltX,pltY,pltWgt,cmap=cmap)
             fig.colorbar(pt, ax=ax, fraction=0.046, pad=0.04) 
@@ -1347,7 +1585,7 @@ class bunge( OD ):
         3d plot using Mayavi (VTK)
         """
 
-        fig = _mlab.figure(figure='1',bgcolor=(0.75,0.75,0.75))
+        fig = _mlab.figure(bgcolor=(0.75,0.75,0.75))
 
         #reshape pts
         if self.centered: data = _np.copy(self.weights.reshape(self.phi1cen.shape))

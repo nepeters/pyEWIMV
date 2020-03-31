@@ -23,6 +23,10 @@ __all__ = ['eu2om',
            'ax2om',
            'quat2eu']
 
+### symmetrise ###
+
+
+
 ### Euler (Bunge) space ### 
 
 def eu2om(bunge, out=None, eps=9): 
@@ -385,6 +389,50 @@ def om2eu(g): ##calcEuler
 
         return _np.column_stack((phi1,phi,phi2))
 
+def om2quat(g,P=1):
+    """input is 3x3 array rotation matrix"""
+
+    if g.shape == (3,3):
+
+        x0 = 0.5*_np.sqrt(1+g[0,0]+g[1,1]+g[2,2])
+        x1 = P*0.5*_np.sqrt(1+g[0,0]-g[1,1]-g[2,2])
+        x2 = P*0.5*_np.sqrt(1-g[0,0]+g[1,1]-g[2,2])
+        x3 = P*0.5*_np.sqrt(1-g[0,0]-g[1,1]+g[2,2])
+
+        if g[2,1] < g[1,2]:
+            x1 = -x1
+        if g[0,2] < g[2,0]:
+            x2 = -x2
+        if g[1,0] < g[0,1]:
+            x3 = -x3
+
+        Q = _np.array((x0,x1,x2,x3))
+        Q = Q/_np.linalg.norm(Q)
+        
+        return Q
+
+    else:
+
+        x0 = 0.5*_np.sqrt(1+g[:,0]+g[:,4]+g[:,8])
+        x1 = P*0.5*_np.sqrt(1+g[:,0]-g[:,4]-g[:,8])
+        x2 = P*0.5*_np.sqrt(1-g[:,0]+g[:,4]-g[:,8])
+        x3 = P*0.5*_np.sqrt(1-g[:,0]-g[:,4]+g[:,8])
+
+        # x1L = _np.vstack([_np.where(g[idx,7] < g[idx,5],[-x1[idx],x1[idx]]) for idx in range(len(x1))])
+        # x1L = _np.where(g[:,7] < g[:,5],[-_np.copy(x1),x1])
+        x1L = _np.asarray([xv if c else yv for (c,xv,yv) in zip(g[:,7] < g[:,5],-x1,x1)])
+        # x2L = _np.vstack([_np.where(g[idx,2] < g[idx,6],[-x2[idx],x2[idx]]) for idx in range(len(x2))])
+        # x2L = _np.where(g[:,2] < g[:,6],[-_np.copy(x2),x2])
+        x2L = _np.asarray([xv if c else yv for (c,xv,yv) in zip(g[:,2] < g[:,6],-x2,x2)])
+        # x3L = _np.vstack([_np.where(g[idx,3] < g[idx,1],[-x3[idx],x3[idx]]) for idx in range(len(x3))])
+        # x3L = _np.where(g[:,3] < g[:,1],[-_np.copy(x3),x3])
+        x3L = _np.asarray([xv if c else yv for (c,xv,yv) in zip(g[:,3] < g[:,1],-x3,x3)])
+
+        QL = _np.nan_to_num(_np.column_stack((x0,x1L,x2L,x3L)),copy=False)
+        QN = _np.concatenate([Q/_np.linalg.norm(Q) for Q in QL])
+
+        return QN
+
 ### rodrigues vectors ###
 
 def ro2ho(ro):
@@ -566,7 +614,6 @@ def err_handler(type, flag):
     print()
     print("Floating point error (%s), with flag %s").format(type, flag)
 
-# @jit(nopython=True)
 def quat2eu(quat, P=-1):
 
     """
@@ -640,7 +687,29 @@ def quat2eu(quat, P=-1):
     phi2 = _np.round(phi2, decimals = 8)
 
     return phi1,Phi,phi2
-#    return case1, case2, case3
+    # return case1, case2, case3
+
+def quat2om(Q,P=1):
+
+    """
+    array Nx4 - quaternions [q0, q1, q2, q3]
+
+    """
+
+    g = _np.empty((len(Q),9))
+
+    Qmean = Q[:,0]**2 - (Q[:,1]**2+Q[:,2]**2+Q[:,3]**2)
+    g[:,0] = Qmean + 2*Q[:,1]**2
+    g[:,1] = 2*(Q[:,1]*Q[:,2]-P*Q[:,0]*Q[:,3])
+    g[:,2] = 2*(Q[:,1]*Q[:,3]+P*Q[:,0]*Q[:,2])
+    g[:,3] = 2*(Q[:,1]*Q[:,2]+P*Q[:,0]*Q[:,3])
+    g[:,4] = Qmean + 2*Q[:,2]**2
+    g[:,5] = 2*(Q[:,2]*Q[:,3]-P*Q[:,0]*Q[:,1])
+    g[:,6] = 2*(Q[:,1]*Q[:,3]-P*Q[:,0]*Q[:,2])
+    g[:,7] = 2*(Q[:,2]*Q[:,3]+P*Q[:,0]*Q[:,1])
+    g[:,8] = Qmean + 2*Q[:,3]**2
+
+    return g
 
 #TODO: get rid of need for numba
 @_jit(nopython=True,parallel=False)
