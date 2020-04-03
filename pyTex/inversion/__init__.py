@@ -216,8 +216,9 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
     
     # handle reflection weights
     if rad_type == 'xrd': pass #TODO: implement this
-    elif rad_type == 'nd': refl_wgt = _calc_NDreflWeights(crystal_dict, pfs.refls) #based on ND
-    elif rad_type == 'none': refl_wgt = _np.ones((1, len(pfs.hkls))) #all ones
+    # elif rad_type == 'nd': refl_wgt = _calc_NDreflWeights(crystal_dict, pfs.refls) #based on ND
+    elif rad_type == 'nd': refl_wgt = _np.ones((len(pfs.hkls)))
+    elif rad_type == 'none': refl_wgt = _np.ones((len(pfs.hkls))) #all ones
     else: raise ValueError('Please specify either xrd or nd or none (all = 1)')
 
     """ calculate 5x5 pf grid XYZ for paths """
@@ -304,7 +305,14 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
                 temp = _np.log(temp)
                 n = _np.count_nonzero(temp,axis=1)
                 n = _np.where(n == 0, 1, n)
-                calc_od[0][:,fi] = _np.exp((_np.sum(temp,axis=1)*refl_wgt[fi])/n)
+                
+                try:
+                    calc_od[0][:,fi] = _np.exp((_np.sum(temp,axis=1)*refl_wgt[fi])/n)
+                except:
+                    print(temp)
+                    print(refl_wgt[fi])
+                    print(fi)
+                    print(yi)
             
             calc_od[0] = _np.product(calc_od[0],axis=1)**(1/numPoles)
             #place into OD object

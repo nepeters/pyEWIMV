@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Nov  6 13:28:24 2019
-
 @author: nate
 """
 
@@ -12,7 +11,7 @@ orientation module
 
 import numpy as _np
 from numba import jit as _jit
-
+from pyTex.utils import genSymOps as _gensym
 
 __all__ = ['eu2om',
            'eu2quat',
@@ -23,9 +22,40 @@ __all__ = ['eu2om',
            'ax2om',
            'quat2eu']
 
+## TODO: look into subclassing scipy Rotation to add features
+
 ### symmetrise ###
 
+def symmetrise(g, cs, ss):
 
+    """
+    return symmetric equivalents
+    """
+
+    ## use orientation matrix | sample -> crystal (Bunge notation)
+
+    crysSymOps = _gensym(cs)
+    # crysSymOps = crysSymOps.transpose((2,0,1))
+
+    if ss == '1' or ss == '-1': 
+        smplSymOps = _np.eye(3)[None,:,:] #add third axes
+
+    else: 
+        smplSymOps = _gensym(ss)
+        # smplSymOps = smplSymOps.transpose((2,0,1))
+
+    # sym_equiv = _np.zeros((3,3,crysSymOps.shape[2]*smplSymOps.shape[2]))
+    test = []
+
+    k = 0
+    for sopi in range(smplSymOps.shape[0]):
+        
+        test.append(smplSymOps[sopi,:,:] @ g @ crysSymOps)
+        k+=1
+
+    if len(test) > 1:
+        return _np.vstack(test)
+    else: return test[0]
 
 ### Euler (Bunge) space ### 
 
