@@ -21,7 +21,7 @@ sampleSym  = '1'
 cellSize = np.deg2rad(5)
 
 od_file = '/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/MAUD EWIMV exports/'
-sampleName = 'NOMAD_Al_4Datasets_SSabs_MAUD_5res.odf'
+sampleName = 'NOMAD_Al_4Datasets_NoSSabs_MAUD_5res.odf'
 
 MAUD_od = bunge._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
 
@@ -122,35 +122,39 @@ MAUD_od = bunge._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
 
 # %%
 
-# # mayavi
-# import mayavi.mlab as mlab
+## volume fractions
 
-# # fig = maud_od.plot3d()
-# fig = mlab.figure(bgcolor=(1,1,1))
+from tqdm import tqdm
+from scipy.spatial.transform import Rotation as R
 
-# org = mlab.points3d(0,
-#                     0,
-#                     0,
-#                     scale_factor=1,
-#                     mode='point',
-#                     color=(1,0,0),
-#                     figure=fig)
- 
-# org.actor.property.render_points_as_spheres = True
-# org.actor.property.point_size = 5
+betaFiber =np.vstack([[35.3,45.0,0.0],
+            [33.6,47.7,5.0],
+            [32.1,51.0,10.0],
+            [31.1,54.7,15.0],
+            [31.3,59.1,20.0],
+            [35.2,64.2,25.0],
+            [46.1,69.9,30.0],
+            [49.5,76.2,35.0],          
+            [51.8,83.0,40.0],
+            [54.7,90.0,45.0],
+            [90.0,35.3,45.0],
+            [80.2,35.4,50.0],
+            [73.0,35.7,55.0],
+            [66.9,36.2,60.0],
+            [61.2,37.0,65.0],
+            [55.9,38.0,70.0],
+            [50.7,39.2,75.0],
+            [45.6,40.8,80.0],
+            [40.5,42.7,85.0],
+            [35.3,45.0,90.0]])
 
+g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
 
-# ## grid ##
-# gd = mlab.points3d(new_phi1,
-#                    new_Phi,
-#                    new_phi2,
-#                     scale_factor=1,
-#                     mode='point',
-#                     color=(0,0,0),
-#                     figure=fig)
+vf = []
 
-# gd.actor.property.render_points_as_spheres = True
-# gd.actor.property.point_size = 2
+for g in tqdm(g_betaFiber):
+    
+    vf.append(MAUD_od.compVolume(g,10))
 
 # %%
 

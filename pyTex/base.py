@@ -1048,13 +1048,11 @@ class bunge( OD ):
         else:
             return -_np.sum( _np.ravel( cellVolume ) * self.weights * _np.log( self.weights ) ) / _np.sum( _np.ravel( cellVolume ) )
 
-    def _volume( self, ori, rad, degree=True ):
+    def compVolume( self, ori, rad, degree=True ):
 
         """
         calculate volume fractions
         """
-
-        print(type(_R))
 
         ## check for scipy rotation instance
         # if isinstance(ori,_R):
