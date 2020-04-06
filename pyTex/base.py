@@ -17,6 +17,7 @@ import time as _time
 
 import numpy as _np 
 from scipy.interpolate import griddata as _griddata
+from scipy.spatial.transform import rotation as _R
 from sklearn.neighbors import KDTree as _KDTree
 import matplotlib.pyplot as _plt
 import mayavi.mlab as _mlab
@@ -39,6 +40,8 @@ from .utils import _sparseScatterPlot
 from .utils import genSymOps as _genSymOps
 from .utils import tensor2voigt as _tensor2voigt, voigt2tensor as _voigt2tensor
 from .orientation import om2quat as _om2quat
+from .orientation import symmetrise as _symOri
+from .orientation import om2eu as _om2eu
 
 ### general functions ###
 ### block print from xrdtools ###
@@ -671,8 +674,8 @@ class bunge( OD ):
 
         if '1' != sampleSym: 
             tempOps = _genSymOps(sampleSym)
-            tempOps = _np.swapaxes(tempOps,2,0)
-            tempOps = tempOps[_np.where( _np.linalg.det(tempOps) == 1 )]
+            # tempOps = _np.swapaxes(tempOps,2,0)
+            # tempOps = tempOps[_np.where( _np.linalg.det(tempOps) == 1 )]
             self.smpl_symOps = _quat.from_matrix(tempOps)
         else: 
             self.smpl_symOps = _quat.from_matrix(_np.identity(3))[None,:]
@@ -1045,6 +1048,91 @@ class bunge( OD ):
         else:
             return -_np.sum( _np.ravel( cellVolume ) * self.weights * _np.log( self.weights ) ) / _np.sum( _np.ravel( cellVolume ) )
 
+    def _volume( self, ori, rad, degree=True ):
+
+        """
+        calculate volume fractions
+        """
+
+        print(type(_R))
+
+        ## check for scipy rotation instance
+        # if isinstance(ori,_R):
+        #     g = ori.as_matrix()
+
+        # elif isinstance(ori,_np.ndarray): pass
+            
+        if ori.shape == (3,3): #orientation matrix
+            ## get symmetric equivalents
+            g_sym = _symOri(ori, self.CS, self.SS)
+
+            #try transpose - om2eu assumes bunge convention for matrix
+            g_sym = g_sym.transpose((0,2,1))
+
+            # convert to euler
+            eu_sym = _om2eu(g_sym)
+
+            # pick fundamental zone
+            fz = (eu_sym[:,0] <= self._phi1max) & (eu_sym[:,1] <= self._Phimax) & (eu_sym[:,2] <= self._phi2max)
+            fz_idx = _np.nonzero(fz)
+            g_fz = g_sym[fz_idx[0],:,:]
+
+            # generate sym ops
+            crysSymOps = _genSymOps(self.CS)
+            smplSymOps = _genSymOps(self.SS)
+
+            # create Nx3 array of grid points
+            if self.centered: eu_grid = _np.array([self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten()]).T
+            else: eu_grid = _np.array([self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten()]).T
+
+            g_grid  = _eu2om(eu_grid,out='mdarray_2')
+            g_grid  = g_grid.transpose((2,0,1))
+
+            trace = {}
+            misori = {}
+            mo_cell = []
+
+            for gi,g in enumerate(g_fz):    
+                
+                trace[gi] = []
+                misori[gi] = []
+                k = 0
+                
+                for crys_op in crysSymOps:
+                    
+                    # for smpl_op in smplSymOps:
+                    #SCIPY OUTPUTS TRANSPOSE (CRYSTAL->MATRIX) THEREFORE NO TRANSPOSE IS NEEDED
+                    temp = g @ g_grid
+                    test = crys_op @ temp 
+                    trace[gi].append( _np.trace( test,axis1=1,axis2=2 ) )
+                    
+                    #calculate misorientation
+                    mo = _np.arccos( _np.clip( (trace[gi][k] - 1)/2, -1, 1) )
+
+                    #criteria
+                    if degree: crit = _np.where(mo <= _np.deg2rad(rad))
+                    else: crit = _np.where(mo <= rad)
+
+                    #store cell id, misorientation angle for each sym equiv.
+                    misori[gi].append( _np.array( [crit[0], mo[crit]] ).T )
+                    k += 1
+
+                # concatenate, pull true min from sym equiv.
+                misori[gi] = _np.vstack(misori[gi])
+                # mo_cell.append( misori[gi][ _np.argmin(misori[gi][:,1]), 0 ].astype(int) )
+                
+                mo_cell.append(_np.unique(misori[gi],axis=0)[:,0].T)    
+                # misori.append(_np.argmin(_np.arccos((_np.vstack(trace)-1)/2)))
+                # k+=1
+
+            mo_cell = _np.unique(_np.hstack(mo_cell).astype(int))
+
+            #total volume of valid cells / norm to entire volume
+            vf = _np.sum( self.weights[mo_cell]*self.cellVolume.flatten()[mo_cell] ) / _np.sum(self.weights * self.cellVolume.flatten())
+            # vf = self.weights[mo_cell]
+
+        return vf
+
     """ homogenization """
 
     def reuss( self, compliance ):
@@ -1134,10 +1222,11 @@ class bunge( OD ):
         """
 
         symOps = _genSymOps(self.cs)
-        symOps = _np.unique(_np.swapaxes(symOps,2,0),axis=0)
+        # symOps = _np.unique(_np.swapaxes(symOps,2,0),axis=0)
 
-        proper = _np.where( _np.linalg.det(symOps) == 1 ) #proper orthogonal/no inversion
-        quatSymOps = _quat.from_matrix(symOps[proper])
+        # proper = _np.where( _np.linalg.det(symOps) == 1 ) #proper orthogonal/no inversion
+        # quatSymOps = _quat.from_matrix(symOps[proper])
+        quatSymOps = _quat.from_matrix(symOps)
         quatSymOps = _np.tile(quatSymOps[:,:,_np.newaxis],(1,1,len(phi)))
         quatSymOps = quatSymOps.transpose((0,2,1))
         
@@ -1178,7 +1267,7 @@ class bunge( OD ):
             for yi,y in enumerate(it): 
                 
                 """ symmetry method """
-                t0 = _time.time()
+                # t0 = _time.time()
                 #calculate path for single (hkl)
                 axis[fi][yi] = _np.cross(fam,y)
                 axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=-1)
@@ -1196,25 +1285,25 @@ class bunge( OD ):
                     #transpose to correct format for conversion
                     qfib = qfib.transpose((1,0,2))
                     
-                    # #convert to bunge euler
-                    # phi1, Phi, phi2 = _quat2eu(qfib)
+                    #convert to bunge euler
+                    phi1, Phi, phi2 = _quat2eu(qfib)
                     
-                    # phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #brnng back to 0 - 2pi
-                    # Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #brnng back to 0 - pi
-                    # phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #brnng back to 0 - 2pi
+                    phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #brnng back to 0 - 2pi
+                    Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #brnng back to 0 - pi
+                    phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #brnng back to 0 - 2pi
                     
-                    # #fundamental zone calc (not true!)
-                    # eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
-                    # eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
+                    #fundamental zone calc (not true!)
+                    eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
+                    eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
             
-                    # fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
-                    # fz_idx = _np.nonzero(fz)
+                    fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
+                    fz_idx = _np.nonzero(fz)
                     
-                    # #pull only unique points? - not sure why there are repeated points, something with symmetry for certain hkls
-                    # #should only be ~73 points per path, but three fold symmetry is also present
-                    # path_e[fi][yi],uni_path_idx = _np.unique(eu_fib[fz],return_index=True,axis=0)
-                    # fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
-                    # path_q[fi][yi] = qfib[fib_idx][uni_path_idx]
+                    #pull only unique points? - not sure why there are repeated points, something with symmetry for certain hkls
+                    #should only be ~73 points per path, but three fold symmetry is also present
+                    path_e[fi][yi],uni_path_idx = _np.unique(eu_fib[fz],return_index=True,axis=0)
+                    fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
+                    path_q[fi][yi] = qfib[fib_idx][uni_path_idx]
 
                     """ loop method """
 
@@ -1259,42 +1348,42 @@ class bunge( OD ):
 
                     """ euclidean distance calculation - KDTree """
                     
-                #     qfib_pos = _np.copy(qfib[fib_idx])
-                #     qfib_pos[qfib_pos[:,0] < 0] *= -1
+                    qfib_pos = _np.copy(qfib[fib_idx])
+                    qfib_pos[qfib_pos[:,0] < 0] *= -1
                     
-                #     # returns tuple - first array are points, second array is distances
-                #     query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
+                    # returns tuple - first array are points, second array is distances
+                    query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
                 
-                #     # concatenate arrays
-                #     query = _np.column_stack([_np.concatenate(ar) for ar in query])
+                    # concatenate arrays
+                    query = _np.column_stack([_np.concatenate(ar) for ar in query])
                     
-                #     # round very small values
-                #     query = _np.round(query, decimals=7)
+                    # round very small values
+                    query = _np.round(query, decimals=7)
                     
-                #     # move values at zero to very small (1E-5)
-                #     query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
+                    # move values at zero to very small (1E-5)
+                    query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
                     
-                #     # sort by minimum distance - unique function takes first appearance of index
-                #     query_sort = query[_np.argsort(query[:,1],axis=0)]
+                    # sort by minimum distance - unique function takes first appearance of index
+                    query_sort = query[_np.argsort(query[:,1],axis=0)]
                     
-                #     # return unique points
-                #     uni_pts = _np.unique(query_sort[:,0],return_index=True)
+                    # return unique points
+                    uni_pts = _np.unique(query_sort[:,0],return_index=True)
                     
-                #     if yi not in gridPts[fi]:
+                    if yi not in gridPts[fi]:
 
-                #         gridPts[fi][yi] = [uni_pts[0].astype(int)]
-                #         gridDist[fi][yi] = [query_sort[uni_pts[1],1]]
+                        gridPts[fi][yi] = [uni_pts[0].astype(int)]
+                        gridDist[fi][yi] = [query_sort[uni_pts[1],1]]
                     
-                #     else:
+                    else:
                         
-                #         gridPts[fi][yi].append(uni_pts[0].astype(int))
-                #         gridDist[fi][yi].append(query_sort[uni_pts[1],1])
+                        gridPts[fi][yi].append(uni_pts[0].astype(int))
+                        gridDist[fi][yi].append(query_sort[uni_pts[1],1])
 
-                # gridDist[fi][yi] = _np.concatenate(gridDist[fi][yi])
-                # gridPts[fi][yi]  = _np.concatenate(gridPts[fi][yi])
+                gridDist[fi][yi] = _np.concatenate(gridDist[fi][yi])
+                gridPts[fi][yi]  = _np.concatenate(gridPts[fi][yi])
                 
-                t1 = _time.time()
-                print(t1-t0)
+                # t1 = _time.time()
+                # print(t1-t0)
                 """ geodesic distance calculation - dot product """
                 # """ reduce geodesic query size """
                 # qfib_pos = _np.copy(qfib[fib_idx])
@@ -1371,21 +1460,6 @@ class bunge( OD ):
         both for e-wimv & wimv
         """
 
-        from scipy.spatial.transform import Rotation as R
-
-        if '1' not in self.SS: 
-            ## only works with 'mmm' yet
-            smplSymOps = _genSymOps(self.SS)
-            smplSymOps = _np.swapaxes(smplSymOps,2,0)
-            ## only select proper orthogonal
-            smplSymOps = smplSymOps[_np.where( _np.linalg.det(smplSymOps) == 1 )]
-
-        ## try to set pointer to all equivalent points
-        # if '1' in self.SS:
-
-            ## true fz is 90,90,90
-            # tmp_p1, tmp_P, tmp_p2 = bunge._genGrid(self.cellSize,_np.deg2rad(90),self._Phimax,self._phi2max,centered=self.centered)
-
         if inv_method == 'e-wimv' and hasattr(self,'paths'):
 
             self.pointer = {}
@@ -1404,14 +1478,6 @@ class bunge( OD ):
                     for yi in range(len(p['grid points'][hi].keys())):
 
                         od_cells = p['grid points'][hi][yi]
-
-                        # if '1' not in self.SS: od_cells = p['grid points'][hi][yi]
-                        # else:
-                        #     ### loop through each grid point, calculate sym. equivalent
-                        #     for cell in p['grid points'][hi][yi]:
-                                
-                        #         #retrieve orient. matrix
-                        #         g_temp = R.from_matrix(self.g[cell])
 
                         #handle no od_cells
                         if len(od_cells) == 0: continue
@@ -1593,13 +1659,7 @@ class bunge( OD ):
 
         pass
 
-    def _volume( self, ori ):
 
-        """
-        calculate volume fractions
-        """
-
-        pass
 
     @staticmethod
     def calcDiff( orient_dist1, orient_dist2, type='L1' ):
@@ -1687,12 +1747,12 @@ class bunge( OD ):
         _mlab.outline()
 
         ax = _mlab.axes(color=(0,0,0),
-                        xlabel='phi2',
+                        xlabel='phi1',
                         ylabel='Phi',
-                        zlabel='phi1',
-                        ranges=[0, _np.rad2deg(self._phi2max),
+                        zlabel='phi2',
+                        ranges=[0, _np.rad2deg(self._phi1max),
                                 0, _np.rad2deg(self._Phimax),
-                                0, _np.rad2deg(self._phi1max)])  
+                                0, _np.rad2deg(self._phi2max)])  
 
         ax.axes.number_of_labels = 5
         ax.axes.corner_offset = 0.04

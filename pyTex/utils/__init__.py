@@ -66,7 +66,7 @@ def normalize(v):
 
     return hkl_n
 
-def genSymOps(cs):
+def genSymOps(cs, properOnly=False):
 
     """
     generate sym ops for system
@@ -74,7 +74,7 @@ def genSymOps(cs):
     laue group: 'm-3', 'm-3m'
     """
 
-    spgtbl_path = _os.path.join(__location__, 'spacegroups.in')
+    # spgtbl_path = _os.path.join(__location__, 'spacegroups.in')
 
     if cs == 'm-3' or cs == '23':
 
@@ -82,25 +82,45 @@ def genSymOps(cs):
 
     elif cs == 'm-3m' or cs == '432':
 
-        spg_tbl = _pd.read_csv(spgtbl_path, sep="\t")
-        # use spacegroup #225
-        hall_num = spg_tbl[spg_tbl['Table No.'] == 225]['Serial No.'].iloc[0]
-        symOps = _spglib.get_symmetry_from_database(hall_num)['rotations']
+        #spglib
+        # spg_tbl = _pd.read_csv(spgtbl_path, sep="\t")
+        # # use spacegroup #225
+        # hall_num = spg_tbl[spg_tbl['Table No.'] == 225]['Serial No.'].iloc[0]
+        # symOps = _spglib.get_symmetry_from_database(hall_num)['rotations']
 
-        symOps = _np.swapaxes(symOps,0,2)
-        symOps = _np.swapaxes(symOps,0,1)
+        # symOps = _np.swapaxes(symOps,0,2)
+        # symOps = _np.swapaxes(symOps,0,1)
+
+        #scipy
+        symOps = _R.create_group('O').as_matrix()
 
     elif cs == 'mmm':
 
-        spg_tbl = _pd.read_csv(spgtbl_path, sep="\t")
-        # use spacegroup #225
-        hall_num = spg_tbl[spg_tbl['Table No.'] == 47]['Serial No.'].iloc[0]
-        symOps = _spglib.get_symmetry_from_database(hall_num)['rotations']
+        #spglib
+        # spg_tbl = _pd.read_csv(spgtbl_path, sep="\t")
+        # # use spacegroup #225
+        # hall_num = spg_tbl[spg_tbl['Table No.'] == 47]['Serial No.'].iloc[0]
+        # symOps = _spglib.get_symmetry_from_database(hall_num)['rotations']
 
-        symOps = _np.swapaxes(symOps,0,2)
-        symOps = _np.swapaxes(symOps,0,1)        
+        # symOps = _np.swapaxes(symOps,0,2)
+        # symOps = _np.swapaxes(symOps,0,1)        
     
+        #scipy
+        symOps = _R.create_group('D2').as_matrix()
+        
+
+    elif cs == '1':
+
+        symOps = _R.identity().as_matrix()[None,:,:]
+
+    # if properOnly:
+    #     symOps = _np.unique(_np.swapaxes(symOps,2,0),axis=0) 
+    #     # symOps = _np.unique( symOps,axis=0 )
+    #     proper = _np.where( _np.linalg.det(symOps) == 1 ) #proper orthogonal/no inversion
+    #     return symOps[proper]
+    # else:
     return symOps
+        
 
 def symmetrise(cs,hkl):
 
@@ -427,7 +447,7 @@ def XYZtoSPH( xyz, proj='none', upperOnly=True, SNS=False ):
         sph1 = _np.arctan2(_np.sqrt(inplane), xyz[:,up,:]) #alpha
         
         if proj == 'stereo': sph1 = _np.tan(sph1/2)
-        elif proj == 'earea': sph1 = 2*_np.sin(sph1/2)
+        elif proj == 'earea': sph1 = (_np.pi/_np.sqrt(2))*_np.sin(sph1/2)
         elif proj == 'none': pass
         
         sph0 = _np.arctan2(xyz[:,ip[1],:], xyz[:,ip[0],:]) #beta  
@@ -450,7 +470,7 @@ def XYZtoSPH( xyz, proj='none', upperOnly=True, SNS=False ):
         
         sph[:,1] = _np.arctan2(_np.sqrt(inplane), xyz[:,up])
         if proj == 'stereo': sph[:,1] = _np.tan(sph[:,1]/2)
-        elif proj == 'earea': sph[:,1] = 2*_np.sin(sph[:,1]/2)
+        elif proj == 'earea': sph[:,1] = (_np.pi/_np.sqrt(2))*_np.sin(sph[:,1]/2)
         elif proj == 'none': pass
         
         # eliminate large values
