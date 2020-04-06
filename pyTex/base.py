@@ -1722,14 +1722,14 @@ class bunge( OD ):
         3d plot using Mayavi (VTK)
         """
 
-        fig = _mlab.figure(bgcolor=(0.75,0.75,0.75))
+        # fig = _mlab.figure(bgcolor=(0.75,0.75,0.75))
 
         #reshape pts
         if self.centered: data = _np.copy(self.weights.reshape(self.phi1cen.shape))
         else: data = _np.copy(self.weights.reshape(self.phi1.shape))
         
         #round small values (<1E-5)
-        data[data < 1E-5] = 0
+        # data[data < 1E-5] = 0
 
         #needs work
         # vol = _mlab.pipeline.volume(_mlab.pipeline.scalar_field(data), vmin=0, vmax=0.8)
@@ -1742,15 +1742,18 @@ class bunge( OD ):
                                             transparent=True)
 
         #plot grid outline box
-        _mlab.outline()
+        _mlab.outline(color=(0,0,0),
+                      extent=[1, data.shape[0],
+                              1, data.shape[1],
+                              1, data.shape[2]])
 
         ax = _mlab.axes(color=(0,0,0),
-                        xlabel='phi1',
+                        xlabel='phi2',
                         ylabel='Phi',
-                        zlabel='phi2',
-                        ranges=[0, _np.rad2deg(self._phi1max),
+                        zlabel='phi1',
+                        ranges=[0, _np.rad2deg(self._phi2max),
                                 0, _np.rad2deg(self._Phimax),
-                                0, _np.rad2deg(self._phi2max)])  
+                                0, _np.rad2deg(self._phi1max)])  
 
         ax.axes.number_of_labels = 5
         ax.axes.corner_offset = 0.04
@@ -1790,7 +1793,7 @@ class bunge( OD ):
 
         _mlab.show(stop=True)
 
-        return fig
+        # return fig
 
 class rodrigues( OD ):
     

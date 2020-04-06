@@ -28,7 +28,7 @@ dir_path = os.path.dirname(os.path.realpath('__file__'))
 P = 1
 
 #sample information
-sampleName = 'Al_NRSF2_5x8'
+sampleName = 'Al_NRSF2_5x8_mmm'
 rad_type = 'nd'
 def_al = {'name': 'Al',
           'composition': [dict(ion='Al', pos=[0, 0, 0]),
@@ -51,48 +51,48 @@ tube_exp = 1
 
 """ NRSF2 .jul """
 
-# #define pole figures
-# data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
-# hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
-# pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
-# pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
-# pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
+#define pole figures
+data_path = os.path.join(dir_path, 'Data', 'HB2B - Aluminum')
+hkls = np.array([(2,2,2), (3,1,1), (4,0,0)])
+pf222path = os.path.join(data_path, 'HB2B_exp129_3Chi_222.jul')
+pf311path = os.path.join(data_path, 'HB2B_exp129_3Chi_311.jul')
+pf400path = os.path.join(data_path, 'HB2B_exp129_3Chi_400.jul')
 
-# #load pole figures
-# pf = poleFigure([pf222path,pf311path,pf400path], hkls, crystalSym, 'jul')
+#load pole figures
+pf = poleFigure([pf222path,pf311path,pf400path], hkls, crystalSym, 'jul')
 
-# rot = R.from_euler('XZX', (90,90,90), degrees=True).as_matrix()
+rot = R.from_euler('XZX', (90,90,90), degrees=True).as_matrix()
 
 """ peak-fitted pole figures """
 
-hkls = []
-files = []
+# hkls = []
+# files = []
 
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
-# datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
-# datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
-# datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
-datadir = '/home/nate/projects/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
+# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs','combined')
+# # datadir = os.path.join(dir_path,'Data','NOMAD Nickel - full abs - peak int','pole figures','combined')
+# # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
+# # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
+# # datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
+# datadir = '/home/nate/projects/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
 
-for file in os.listdir(datadir):
+# for file in os.listdir(datadir):
     
-    pfName = file.split(')')[0].split('(')[1]
+#     pfName = file.split(')')[0].split('(')[1]
     
-    try:
-        hkls.append(tuple([int(c) for c in pfName]))
-        files.append(os.path.join(datadir,file))
-    except: #not hkls
-        continue
+#     try:
+#         hkls.append(tuple([int(c) for c in pfName]))
+#         files.append(os.path.join(datadir,file))
+#     except: #not hkls
+#         continue
     
-    sortby = [sum([c**2 for c in h]) for h in hkls]
-    hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
-    files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
+#     sortby = [sum([c**2 for c in h]) for h in hkls]
+#     hkls = [x for _, x in sorted(zip(sortby,hkls), key=lambda pair: pair[0])]
+#     files = [x for _, x in sorted(zip(sortby,files), key=lambda pair: pair[0])]
     
 
-pf = poleFigure(files,hkls,crystalSym,'sparse')
+# pf = poleFigure(files,hkls,crystalSym,'sparse')
 
-rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_matrix()
+# rot = R.from_euler('XZY',(13,-88,90), degrees=True).as_matrix()
 
 #rotate pole figures
 pf.rotate(rot)
@@ -154,7 +154,7 @@ vf = []
 
 for g in tqdm(g_betaFiber):
     
-    vf.append(calc_od[final_iter-1]._volume(g,10))
+    vf.append(calc_od[final_iter-1].compVolume(g,10))
 
 
 # print(calc_od[final_iter-1]._volume(copper.as_matrix(),10))
@@ -181,7 +181,7 @@ for g in tqdm(g_betaFiber):
 # hill = calc_od[final_iter-1].hill(elastic)
 
 ## export data
-# calc_od[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
+calc_od[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
 # recalc_pf[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 # recalc_pf_new.export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 

@@ -16,13 +16,16 @@ from pyTex.orientation import om2eu, eu2om
 from pyTex.utils import genSymOps
 from pyTex import bunge
 
-od = bunge(np.deg2rad(5), 'm-3m', '1')
+cs = 'm-3m'
+ss = 'mmm'
+
+od = bunge(np.deg2rad(5), cs, ss)
 
 hkl = np.array([2, 1, 3])
 hkl = np.divide(hkl, np.linalg.norm(hkl))
 
-test = R.from_euler('ZXZ', [35.3,45.0,90.0], degrees=True)
-testSym = symOri(test.as_matrix(),'m-3m', '1')
+test = R.from_euler('ZXZ', [40.5,42.7,85.0], degrees=True)
+testSym = symOri(test.as_matrix(),cs, ss)
 
 #try transpose
 testSym = testSym.transpose((0,2,1))
@@ -36,8 +39,8 @@ fz_idx = np.nonzero(fz)
 g_fz = testSym[fz_idx[0],:,:]
 
 # generate crystal sym ops
-crysSymOps = genSymOps('m-3m')
-smplSymOps = genSymOps('1')
+crysSymOps = genSymOps(cs)
+smplSymOps = genSymOps(ss)
 
 # create Nx3 array of grid points
 eu_grid = np.array([od.phi1cen.flatten(),od.Phicen.flatten(),od.phi2cen.flatten()]).T
@@ -90,9 +93,9 @@ mo_cell = np.unique(np.hstack(mo_cell).astype(int))
 import mayavi.mlab as mlab
 from pyTex import bunge
 
-od = bunge(np.deg2rad(5), 'm-3m', '1')
+od = bunge(np.deg2rad(5), cs, ss)
 
-mlab.figure(bgcolor=(1,1,1))
+# mlab.figure(bgcolor=(1,1,1))
 
 gd = mlab.points3d(od.phi1cen,od.Phicen,od.phi2cen,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
 gd.actor.property.render_points_as_spheres = True
@@ -104,4 +107,4 @@ pts.actor.property.point_size = 10
 
 pts = mlab.points3d(eu_grid[mo_cell,0],eu_grid[mo_cell,1],eu_grid[mo_cell,2],mode='point',scale_factor=1,color=(1,0,0))
 pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 10
+pts.actor.property.point_size = 6
