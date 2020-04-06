@@ -41,7 +41,7 @@ def_al = {'name': 'Al',
           'massNorm': False}
 
 crystalSym = 'm-3m'
-sampleSym = '1'
+sampleSym = 'mmm'
 cellSize = np.deg2rad(5)
 od = bunge(cellSize, crystalSym, sampleSym)
 

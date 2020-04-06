@@ -848,11 +848,7 @@ class bunge( OD ):
         # i  each 19 rows is new phi2 section
         # ↓
 
-        # he uses matthies.........!!!!!!!!!!!!!!!!!!!
-        # phi2 = gamma
-        # Phi  = beta
-        # phi1 = alpha
-
+        ## bunge
         with open(file,'r') as f:
 
             #read in odf data
@@ -861,7 +857,31 @@ class bunge( OD ):
             odf_txt = _np.genfromtxt(odf_str,skip_header=3)
             print('loaded ODF')
             print('header: "'+odf_str[0].strip('\n')+'"')
-            file_sym = int(odf_str[1].split(' ')[0])
+            file_sym = int(odf_str[1].split(' ')[0])        
+
+        ## matthies -- this doesn't match expected, maybe it doesn't use it?
+        # with open(file,'r') as f:
+
+        #     odf_data = []
+            
+        #     #read in odf data
+        #     odf_str = f.readlines()
+        #     counter = [0,0]
+        #     for n,line in enumerate(odf_str):
+        #         if n < 3: 
+        #             counter[0] += 1
+        #             counter[1] += 1
+        #         else:
+        #             if line in ['\n']: #check for blank line
+        #                 odf_data.append(_np.genfromtxt(odf_str[counter[0]:counter[1]]))
+        #                 # print(counter)
+        #                 counter[0] = n+1
+        #                 counter[1] += 1
+        #             else: counter[1] += 1 
+                        
+        #     print('loaded ODF')
+        #     print('header: "'+odf_str[0].strip('\n')+'"')
+        #     file_sym = int(odf_str[1].split(' ')[0])
 
         sym_beartex = {11: ['622'],
                        10: ['6'],
@@ -880,8 +900,10 @@ class bunge( OD ):
         else: print('Supplied crystal sym does not match file sym')
 
         # TODO: handle other than 5deg grid - has same number of values, but with duplicates
+        ## this instance will have attributes overwritten
         od = bunge(cellSize,crystalSym,sampleSym,centered=False)
-        
+
+        ## bunge
         # override edge corrections
         od.cellVolume = od.res * od.res * ( _np.cos( od.Phi - ( od.res/2 ) ) - _np.cos( od.Phi + ( od.res/2 ) ) )
 
@@ -890,12 +912,69 @@ class bunge( OD ):
         for i,p2 in enumerate(od._phi2range):
             for j,p in enumerate(od._Phirange):
                 for k,p1 in enumerate(od._phi1range):
-                    
-
 
                     weights[i,j,k] = odf_txt[j+i*19,k]
 
         od.weights = _np.ravel(weights)
+
+        ## matthies -- this doesn't match expected, maybe it doesn't use it?
+
+        # # set boundary in Matthies space (not rigorous for cubic)
+        # if sampleSym == '1': alphaMax = _np.deg2rad(360)
+        # elif sampleSym == 'm': alphaMax = _np.deg2rad(180)
+        # elif sampleSym == 'mmm': alphaMax = _np.deg2rad(90)
+        # else: raise ValueError('invalid sampleSym')
+
+        # if crystalSym == 'm-3m' or crystalSym == '432': 
+        #     betaMax = _np.deg2rad(90)
+        #     gammaMax = _np.deg2rad(90)
+        # elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
+        # else: raise ValueError('invalid crystalSym, only cubic so far..')
+
+        # gammaRange = _np.arange(0,gammaMax+cellSize,cellSize)
+        # betaRange  = _np.arange(0,betaMax+cellSize,cellSize)
+        # alphaRange = _np.arange(0,alphaMax+cellSize,cellSize)
+
+        # gam, bet, alp = _np.meshgrid(gammaRange,betaRange,alphaRange,indexing='ij')
+
+        # weights = _np.zeros_like(gam)
+
+        # for gi,g in enumerate(gammaRange):
+        #     for bi,b in enumerate(betaRange):
+        #         for ai,a in enumerate(alphaRange):
+                    
+        #             weights[gi,bi,ai] = odf_data[gi][bi,ai]
+
+        # # out = _np.array([gam.flatten(),bet.flatten(),alp.flatten(),weights.flatten()]).T
+
+        # ## shift back to phi1, Phi, phi2
+        # phi1 = alp + _np.pi/2
+        # Phi  = _np.copy(bet)
+        # phi2 = -gam + _np.pi/2
+        # phi1 = _np.where(phi1 > alphaMax, phi1 - alphaMax, phi1) #brnng back to 0 - 2pi
+        # phi2 = _np.where(phi2 > gammaMax, phi2 - gammaMax, phi2) #brnng back to 0 - 2pi
+
+        # ## phi1_360 index - where to insert new slice
+        # phi1_0 = _np.argmax(phi1[0,0,:])
+
+        # ## add duplicate slice (phi1=360) at phi1 = 0
+        # phi1 = _np.insert(phi1,0,_np.zeros_like(phi1[:,:,phi1_0]),axis=2)
+        # Phi  = _np.insert(Phi,0,Phi[:,:,0],axis=2)
+        # phi2 = _np.insert(phi2,0,phi2[:,:,0],axis=2)
+        # weights  = _np.insert(weights,0,weights[:,:,phi1_0],axis=2)
+
+        # ## clunky
+        # out = _np.array([phi1.flatten(),Phi.flatten(),phi2.flatten(),weights.flatten()]).T
+        # out_sort = out[_np.lexsort((out[:,0],out[:,1],out[:,2]))]
+
+        # od.phi1 =  out_sort[:,0].reshape(phi1.shape)
+        # od.Phi  =  out_sort[:,1].reshape(Phi.shape)
+        # od.phi2 =  out_sort[:,2].reshape(phi2.shape)
+        # od.weights = _np.copy(out_sort[:,3])
+
+        # od.g, od.bungeList = _eu2om((od.phi1,od.Phi,od.phi2),out='mdarray')
+
+        # od.cellVolume = cellSize * cellSize * ( _np.cos( Phi - ( cellSize/2 ) ) - _np.cos( Phi + ( cellSize/2 ) ) )
 
         return od
 
@@ -1305,7 +1384,7 @@ class bunge( OD ):
         # if '1' in self.SS:
 
             ## true fz is 90,90,90
-            # tmp_p1, tmp_P, tmp_p2 = bunge._genGrid(self.cellSize,np.deg2rad(90),self._Phimax,self._phi2max,centered=self.centered)
+            # tmp_p1, tmp_P, tmp_p2 = bunge._genGrid(self.cellSize,_np.deg2rad(90),self._Phimax,self._phi2max,centered=self.centered)
 
         if inv_method == 'e-wimv' and hasattr(self,'paths'):
 

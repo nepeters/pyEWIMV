@@ -23,122 +23,134 @@ cellSize = np.deg2rad(5)
 od_file = '/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/MAUD EWIMV exports/'
 sampleName = 'NOMAD_Al_4Datasets_SSabs_MAUD_5res.odf'
 
-with open(od_file+sampleName,'r') as f:
+MAUD_od = bunge._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
 
-    odf_data = []
+# with open(od_file+sampleName,'r') as f:
+
+#     odf_data = []
     
-    #read in odf data
-    odf_str = f.readlines()
-    counter = [0,0]
-    for n,line in enumerate(odf_str):
-        if n < 3: 
-            counter[0] += 1
-            counter[1] += 1
-        else:
-            if line in ['\n']: #check for blank line
-                odf_data.append(np.genfromtxt(odf_str[counter[0]:counter[1]]))
-                # print(counter)
-                counter[0] = n+1
-                counter[1] += 1
-            else: counter[1] += 1 
+#     #read in odf data
+#     odf_str = f.readlines()
+#     counter = [0,0]
+#     for n,line in enumerate(odf_str):
+#         if n < 3: 
+#             counter[0] += 1
+#             counter[1] += 1
+#         else:
+#             if line in ['\n']: #check for blank line
+#                 odf_data.append(np.genfromtxt(odf_str[counter[0]:counter[1]]))
+#                 # print(counter)
+#                 counter[0] = n+1
+#                 counter[1] += 1
+#             else: counter[1] += 1 
                 
-    print('loaded ODF')
-    print('header: "'+odf_str[0].strip('\n')+'"')
-    file_sym = int(odf_str[1].split(' ')[0])
+#     print('loaded ODF')
+#     print('header: "'+odf_str[0].strip('\n')+'"')
+#     file_sym = int(odf_str[1].split(' ')[0])
 
-sym_beartex = {11: ['622'],
-                10: ['6'],
-                9: ['32'],
-                8: ['3'],
-                7: ['432','m-3m'],
-                6: ['23','m-3'],
-                5: ['422'],
-                4: ['4'],
-                3: ['222'],
-                2: ['2'],
-                1: ['1']}
+# sym_beartex = {11: ['622'],
+#                 10: ['6'],
+#                 9: ['32'],
+#                 8: ['3'],
+#                 7: ['432','m-3m'],
+#                 6: ['23','m-3'],
+#                 5: ['422'],
+#                 4: ['4'],
+#                 3: ['222'],
+#                 2: ['2'],
+#                 1: ['1']}
 
-file_sym = sym_beartex.get(file_sym, lambda: 'Unknown Laue group')
-if any([crystalSym in sym for sym in file_sym]): pass
-else: print('Supplied crystal sym does not match file sym')
+# file_sym = sym_beartex.get(file_sym, lambda: 'Unknown Laue group')
+# if any([crystalSym in sym for sym in file_sym]): pass
+# else: print('Supplied crystal sym does not match file sym')
 
-# set boundary in Bunge space (not rigorous for cubic)
-if sampleSym == '1': alphaMax = np.deg2rad(360)
-elif sampleSym == 'm': alphaMax = np.deg2rad(180)
-elif sampleSym == 'mmm': alphaMax = np.deg2rad(90)
-else: raise ValueError('invalid sampleSym')
+# # set boundary in Bunge space (not rigorous for cubic)
+# if sampleSym == '1': alphaMax = np.deg2rad(360)
+# elif sampleSym == 'm': alphaMax = np.deg2rad(180)
+# elif sampleSym == 'mmm': alphaMax = np.deg2rad(90)
+# else: raise ValueError('invalid sampleSym')
 
-if crystalSym == 'm-3m' or crystalSym == '432': 
-    betaMax = np.deg2rad(90)
-    gammaMax = np.deg2rad(90)
-elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
-else: raise ValueError('invalid crystalSym, only cubic so far..')
+# if crystalSym == 'm-3m' or crystalSym == '432': 
+#     betaMax = np.deg2rad(90)
+#     gammaMax = np.deg2rad(90)
+# elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
+# else: raise ValueError('invalid crystalSym, only cubic so far..')
 
-gammaRange = np.arange(0,gammaMax+cellSize,cellSize)
-betaRange  = np.arange(0,betaMax+cellSize,cellSize)
-alphaRange = np.arange(0,alphaMax+cellSize,cellSize)
+# gammaRange = np.arange(0,gammaMax+cellSize,cellSize)
+# betaRange  = np.arange(0,betaMax+cellSize,cellSize)
+# alphaRange = np.arange(0,alphaMax,cellSize)
 
-gam, bet, alp = np.meshgrid(gammaRange,betaRange,alphaRange,indexing='ij')
+# gam, bet, alp = np.meshgrid(gammaRange,betaRange,alphaRange,indexing='ij')
 
-weights = np.zeros_like(gam)
+# weights = np.zeros_like(gam)
 
-for gi,g in enumerate(gammaRange):
-    for bi,b in enumerate(betaRange):
-        for ai,a in enumerate(alphaRange):
+# for gi,g in enumerate(gammaRange):
+#     for bi,b in enumerate(betaRange):
+#         for ai,a in enumerate(alphaRange):
             
-            weights[gi,bi,ai] = odf_data[gi][bi,ai]
+#             weights[gi,bi,ai] = odf_data[gi][bi,ai]
             
-out = np.array([gam.flatten(),bet.flatten(),alp.flatten(),weights.flatten()]).T
+# out = np.array([gam.flatten(),bet.flatten(),alp.flatten(),weights.flatten()]).T
 
-## shift back to phi1, Phi, phi2
-phi1 = -alp + np.pi/2
-Phi  = np.copy(bet)
-phi2 = gam - np.pi/2
-phi1 = np.where(phi1 < 0, phi1 + alphaMax, phi1) #brnng back to 0 - 2pi
-phi2 = np.where(phi2 < 0, phi2 + gammaMax, phi2) #brnng back to 0 - 2pi
+# ## shift back to phi1, Phi, phi2
+# new_phi1 = alp + np.pi/2
+# new_Phi  = np.copy(bet)
+# new_phi2 = -gam + np.pi/2
+# new_phi1 = np.where(new_phi1 > alphaMax, new_phi1 - alphaMax, new_phi1) #brnng back to 0 - 2pi
+# new_phi2 = np.where(new_phi2 > gammaMax, new_phi2 - gammaMax, new_phi2) #brnng back to 0 - 2pi
 
-## calculate g
-g       = np.zeros((3,3,gam.shape[0]*gam.shape[1]*gam.shape[2]))
+# phi1_0 = np.argmax(new_phi1[0,0,:])
 
-# it = np.nditer(phi1,flags=['multi_index'])
-# k = 0
-# while not it.finished:
-#     g[:,:,k] = eu2om([phi1[it.multi_index],Phi[it.multi_index],phi2[it.multi_index]])
-#     k += 1
-#     it.iternext()
+# ## add duplicate slice (phi1=360) at phi1 = 0
+# new_phi1 = np.insert(new_phi1,0,np.zeros_like(new_phi1[:,:,phi1_0]),axis=2)
+# new_Phi  = np.insert(new_Phi,0,new_Phi[:,:,0],axis=2)
+# new_phi2 = np.insert(new_phi2,0,new_phi2[:,:,0],axis=2)
+# weights  = np.insert(weights,0,weights[:,:,phi1_0],axis=2)
 
-g, bungeList = eu2om((phi1,Phi,phi2),out='mdarray')
+# out = np.array([new_phi1.flatten(),new_Phi.flatten(),new_phi2.flatten(),weights.flatten()]).T
+# out_sort = out[np.lexsort((out[:,0],out[:,1],out[:,2]))]
 
-## no edge correction
-cellVolume = cellSize * cellSize * ( np.cos( Phi - ( cellSize/2 ) ) - np.cos( Phi + ( cellSize/2 ) ) )
+# phi1 =  out_sort[:,0].reshape(new_phi1.shape)
+# Phi  =  out_sort[:,1].reshape(new_Phi.shape)
+# phi2 =  out_sort[:,2].reshape(new_phi2.shape)
+# weights = np.copy(out_sort[:,3])
 
-## edge correction
-# Phi_zero = (Phi == 0)
-# Phi_max = (Phi == np.max(Phi))
+# g, bungeList = eu2om((phi1,Phi,phi2),out='mdarray')
 
-# phi1_zero = (phi1 == 0)
-# phi1_max = (phi1 == np.max(phi1))
+# # no edge correction
+# cellVolume = cellSize * cellSize * ( np.cos( Phi - ( cellSize/2 ) ) - np.cos( Phi + ( cellSize/2 ) ) )
 
-# phi2_zero = (phi2 == 0)
-# phi2_max = (phi2 == np.max(phi2))
+# %%
 
-# dphi1_dphi2 = np.ones_like(bungeList) * cellSize * cellSize
-# #phi1 edge cases - 0.5*Δφ1 + Δφ2
-# dphi1_dphi2[phi1_zero+phi1_max] = 1.5*cellSize
-# #phi2 edge cases - Δφ1 + 0.5*Δφ2
-# dphi1_dphi2[phi2_zero+phi2_max] = 1.5*cellSize
-# #phi1 and phi2 edge case - 0.5*Δφ1 + 0.5*Δφ2
-# dphi1_dphi2[(phi2_zero+phi2_max)*(phi1_zero+phi1_max)] = cellSize  
+# # mayavi
+# import mayavi.mlab as mlab
 
-# delta_Phi = np.ones_like(bungeList) * ( np.cos( Phi - (cellSize/2) ) - np.cos( Phi + (cellSize/2) ) )
-# #Phi = 0
-# delta_Phi[Phi_zero] = ( np.cos( Phi[Phi_zero] ) - np.cos( Phi[Phi_zero] + (cellSize/2) ) )
-# #Phi = max
-# delta_Phi[Phi_max] = ( np.cos( Phi[Phi_zero] - (cellSize/2) ) - np.cos( Phi[Phi_zero] ) )
+# # fig = maud_od.plot3d()
+# fig = mlab.figure(bgcolor=(1,1,1))
 
-# cellVolume = dphi1_dphi2 * delta_Phi 
+# org = mlab.points3d(0,
+#                     0,
+#                     0,
+#                     scale_factor=1,
+#                     mode='point',
+#                     color=(1,0,0),
+#                     figure=fig)
+ 
+# org.actor.property.render_points_as_spheres = True
+# org.actor.property.point_size = 5
 
-# index = np.sum( cellVolume * weights**2 )  / np.sum( cellVolume )
+
+# ## grid ##
+# gd = mlab.points3d(new_phi1,
+#                    new_Phi,
+#                    new_phi2,
+#                     scale_factor=1,
+#                     mode='point',
+#                     color=(0,0,0),
+#                     figure=fig)
+
+# gd.actor.property.render_points_as_spheres = True
+# gd.actor.property.point_size = 2
 
 # %%
 
@@ -161,77 +173,77 @@ cellVolume = cellSize * cellSize * ( np.cos( Phi - ( cellSize/2 ) ) - np.cos( Ph
 
 # %%
 
-from tqdm import tqdm
+# from tqdm import tqdm
 
-def transform(T,g):
+# def transform(T,g):
     
-    Tprime = np.zeros([3,3,3,3])
+#     Tprime = np.zeros([3,3,3,3])
     
-    for i in range(3):
-        for j in range(3):
-            for k in range(3):
-                for l in range(3):
+#     for i in range(3):
+#         for j in range(3):
+#             for k in range(3):
+#                 for l in range(3):
                     
-                    for m in range(3):
-                        for n in range(3):
-                            for o in range(3):
-                                for p in range(3):
-                                    Tprime[i,j,k,l] += g[i,m] * g[j,n] * g[k,o] * g[l,p] * T[m,n,o,p]
+#                     for m in range(3):
+#                         for n in range(3):
+#                             for o in range(3):
+#                                 for p in range(3):
+#                                     Tprime[i,j,k,l] += g[i,m] * g[j,n] * g[k,o] * g[l,p] * T[m,n,o,p]
 
-    return Tprime
+#     return Tprime
 
-## stiffness tensors
+# ## stiffness tensors
 
-# C11 = 106.8
-# C22 = C11
-# C33 = C11
-# C12 = 60.74
+# # C11 = 106.8
+# # C22 = C11
+# # C33 = C11
+# # C12 = 60.74
+# # C13 = C12
+# # C23 = C12
+# # C44 = 28.21
+# # C55 = C44
+# # C66 = C44
+
+# C11 = 52
+# C12 = 34
 # C13 = C12
 # C23 = C12
-# C44 = 28.21
+# C22 = 52
+# C33 = C22
+# C44 = 173
 # C55 = C44
 # C66 = C44
 
-C11 = 52
-C12 = 34
-C13 = C12
-C23 = C12
-C22 = 52
-C33 = C22
-C44 = 173
-C55 = C44
-C66 = C44
+# Cvoigt =  np.array([[C11, C12, C13, 0.0, 0.0, 0.0],
+#                     [C12, C22, C23, 0.0, 0.0, 0.0],
+#                     [C13, C23, C33, 0.0, 0.0, 0.0],
+#                     [0.0, 0.0, 0.0, C44, 0.0, 0.0],
+#                     [0.0, 0.0, 0.0, 0.0, C55, 0.0],
+#                     [0.0, 0.0, 0.0, 0.0, 0.0, C66]]);  
 
-Cvoigt =  np.array([[C11, C12, C13, 0.0, 0.0, 0.0],
-                    [C12, C22, C23, 0.0, 0.0, 0.0],
-                    [C13, C23, C33, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, C44, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, C55, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, C66]]);  
+# Svoigt = np.linalg.inv(Cvoigt)
 
-Svoigt = np.linalg.inv(Cvoigt)
+# Ctensor = voigt2tensor(Cvoigt)
+# Stensor = voigt2tensor(Svoigt,compliance=True)
 
-Ctensor = voigt2tensor(Cvoigt)
-Stensor = voigt2tensor(Svoigt,compliance=True)
+# scale = (weights.flatten() * cellVolume.flatten()) / sum((weights.flatten() * cellVolume.flatten()))
 
-scale = (weights.flatten() * cellVolume.flatten()) / sum((weights.flatten() * cellVolume.flatten()))
+# Ctemp = np.zeros([3,3,3,3])
+# Stemp = np.zeros([3,3,3,3])
 
-Ctemp = np.zeros([3,3,3,3])
-Stemp = np.zeros([3,3,3,3])
-
-for n,wgt in tqdm(enumerate(scale)):
+# for n,wgt in tqdm(enumerate(scale)):
     
-    g_temp = np.copy(g[:,:,n])
+#     g_temp = np.copy(g[:,:,n])
     
-    Sten_Tr = np.einsum('im,jn,ko,lp,mnop',g_temp,g_temp,g_temp,g_temp,Stensor)
-    Cten_Tr = np.einsum('im,jn,ko,lp,mnop',g_temp,g_temp,g_temp,g_temp,Ctensor)
-    Ctemp += Cten_Tr*wgt
-    Stemp += Sten_Tr*wgt
+#     Sten_Tr = np.einsum('im,jn,ko,lp,mnop',g_temp,g_temp,g_temp,g_temp,Stensor)
+#     Cten_Tr = np.einsum('im,jn,ko,lp,mnop',g_temp,g_temp,g_temp,g_temp,Ctensor)
+#     Ctemp += Cten_Tr*wgt
+#     Stemp += Sten_Tr*wgt
 
-Voigt = tensor2voigt(Ctemp)
-Reuss = np.linalg.inv(tensor2voigt(Stemp,compliance=True))
+# Voigt = tensor2voigt(Ctemp)
+# Reuss = np.linalg.inv(tensor2voigt(Stemp,compliance=True))
 
-Hill  = 0.5*( Voigt + Reuss )
+# Hill  = 0.5*( Voigt + Reuss )
 
 # %% 
 
