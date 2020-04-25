@@ -26,7 +26,8 @@ from pyTex.base import poleFigure, bunge
 hkls = []
 files = []
 # datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures integ int Al absCorr/combined'
-datadir = '/home/nate/projects/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
+# datadir = '/home/nate/projects/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
+datadir = 'C:/Users/Nate/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
 
 for file in os.listdir(datadir):
     
@@ -397,10 +398,10 @@ for fi,fam in enumerate(pf._normHKLs[:1]):
 
 """ try to sort into three fibers """
 
-pf_num = 0
-yi     = 3
+# pf_num = 0
+# yi     = 3
 
-fibers = fibre_e[pf_num][yi]
+# fibers = fibre_e[pf_num][yi]
 
 ## first three are the three fibers around the center
 
@@ -471,142 +472,142 @@ centerLine = mlab.plot3d(fibers[0][:,0],fibers[0][:,1],fibers[0][:,2],color=(1,0
 
 # %% pole figure projection ##
 
-import sys
-from scipy.spatial import distance
+# import sys
+# from scipy.spatial import distance
 
-sys.path.insert(0,'/home/nate/projects/coverage/functions')
-from utils import sortPolAngles, POLtoXY
+# sys.path.insert(0,'/home/nate/projects/coverage/functions')
+# from utils import sortPolAngles, POLtoXY
 
-yi = 36
+# yi = 36
 
-fam = pf._symHKL[pf_num]
+# fam = pf._symHKL[pf_num]
     
-xyz = {}
-pol = {}
-sortedPoints = {}
-gap_idx = {}
-distanceList = {}
+# xyz = {}
+# pol = {}
+# sortedPoints = {}
+# gap_idx = {}
+# distanceList = {}
 
-for oi,offset in enumerate(offset_rots):
+# for oi,offset in enumerate(offset_rots):
     
-    g = quat.to_matrix(fibre_q[pf_num][yi][oi])
-    g = g.transpose((1,2,0))
+#     g = quat.to_matrix(fibre_q[pf_num][yi][oi])
+#     g = g.transpose((1,2,0))
     
-    # Mx3xN array | M - hkl multi. N - # of unique g
-    xyz[oi] = np.dot(fam,g)
-    pol[oi] = XYZtoSPH(xyz[oi],proj='earea')
+#     # Mx3xN array | M - hkl multi. N - # of unique g
+#     xyz[oi] = np.dot(fam,g)
+#     pol[oi] = XYZtoSPH(xyz[oi],proj='earea')
     
-    pol[oi] = np.vstack([pol[oi][:,:,i] for i in range(g.shape[2])])
-    pol[oi] = np.unique(np.round(pol[oi],decimals=5),axis=0)
+#     pol[oi] = np.vstack([pol[oi][:,:,i] for i in range(g.shape[2])])
+#     pol[oi] = np.unique(np.round(pol[oi],decimals=5),axis=0)
 
-    """ order points """
+#     """ order points """
     
-    # if oi == 0: pass
-    # else:
+#     # if oi == 0: pass
+#     # else:
 
-    sortedPoints[oi] = sortPolAngles(pol[oi])
+#     sortedPoints[oi] = sortPolAngles(pol[oi])
     
-    scatterXY = POLtoXY(sortedPoints[oi])
-    distMat=distance.cdist(scatterXY,scatterXY,metric='euclidean')
+#     scatterXY = POLtoXY(sortedPoints[oi])
+#     distMat=distance.cdist(scatterXY,scatterXY,metric='euclidean')
     
-    distanceList[oi] = []
+#     distanceList[oi] = []
     
-    for i in range(len(sortedPoints[oi])-1):
+#     for i in range(len(sortedPoints[oi])-1):
         
-        distanceList[oi].append(distMat[i,i+1])
+#         distanceList[oi].append(distMat[i,i+1])
         
-    gaps = np.where(np.array(distanceList[oi]) > 0.06)
-    gap_idx[oi] = []
+#     gaps = np.where(np.array(distanceList[oi]) > 0.06)
+#     gap_idx[oi] = []
     
-    for gi,gp in enumerate(gaps[0]):
+#     for gi,gp in enumerate(gaps[0]):
         
-        if gi == 0: gap_idx[oi].append((0,gp+1))
-        elif gi == len(gaps[0])-1: 
-            gap_idx[oi].append((gaps[0][gi-1]+1,gp+1))
-            gap_idx[oi].append((gp+1,len(sortedPoints[oi])))
-        else: gap_idx[oi].append((gaps[0][gi-1]+1,gp+1))
+#         if gi == 0: gap_idx[oi].append((0,gp+1))
+#         elif gi == len(gaps[0])-1: 
+#             gap_idx[oi].append((gaps[0][gi-1]+1,gp+1))
+#             gap_idx[oi].append((gp+1,len(sortedPoints[oi])))
+#         else: gap_idx[oi].append((gaps[0][gi-1]+1,gp+1))
 
 # %%
 
-from cycler import cycler
-cc = (cycler(color=list('cmyk')) *
-      cycler(linestyle=['-', '--', '-.']))
+# from cycler import cycler
+# cc = (cycler(color=list('cmyk')) *
+#       cycler(linestyle=['-', '--', '-.']))
 
-plt.rc('axes', prop_cycle=cc)
+# plt.rc('axes', prop_cycle=cc)
 
-fig = plt.figure()
+# fig = plt.figure()
 
-ax = plt.subplot(111,projection='polar',frameon = True)
+# ax = plt.subplot(111,projection='polar',frameon = True)
 
-ax.set_thetagrids(np.arange(0,360,5))
-ax.set_axisbelow(True)
-# ax.grid(color='lightgrey')
-ax.grid(False)
-plt.subplots_adjust(left=0,bottom=0,right=1,top=1,wspace=0,hspace=0)
+# ax.set_thetagrids(np.arange(0,360,5))
+# ax.set_axisbelow(True)
+# # ax.grid(color='lightgrey')
+# ax.grid(False)
+# plt.subplots_adjust(left=0,bottom=0,right=1,top=1,wspace=0,hspace=0)
 
-ax.set_yticklabels([])
-ax.set_xticklabels([])
-ax.set_ylim([0,np.pi/2])
-# ax.set_ylim([0,1])
-ax.set_theta_zero_location('N') 
+# ax.set_yticklabels([])
+# ax.set_xticklabels([])
+# ax.set_ylim([0,np.pi/2])
+# # ax.set_ylim([0,1])
+# ax.set_theta_zero_location('N') 
 
-### loop through all lines ###
+# ### loop through all lines ###
 
-# for (oi,gp_id),(_,sort_pts) in zip(gap_idx.items(),sortedPoints.items()):
+# # for (oi,gp_id),(_,sort_pts) in zip(gap_idx.items(),sortedPoints.items()):
     
-#     if oi != 3:
+# #     if oi != 3:
     
-#         for i,gpi in enumerate(gp_id):
+# #         for i,gpi in enumerate(gp_id):
     
-#             ax.plot(sort_pts[gpi[0]:gpi[1],0],sort_pts[gpi[0]:gpi[1],1],label=str(oi)+str('-')+str(i))
-#             # ax.scatter(sort_pts[:,0],sort_pts[:,1],s=2,label=str(oi)+str('-')+str(i))
-#         #     pass
+# #             ax.plot(sort_pts[gpi[0]:gpi[1],0],sort_pts[gpi[0]:gpi[1],1],label=str(oi)+str('-')+str(i))
+# #             # ax.scatter(sort_pts[:,0],sort_pts[:,1],s=2,label=str(oi)+str('-')+str(i))
+# #         #     pass
             
-# #     # ax.scatter(sort_pts[:,0],sort_pts[:,1],s=2,label=oi)
+# # #     # ax.scatter(sort_pts[:,0],sort_pts[:,1],s=2,label=oi)
     
-# plt.legend()    
+# # plt.legend()    
 
-#gap_idx[oi][i]
-#sortedPoints[oi]
+# #gap_idx[oi][i]
+# #sortedPoints[oi]
 
-### this will only work for [111], y#15
+# ### this will only work for [111], y#15
 
-ax.plot(sortedPoints[1][gap_idx[1][1][0]:gap_idx[1][1][1],0],sortedPoints[1][gap_idx[1][1][0]:gap_idx[1][1][1],1],'-b')
-# ax.plot(sortedPoints[1][gap_idx[1][0][0]:gap_idx[1][0][1],0],sortedPoints[1][gap_idx[1][0][0]:gap_idx[1][0][1],1],'-r')
+# ax.plot(sortedPoints[1][gap_idx[1][1][0]:gap_idx[1][1][1],0],sortedPoints[1][gap_idx[1][1][0]:gap_idx[1][1][1],1],'-b')
+# # ax.plot(sortedPoints[1][gap_idx[1][0][0]:gap_idx[1][0][1],0],sortedPoints[1][gap_idx[1][0][0]:gap_idx[1][0][1],1],'-r')
 
-ax.plot(sortedPoints[2][gap_idx[2][0][0]:gap_idx[2][0][1],0],sortedPoints[2][gap_idx[2][0][0]:gap_idx[2][0][1],1],'-b')
-ax.plot(sortedPoints[2][gap_idx[2][3][0]:gap_idx[2][3][1],0],sortedPoints[2][gap_idx[2][3][0]:gap_idx[2][3][1],1],'-b')
-ax.plot(sortedPoints[2][gap_idx[2][4][0]:gap_idx[2][4][1],0],sortedPoints[2][gap_idx[2][4][0]:gap_idx[2][4][1],1],'-b')
+# ax.plot(sortedPoints[2][gap_idx[2][0][0]:gap_idx[2][0][1],0],sortedPoints[2][gap_idx[2][0][0]:gap_idx[2][0][1],1],'-b')
+# ax.plot(sortedPoints[2][gap_idx[2][3][0]:gap_idx[2][3][1],0],sortedPoints[2][gap_idx[2][3][0]:gap_idx[2][3][1],1],'-b')
+# ax.plot(sortedPoints[2][gap_idx[2][4][0]:gap_idx[2][4][1],0],sortedPoints[2][gap_idx[2][4][0]:gap_idx[2][4][1],1],'-b')
 
-ax.scatter(pol[0][:,0],pol[0][:,1],c='r',s=2)
+# ax.scatter(pol[0][:,0],pol[0][:,1],c='r',s=2)
 
-## add other groups
-# y_plt = XYZtoSPH(pf.y[5],proj='earea')
+# ## add other groups
+# # y_plt = XYZtoSPH(pf.y[5],proj='earea')
 
 
-fam = pf._symHKL[pf_num]
+# fam = pf._symHKL[pf_num]
 
-#full grid
-fullPFgrid, xyz_pf = pf.genGrid(res=pf.res,
-                                radians=True,
-                                centered=True,
-                                ret_xyz=True)
+# #full grid
+# fullPFgrid, xyz_pf = pf.genGrid(res=pf.res,
+#                                 radians=True,
+#                                 centered=True,
+#                                 ret_xyz=True)
 
-g_tube = bungeAngs[nn_gridPts[pf_num][yi]]
-g_tubeOM = eu2om(g_tube,out='mdarray_2')
+# g_tube = bungeAngs[nn_gridPts[pf_num][yi]]
+# g_tubeOM = eu2om(g_tube,out='mdarray_2')
 
-xyz_tube = np.dot(fam,g_tubeOM)
-pol_tube = XYZtoSPH(xyz_tube,proj='earea')
+# xyz_tube = np.dot(fam,g_tubeOM)
+# pol_tube = XYZtoSPH(xyz_tube,proj='earea')
 
-ax.scatter(pol_tube[:,0,:],pol_tube[:,1,:],c=(0, 1, 0),s=4,zorder=0)
+# ax.scatter(pol_tube[:,0,:],pol_tube[:,1,:],c=(0, 1, 0),s=4,zorder=0)
 
-plt.savefig('test.png', dpi=600, transparent=True)
+# plt.savefig('test.png', dpi=600, transparent=True)
 
 # %%
         
-pts = mlab.points3d(xyz_tube[:,0],xyz_tube[:,1],xyz_tube[:,2],mode='point',scale_factor=1,color=(0,1,0))
-pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 10
+# pts = mlab.points3d(xyz_tube[:,0],xyz_tube[:,1],xyz_tube[:,2],mode='point',scale_factor=1,color=(0,1,0))
+# pts.actor.property.render_points_as_spheres = True
+# pts.actor.property.point_size = 10
 
         
 """ tube plot """

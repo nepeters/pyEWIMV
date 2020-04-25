@@ -15,13 +15,15 @@ Crystal coordinate system: z || [001], x || [100], y || [010]
 this goes scattering vector -> intersection in bunge
 """
 
-import os,sys
+import os,sys,tracemalloc
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
 from pyTex import poleFigure, bunge
 from pyTex.inversion import e_wimv
+
+tracemalloc.start()
 
 dir_path = os.path.dirname(os.path.realpath('__file__'))
 
@@ -40,7 +42,7 @@ def_al = {'name': 'Al',
           'massNorm': False}
 
 crystalSym = 'm-3m'
-sampleSym = 'mmm'
+sampleSym = '1'
 cellSize = np.deg2rad(5)
 od = bunge(cellSize, crystalSym, sampleSym)
 
@@ -73,7 +75,7 @@ rot = R.from_euler('XZX', (90,90,90), degrees=True).as_matrix()
 # # datadir = os.path.join(dir_path,'Data','NOMAD Aluminum - no abs - peak int','combined')
 # # datadir = '/media/nate/2E7481AA7481757D/Users/Nate/Dropbox/ORNL/Texture/NRSF2/mtex_export'
 # # datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures peak int Al absCorr/combined'
-# datadir = '/home/nate/projects/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
+# datadir = '/mnt/c/Users/Nate/pyReducePF/pole figures/pole figures integ int Al absCorr 2ndFit/combined'
 
 # for file in os.listdir(datadir):
     
@@ -105,10 +107,10 @@ final_iter = max(list(calc_od.keys()))
 # hkls = [(1,1,1),(2,0,0),(2,2,0)]
 # recalc_pf_new = calc_od[final_iter-1].calcPF( hkls, theta, tube_exp, tube_proj=True )
 
-# # plot recalculated pole figures
-# cl = np.arange(0,10.5,0.5)
-# recalc_pf[final_iter-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
-# # recalc_pf[7].plot(contourlevels=cl,cmap='viridis',proj='stereo')
+# plot recalculated pole figures
+cl = np.arange(0,10.5,0.5)
+recalc_pf[final_iter-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
+# recalc_pf[7].plot(contourlevels=cl,cmap='viridis',proj='stereo')
 
 # #plot ODF section
 # calc_od[final_iter-1].sectionPlot('phi2',np.deg2rad(65))
@@ -121,40 +123,45 @@ print('iterations: '+str(final_iter-1))
 print(calc_od[final_iter-1].index())
 print(calc_od[final_iter-1].entropy())
 
+snapshot = tracemalloc.take_snapshot()
+top_stats = snapshot.statistics('lineno')
+for stat in top_stats[:10]:
+    print(stat)
+
 # %%
 
 ## volume fractions
 
-from tqdm import tqdm
+# from tqdm import tqdm
 
-betaFiber =np.vstack([[35.3,45.0,0.0],
-            [33.6,47.7,5.0],
-            [32.1,51.0,10.0],
-            [31.1,54.7,15.0],
-            [31.3,59.1,20.0],
-            [35.2,64.2,25.0],
-            [46.1,69.9,30.0],
-            [49.5,76.2,35.0],          
-            [51.8,83.0,40.0],
-            [54.7,90.0,45.0],
-            [90.0,35.3,45.0],
-            [80.2,35.4,50.0],
-            [73.0,35.7,55.0],
-            [66.9,36.2,60.0],
-            [61.2,37.0,65.0],
-            [55.9,38.0,70.0],
-            [50.7,39.2,75.0],
-            [45.6,40.8,80.0],
-            [40.5,42.7,85.0],
-            [35.3,45.0,90.0]])
+# betaFiber =np.vstack([[35.3,45.0,0.0],
+#                     [33.6,47.7,5.0],
+#                     [32.1,51.0,10.0],
+#                     [31.1,54.7,15.0],
+#                     [31.3,59.1,20.0],
+#                     [35.2,64.2,25.0],
+#                     [46.1,69.9,30.0],
+#                     [49.5,76.2,35.0],          
+#                     [51.8,83.0,40.0],
+#                     [54.7,90.0,45.0],
+#                     [90.0,35.3,45.0],
+#                     [80.2,35.4,50.0],
+#                     [72.9,35.7,55.0],
+#                     [66.9,36.2,60.0],
+#                     [61.2,37.0,65.0],
+#                     [55.9,38.0,70.0],
+#                     [50.7,39.2,75.0],
+#                     [45.6,40.8,80.0],
+#                     [40.5,42.7,85.0],
+#                     [35.3,45.0,90.0]])
 
-g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
+# g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
 
-vf = []
+# vf = []
 
-for g in tqdm(g_betaFiber):
+# for g in tqdm(g_betaFiber):
     
-    vf.append(calc_od[final_iter-1].compVolume(g,10))
+#     vf.append(calc_od[final_iter-1].compVolume(g,10))
 
 
 # print(calc_od[final_iter-1]._volume(copper.as_matrix(),10))
@@ -181,7 +188,7 @@ for g in tqdm(g_betaFiber):
 # hill = calc_od[final_iter-1].hill(elastic)
 
 ## export data
-calc_od[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
+# calc_od[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
 # recalc_pf[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 # recalc_pf_new.export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 

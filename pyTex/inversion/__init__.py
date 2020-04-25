@@ -307,7 +307,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
                 n = _np.where(n == 0, 1, n)
                 
                 try:
-                    calc_od[0][:,fi] = _np.exp((_np.sum(temp,axis=1)*refl_wgt[fi])/n)
+                    calc_od[0][:,fi] = _np.exp((_np.sum(temp,axis=1)*refl_wgt[fi])/numHKLs[fi])
                 except:
                     print(temp)
                     print(refl_wgt[fi])
@@ -418,7 +418,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
             temp = _np.log(temp)
             n = _np.count_nonzero(temp,axis=1)
             n = _np.where(n == 0, 1, n)
-            calc_od[i+1][:,fi] = _np.exp((_np.sum(temp,axis=1)*refl_wgt[fi])/n)
+            calc_od[i+1][:,fi] = _np.exp((_np.sum(temp,axis=1)*refl_wgt[fi])/numHKLs[fi])
 
         calc_od[i+1] = calc_od[i].weights * _np.power(_np.product(calc_od[i+1],axis=1),(1/numPoles))
 

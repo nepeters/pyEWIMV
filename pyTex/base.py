@@ -1079,9 +1079,18 @@ class bunge( OD ):
             crysSymOps = _genSymOps(self.CS)
             smplSymOps = _genSymOps(self.SS)
 
+            # if grid_res is not None:
+            #     dummy_od = bunge(grid_res,self.CS,self.SS,centered=self.centered)
+
+            #     # create Nx3 array of grid points
+            #     if self.centered: eu_grid = _np.array([dummy_od.phi1cen.flatten(),dummy_od.Phicen.flatten(),dummy_od.phi2cen.flatten()]).T
+            #     else: eu_grid = _np.array([dummy_od.phi1.flatten(),dummy_od.Phi.flatten(),dummy_od.phi2.flatten()]).T
+
+            # else:
+
             # create Nx3 array of grid points
             if self.centered: eu_grid = _np.array([self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten()]).T
-            else: eu_grid = _np.array([self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten()]).T
+            else: eu_grid = _np.array([self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten()]).T                
 
             g_grid  = _eu2om(eu_grid,out='mdarray_2')
             g_grid  = g_grid.transpose((2,0,1))
