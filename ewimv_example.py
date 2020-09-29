@@ -28,7 +28,7 @@ dir_path = os.path.dirname(os.path.realpath('__file__'))
 P = 1
 
 #sample information
-sampleName = 'Al_NRSF2_5x8_mmm'
+sampleName = 'Al_NRSF2_5x8_vn'
 rad_type = 'nd'
 def_al = {'name': 'Al',
           'composition': [dict(ion='Al', pos=[0, 0, 0]),
@@ -40,7 +40,7 @@ def_al = {'name': 'Al',
           'massNorm': False}
 
 crystalSym = 'm-3m'
-sampleSym = 'mmm'
+sampleSym = '1'
 cellSize = np.deg2rad(5)
 od = bunge(cellSize, crystalSym, sampleSym)
 
@@ -105,10 +105,8 @@ final_iter = max(list(calc_od.keys()))
 # hkls = [(1,1,1),(2,0,0),(2,2,0)]
 # recalc_pf_new = calc_od[final_iter-1].calcPF( hkls, theta, tube_exp, tube_proj=True )
 
-# # plot recalculated pole figures
-# cl = np.arange(0,10.5,0.5)
-# recalc_pf[final_iter-1].plot(pfs=3,contourlevels=cl,cmap='viridis_r',proj='none')
-# # recalc_pf[7].plot(contourlevels=cl,cmap='viridis',proj='stereo')
+# plot recalculated pole figures
+recalc_pf[final_iter-1].plot(pfs=3,cmap='viridis_r',proj='none')
 
 # #plot ODF section
 # calc_od[final_iter-1].sectionPlot('phi2',np.deg2rad(65))
@@ -123,67 +121,67 @@ print(calc_od[final_iter-1].entropy())
 
 # %%
 
-## volume fractions
+# ## volume fractions
 
-from tqdm import tqdm
+# from tqdm import tqdm
 
-betaFiber =np.vstack([[35.3,45.0,0.0],
-            [33.6,47.7,5.0],
-            [32.1,51.0,10.0],
-            [31.1,54.7,15.0],
-            [31.3,59.1,20.0],
-            [35.2,64.2,25.0],
-            [46.1,69.9,30.0],
-            [49.5,76.2,35.0],          
-            [51.8,83.0,40.0],
-            [54.7,90.0,45.0],
-            [90.0,35.3,45.0],
-            [80.2,35.4,50.0],
-            [73.0,35.7,55.0],
-            [66.9,36.2,60.0],
-            [61.2,37.0,65.0],
-            [55.9,38.0,70.0],
-            [50.7,39.2,75.0],
-            [45.6,40.8,80.0],
-            [40.5,42.7,85.0],
-            [35.3,45.0,90.0]])
+# betaFiber =np.vstack([[35.3,45.0,0.0],
+#             [33.6,47.7,5.0],
+#             [32.1,51.0,10.0],
+#             [31.1,54.7,15.0],
+#             [31.3,59.1,20.0],
+#             [35.2,64.2,25.0],
+#             [46.1,69.9,30.0],
+#             [49.5,76.2,35.0],          
+#             [51.8,83.0,40.0],
+#             [54.7,90.0,45.0],
+#             [90.0,35.3,45.0],
+#             [80.2,35.4,50.0],
+#             [73.0,35.7,55.0],
+#             [66.9,36.2,60.0],
+#             [61.2,37.0,65.0],
+#             [55.9,38.0,70.0],
+#             [50.7,39.2,75.0],
+#             [45.6,40.8,80.0],
+#             [40.5,42.7,85.0],
+#             [35.3,45.0,90.0]])
 
-g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
+# g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
 
-vf = []
+# vf = []
 
-for g in tqdm(g_betaFiber):
+# for g in tqdm(g_betaFiber):
     
-    vf.append(calc_od[final_iter-1].compVolume(g,10))
+#     vf.append(calc_od[final_iter-1].compVolume(g,10))
 
 
-# print(calc_od[final_iter-1]._volume(copper.as_matrix(),10))
+# # print(calc_od[final_iter-1]._volume(copper.as_matrix(),10))
 
-# C11 = 52
-# C12 = 34
-# C13 = C12
-# C23 = C12
-# C22 = 52
-# C33 = C22
-# C44 = 173
-# C55 = C44
-# C66 = C44
+# # C11 = 52
+# # C12 = 34
+# # C13 = C12
+# # C23 = C12
+# # C22 = 52
+# # C33 = C22
+# # C44 = 173
+# # C55 = C44
+# # C66 = C44
 
-# elastic =  np.array([[C11, C12, C13, 0.0, 0.0, 0.0],
-#                      [C12, C22, C23, 0.0, 0.0, 0.0],
-#                      [C13, C23, C33, 0.0, 0.0, 0.0],
-#                      [0.0, 0.0, 0.0, C44, 0.0, 0.0],
-#                      [0.0, 0.0, 0.0, 0.0, C55, 0.0],
-#                      [0.0, 0.0, 0.0, 0.0, 0.0, C66]]);  
+# # elastic =  np.array([[C11, C12, C13, 0.0, 0.0, 0.0],
+# #                      [C12, C22, C23, 0.0, 0.0, 0.0],
+# #                      [C13, C23, C33, 0.0, 0.0, 0.0],
+# #                      [0.0, 0.0, 0.0, C44, 0.0, 0.0],
+# #                      [0.0, 0.0, 0.0, 0.0, C55, 0.0],
+# #                      [0.0, 0.0, 0.0, 0.0, 0.0, C66]]);  
 
-# # voigt = calc_od[final_iter-1].voigt(elastic)
-# # reuss = calc_od[final_iter-1].reuss(np.linalg.inv(elastic))
-# hill = calc_od[final_iter-1].hill(elastic)
+# # # voigt = calc_od[final_iter-1].voigt(elastic)
+# # # reuss = calc_od[final_iter-1].reuss(np.linalg.inv(elastic))
+# # hill = calc_od[final_iter-1].hill(elastic)
 
-## export data
-calc_od[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
-# recalc_pf[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
-# recalc_pf_new.export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
+# ## export data
+# calc_od[final_iter-1].export('/mnt/c/Users/np7ut/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
+# # recalc_pf[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
+# # recalc_pf_new.export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 
 # %% attempt with symmetry
 

@@ -20,7 +20,10 @@ from scipy.interpolate import griddata as _griddata
 from scipy.spatial.transform import rotation as _R
 from sklearn.neighbors import KDTree as _KDTree
 import matplotlib.pyplot as _plt
-import mayavi.mlab as _mlab
+try:
+    import mayavi.mlab as _mlab
+except:
+    print('mayavi didnt import')
 import xrdtools
 import rowan as _quat
 
@@ -1206,6 +1209,21 @@ class bunge( OD ):
 
     def _calcPath( self, path_type, symHKL, yset, phi, rad, euc_rad, q_tree, hkls_loop_idx=None):
 
+        def fast_mult(qi, qj):
+            """
+            used to calculate only the scalar portion of quaternion
+            
+            fast for misorient.
+            
+            """
+
+            qi = _np.asarray(qi) 
+            qj = _np.asarray(qj)
+            
+            output = qi[..., 0] * qj[..., 0] - _np.sum(qi[..., 1:] * qj[..., 1:], axis=-1)
+            
+            return output
+
         """
         calculate paths through orientation
         
@@ -1219,6 +1237,10 @@ class bunge( OD ):
             -euc_rad - euclidean distance (quaternion) for radius of tube 
         """
 
+        #throw q_grid into positive hemisphere (SO3) for euclidean distance
+        qgrid_pos = _np.copy(self.q_grid)
+        qgrid_pos[qgrid_pos[:,0] < 0] *= -1
+
         symOps = _genSymOps(self.cs)
         # symOps = _np.unique(_np.swapaxes(symOps,2,0),axis=0)
 
@@ -1227,16 +1249,23 @@ class bunge( OD ):
         quatSymOps = _quat.from_matrix(symOps)
         quatSymOps = _np.tile(quatSymOps[:,:,_np.newaxis],(1,1,len(phi)))
         quatSymOps = quatSymOps.transpose((0,2,1))
+
+        ## create symOps matrix for fast multiply
+        crys_symOps = _quat.from_matrix(symOps)
+
+
+        tube_rad = _np.deg2rad(8)
+        tube_thres = _np.cos(tube_rad) / 2
         
         cphi = _np.cos(phi/2)
         sphi = _np.sin(phi/2)
         
-        q0 = {}
-        q = {}
-        qf = {}
+        # q0 = {}
+        # q = {}
+        # qf = {}
         
-        axis = {}
-        omega = {}
+        # axis = {}
+        # omega = {}
         
         path_e = {}
         path_q = {}
@@ -1252,33 +1281,33 @@ class bunge( OD ):
             gridPts[fi] = {}
             gridDist[fi] = {}
             
-            q0[fi] = {}
-            q[fi] = {}
+            # q0[fi] = {}
+            # q[fi] = {}
             
-            axis[fi] = {}
-            omega[fi] = {}
+            # axis[fi] = {}
+            # omega[fi] = {}
             
             """ set proper iterator """
             if isinstance(yset,dict): it = yset[fi]
             else: it = yset
             
-            for yi,y in enumerate(it): 
+            for yi,y in enumerate(_tqdm(it,desc='Looping over y')): 
                 
                 """ symmetry method """
                 # t0 = _time.time()
                 #calculate path for single (hkl)
-                axis[fi][yi] = _np.cross(fam,y)
-                axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=-1)
-                omega[fi][yi] = _np.arccos(_np.dot(fam,y))
+                axis = _np.cross(fam,y)
+                axis = axis / _np.linalg.norm(axis,axis=-1)
+                omega = _np.arccos(_np.dot(fam,y))
 
-                q0[fi][yi] = _np.hstack( [ _np.cos(omega[fi][yi]/2), _np.sin(omega[fi][yi]/2) * axis[fi][yi] ] )
-                q[fi][yi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
-                qf[yi] = _quat.multiply(q[fi][yi], q0[fi][yi])
+                q0 = _np.hstack( [ _np.cos(omega/2), _np.sin(omega/2) * axis ] )
+                q  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
+                qf = _quat.multiply(q, q0)
 
                 for smpl_symOp in self.smpl_symOps: 
 
                     #multiply by sym ops, first sample then crystal
-                    qf_smplSym = _quat.multiply(smpl_symOp, qf[yi])
+                    qf_smplSym = _quat.multiply(smpl_symOp, qf)
                     qfib = _quat.multiply(qf_smplSym, quatSymOps)
                     #transpose to correct format for conversion
                     qfib = qfib.transpose((1,0,2))
@@ -1303,30 +1332,90 @@ class bunge( OD ):
                     fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
                     path_q[fi][yi] = qfib[fib_idx][uni_path_idx]
 
+                    ### new way - true misorientation ###
+
+                    ## reduce geodesic query size
+                    qfib_pos = _np.copy(qfib[fib_idx])
+                    qfib_pos[qfib_pos[:,0] < 0] *= -1
+
+                    query = _np.concatenate(q_tree.query_radius(qfib_pos,euc_rad))
+                    query_uni = _np.unique(query)
+                    qgrid_trun_idx = _np.arange(len(self.q_grid))[query_uni] #store indexes to retrieve original grid pts later
+
+                    ## truncated qgrid
+                    qgrid_trun = _np.copy(self.q_grid[query_uni])
+                    qgrid_trun[qgrid_trun[:,0] < 0] *= -1
+
+                    ## create qgrid_pos for fast multiply
+                    qgrid_trun = _np.broadcast_to(qgrid_trun,(len(phi),len(qgrid_trun),4))
+                    # qgrid_trun = _np.tile(qgrid_trun[:,:,_np.newaxis],(1,1,len(phi)))
+                    qgrid_trun = qgrid_trun.transpose((1,0,2))
+
+                    ## need to use a new name so don't overwrite
+                    g_C = _np.broadcast_to(crys_symOps, (len(qgrid_trun), len(phi), len(crys_symOps), 4))
+                    g_C = g_C.transpose((2,0,1,3))
+                    
+                    # _np.tile(crys_symOps[:,:,_np.newaxis,_np.newaxis],(1,1,qgrid_arr.shape[0],len(phi)))
+                    # crys_symOps = crys_symOps.transpose((0,2,3,1))
+
+                    ## okay now we have the fiber for each y
+                    # now need to get the true misorientation as a "distance"
+
+                    ## tricky multi
+                    # q_fp_grid = _quat.multiply(qf, qgrid_pos)
+                    q_fp_grid = _quat.multiply( qgrid_trun, qf )
+                    
+                    ## another multi
+                    q_mis = fast_mult( q_fp_grid, g_C )
+                    
+                    ## get min angle (along axis = 0 | across 24 equiv.)
+                    ## maximum value - avoid trig
+                    ang_min  = _np.max(q_mis,axis=0)
+                
+                    ## get mask (every point within tube)
+                    mask_tube  = (ang_min >= tube_thres)
+                    
+                    ## get unique cell points and distances
+                    pts_in_tube = _np.argwhere(mask_tube)
+                    dist_pts_in_tube = ang_min[pts_in_tube[:,0],pts_in_tube[:,1]]
+                    
+                    ## combine together
+                    pts_in_tube = _np.hstack((pts_in_tube,dist_pts_in_tube[:,None]))
+                    
+                    ## sort by the distance (ascending)
+                    pts_in_tube = pts_in_tube[_np.argsort(-1*pts_in_tube[:,2]),:]
+
+                    ## get unique indicies
+                    uniq_pts,uniq_idx = _np.unique(pts_in_tube[:,0],return_index=True)
+                    gridPts[fi][yi]   = qgrid_trun_idx[uniq_pts.astype(int)]
+
+                    ## get unique distances
+                    gridDist[fi][yi] = _np.arccos( pts_in_tube[uniq_idx,2] ) * 2              
+
                     """ loop method """
 
                     # try:
-                    #     axis[fi][yi] = axis[fi][yi] / _np.linalg.norm(axis[fi][yi],axis=1)[:,None]
+                    #     axis = axis / _np.linalg.norm(axis,axis=1)[:,None]
                     # except FloatingPointError:
-                    #     return axis[fi][yi]
+                    #     return axis
                     
-                    # omega[fi][yi] = _np.arccos(_np.dot(fam,y))
+                    # omega = _np.arccos(_np.dot(fam,y))
                     
-                    # q0[fi][yi] = {}
-                    # q[fi][yi] = {}
-                    # qf[yi] = {}
+                    # q0 = {}
+                    # q = {}
+                    # qf = {}
                     # qfib = _np.zeros((len(phi),len(fam),4))
                     
-                    # for hi,HxY in enumerate(axis[fi][yi]):
+                    # for hi,HxY in enumerate(axis):
                     
-                    #     q0[fi][yi][hi] = _np.hstack( [ _np.cos(omega[fi][yi][hi]/2), _np.sin(omega[fi][yi][hi]/2) * HxY ] )
-                    #     q[fi][yi][hi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
+                    #     q0[hi] = _np.hstack( [ _np.cos(omega[hi]/2), _np.sin(omega[hi]/2) * HxY ] )
+                    #     q[hi]  = _np.hstack( [ cphi[:, _np.newaxis], _np.tile( y, (len(cphi),1) ) * sphi[:, _np.newaxis] ] )
                         
-                    #     qf[yi][hi] = _quat.multiply(q[fi][yi][hi], q0[fi][yi][hi])
+                    #     qf[hi] = _quat.multiply(q[hi], q0[hi])
                     
-                    #     for qi in range(qf[yi][hi].shape[0]):
+                    #     for qi in range(qf[hi].shape[0]):
                             
-                    #         qfib[qi,hi,:] = qf[yi][hi][qi,:]
+                    #         qfib[qi,hi,:] = qf[hi][qi,:]
                     
                     # phi1, Phi, phi2 = _quat2eu(qfib)
                     
@@ -1344,44 +1433,83 @@ class bunge( OD ):
                     # fib_idx = _np.unravel_index(fz_idx[0], (qfib.shape[0],qfib.shape[1]))            
                     # path_q[fi][yi] = qfib[fib_idx]
 
-                    """ euclidean distance calculation - KDTree """
-                    
-                    qfib_pos = _np.copy(qfib[fib_idx])
-                    qfib_pos[qfib_pos[:,0] < 0] *= -1
-                    
-                    # returns tuple - first array are points, second array is distances
-                    query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
-                
-                    # concatenate arrays
-                    query = _np.column_stack([_np.concatenate(ar) for ar in query])
-                    
-                    # round very small values
-                    query = _np.round(query, decimals=7)
-                    
-                    # move values at zero to very small (1E-5)
-                    query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
-                    
-                    # sort by minimum distance - unique function takes first appearance of index
-                    query_sort = query[_np.argsort(query[:,1],axis=0)]
-                    
-                    # return unique points
-                    uni_pts = _np.unique(query_sort[:,0],return_index=True)
-                    
-                    if yi not in gridPts[fi]:
+                    # """ geodesic distance calculation - dot product """
 
-                        gridPts[fi][yi] = [uni_pts[0].astype(int)]
-                        gridDist[fi][yi] = [query_sort[uni_pts[1],1]]
+                    # """ reduce geodesic query size """
+                    # qfib_pos = _np.copy(qfib[fib_idx])
+                    # qfib_pos[qfib_pos[:,0] < 0] *= -1
                     
-                    else:
+                    # query = _np.concatenate(q_tree.query_radius(qfib_pos,euc_rad))
+                    # query_uni = _np.unique(query)
+                    # qgrid_trun = self.q_grid[query_uni]
+                    # qgrid_trun_idx = _np.arange(len(self.q_grid))[query_uni] #store indexes to retrieve original grid pts later
+                    
+                    # """ distance calc """
+                    # temp = _quatMetric(qgrid_trun,qfib[fib_idx])
+                    # """ find tube """
+                    # tube = (temp <= rad)
+                    # temp = _np.column_stack((_np.argwhere(tube)[:,0],temp[tube]))
+                    
+                    # """ round very small values """
+                    # temp = _np.round(temp, decimals=7)
+                    
+                    # """ move values at zero to very small (1E-5) """
+                    # temp[:,1] = _np.where(temp[:,1] == 0, 1E-5, temp[:,1])
+                    
+                    # """ sort by min distance """
+                    # temp = temp[_np.argsort(temp[:,1],axis=0)]
+                    # """ return unique pts (first in list) """
+                    # uni_pts = _np.unique(temp[:,0],return_index=True)                    
+
+                    # if yi not in gridPts[fi]:
+
+                    #     gridPts[fi][yi] = [qgrid_trun_idx[uni_pts[0].astype(int)]]
+                    #     gridDist[fi][yi] = [temp[uni_pts[1],1]]
+                    
+                    # else:
                         
-                        gridPts[fi][yi].append(uni_pts[0].astype(int))
-                        gridDist[fi][yi].append(query_sort[uni_pts[1],1])
+                    #     gridPts[fi][yi].append(qgrid_trun_idx[uni_pts[0].astype(int)])
+                    #     gridDist[fi][yi].append(temp[uni_pts[1],1])
 
-                gridDist[fi][yi] = _np.concatenate(gridDist[fi][yi])
-                gridPts[fi][yi]  = _np.concatenate(gridPts[fi][yi])
+                    # """ euclidean distance calculation - KDTree """
+                    
+                    # qfib_pos = _np.copy(qfib[fib_idx])
+                    # qfib_pos[qfib_pos[:,0] < 0] *= -1
+                    
+                    # # returns tuple - first array are points, second array is distances
+                    # query = q_tree.query_radius(qfib_pos,euc_rad,return_distance=True)
+                
+                    # # concatenate arrays
+                    # query = _np.column_stack([_np.concatenate(ar) for ar in query])
+                    
+                    # # round very small values
+                    # query = _np.round(query, decimals=7)
+                    
+                    # # move values at zero to very small (1E-5)
+                    # query[:,1] = _np.where(query[:,1] == 0, 1E-5, query[:,1])            
+                    
+                    # # sort by minimum distance - unique function takes first appearance of index
+                    # query_sort = query[_np.argsort(query[:,1],axis=0)]
+                    
+                    # # return unique points
+                    # uni_pts = _np.unique(query_sort[:,0],return_index=True)
+                    
+                    # if yi not in gridPts[fi]:
+
+                    #     gridPts[fi][yi] = [uni_pts[0].astype(int)]
+                    #     gridDist[fi][yi] = [query_sort[uni_pts[1],1]]
+                    
+                    # else:
+                        
+                    #     gridPts[fi][yi].append(uni_pts[0].astype(int))
+                    #     gridDist[fi][yi].append(query_sort[uni_pts[1],1])
+
+                # gridDist[fi][yi] = _np.concatenate(gridDist[fi][yi])
+                # gridPts[fi][yi]  = _np.concatenate(gridPts[fi][yi])
                 
                 # t1 = _time.time()
                 # print(t1-t0)
+
                 """ geodesic distance calculation - dot product """
                 # """ reduce geodesic query size """
                 # qfib_pos = _np.copy(qfib[fib_idx])
