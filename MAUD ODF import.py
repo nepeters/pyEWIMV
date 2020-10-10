@@ -17,109 +17,20 @@ import numpy as np
 import copy
 
 crystalSym = 'm-3m'
-sampleSym  = 'mmm'
+sampleSym  = '1'
 cellSize = np.deg2rad(5)
 
-od_file = '/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/MAUD EWIMV exports/'
-sampleName = 'NOMAD_Al_4Datasets_SSabs_MAUD_5res.odf'
+# # NRSF2
+# od_file = '/mnt/c/Users/np7ut/Dropbox/ORNL/Texture/NRSF2/maud/exports/'
+# sampleName = 'NRSF2_MAUD_detGroup_trun_eta_mmm_odf'
+
+## NOMAD
+od_file = '/mnt/c/Users/np7ut/Dropbox/ORNL/Texture/NOMAD/MAUD_new/exports/'
+sampleName = 'NOMAD_Al_new_groupByTTH_mmm_odf'
 
 MAUD_od = bunge._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
 
-
-# with open(od_file+sampleName,'r') as f:
-
-#     odf_data = []
-    
-#     #read in odf data
-#     odf_str = f.readlines()
-#     counter = [0,0]
-#     for n,line in enumerate(odf_str):
-#         if n < 3: 
-#             counter[0] += 1
-#             counter[1] += 1
-#         else:
-#             if line in ['\n']: #check for blank line
-#                 odf_data.append(np.genfromtxt(odf_str[counter[0]:counter[1]]))
-#                 # print(counter)
-#                 counter[0] = n+1
-#                 counter[1] += 1
-#             else: counter[1] += 1 
-                
-#     print('loaded ODF')
-#     print('header: "'+odf_str[0].strip('\n')+'"')
-#     file_sym = int(odf_str[1].split(' ')[0])
-
-# sym_beartex = {11: ['622'],
-#                 10: ['6'],
-#                 9: ['32'],
-#                 8: ['3'],
-#                 7: ['432','m-3m'],
-#                 6: ['23','m-3'],
-#                 5: ['422'],
-#                 4: ['4'],
-#                 3: ['222'],
-#                 2: ['2'],
-#                 1: ['1']}
-
-# file_sym = sym_beartex.get(file_sym, lambda: 'Unknown Laue group')
-# if any([crystalSym in sym for sym in file_sym]): pass
-# else: print('Supplied crystal sym does not match file sym')
-
-# # set boundary in Bunge space (not rigorous for cubic)
-# if sampleSym == '1': alphaMax = np.deg2rad(360)
-# elif sampleSym == 'm': alphaMax = np.deg2rad(180)
-# elif sampleSym == 'mmm': alphaMax = np.deg2rad(90)
-# else: raise ValueError('invalid sampleSym')
-
-# if crystalSym == 'm-3m' or crystalSym == '432': 
-#     betaMax = np.deg2rad(90)
-#     gammaMax = np.deg2rad(90)
-# elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
-# else: raise ValueError('invalid crystalSym, only cubic so far..')
-
-# gammaRange = np.arange(0,gammaMax+cellSize,cellSize)
-# betaRange  = np.arange(0,betaMax+cellSize,cellSize)
-# alphaRange = np.arange(0,alphaMax,cellSize)
-
-# gam, bet, alp = np.meshgrid(gammaRange,betaRange,alphaRange,indexing='ij')
-
-# weights = np.zeros_like(gam)
-
-# for gi,g in enumerate(gammaRange):
-#     for bi,b in enumerate(betaRange):
-#         for ai,a in enumerate(alphaRange):
-            
-#             weights[gi,bi,ai] = odf_data[gi][bi,ai]
-            
-# out = np.array([gam.flatten(),bet.flatten(),alp.flatten(),weights.flatten()]).T
-
-# ## shift back to phi1, Phi, phi2
-# new_phi1 = alp + np.pi/2
-# new_Phi  = np.copy(bet)
-# new_phi2 = -gam + np.pi/2
-# new_phi1 = np.where(new_phi1 > alphaMax, new_phi1 - alphaMax, new_phi1) #brnng back to 0 - 2pi
-# new_phi2 = np.where(new_phi2 > gammaMax, new_phi2 - gammaMax, new_phi2) #brnng back to 0 - 2pi
-
-# phi1_0 = np.argmax(new_phi1[0,0,:])
-
-# ## add duplicate slice (phi1=360) at phi1 = 0
-# new_phi1 = np.insert(new_phi1,0,np.zeros_like(new_phi1[:,:,phi1_0]),axis=2)
-# new_Phi  = np.insert(new_Phi,0,new_Phi[:,:,0],axis=2)
-# new_phi2 = np.insert(new_phi2,0,new_phi2[:,:,0],axis=2)
-# weights  = np.insert(weights,0,weights[:,:,phi1_0],axis=2)
-
-# out = np.array([new_phi1.flatten(),new_Phi.flatten(),new_phi2.flatten(),weights.flatten()]).T
-# out_sort = out[np.lexsort((out[:,0],out[:,1],out[:,2]))]
-
-# phi1 =  out_sort[:,0].reshape(new_phi1.shape)
-# Phi  =  out_sort[:,1].reshape(new_Phi.shape)
-# phi2 =  out_sort[:,2].reshape(new_phi2.shape)
-# weights = np.copy(out_sort[:,3])
-
-# g, bungeList = eu2om((phi1,Phi,phi2),out='mdarray')
-
-# # no edge correction
-# cellVolume = cellSize * cellSize * ( np.cos( Phi - ( cellSize/2 ) ) - np.cos( Phi + ( cellSize/2 ) ) )
+test = MAUD_od.export(od_file+'{}.odf'.format(sampleName.split('odf')[0]),vol_norm=True)
 
 # %%
 
@@ -128,26 +39,26 @@ MAUD_od = bunge._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
 # from tqdm import tqdm
 # from scipy.spatial.transform import Rotation as R
 
-betaFiber =np.vstack([[35.3,45.0,0.0],
-            [33.6,47.7,5.0],
-            [32.1,51.0,10.0],
-            [31.1,54.7,15.0],
-            [31.3,59.1,20.0],
-            [35.2,64.2,25.0],
-            [46.1,69.9,30.0],
-            [49.5,76.2,35.0],          
-            [51.8,83.0,40.0],
-            [54.7,90.0,45.0],
-            [90.0,35.3,45.0],
-            [80.2,35.4,50.0],
-            [73.0,35.7,55.0],
-            [66.9,36.2,60.0],
-            [61.2,37.0,65.0],
-            [55.9,38.0,70.0],
-            [50.7,39.2,75.0],
-            [45.6,40.8,80.0],
-            [40.5,42.7,85.0],
-            [35.3,45.0,90.0]])
+# betaFiber =np.vstack([[35.3,45.0,0.0],
+#             [33.6,47.7,5.0],
+#             [32.1,51.0,10.0],
+#             [31.1,54.7,15.0],
+#             [31.3,59.1,20.0],
+#             [35.2,64.2,25.0],
+#             [46.1,69.9,30.0],
+#             [49.5,76.2,35.0],          
+#             [51.8,83.0,40.0],
+#             [54.7,90.0,45.0],
+#             [90.0,35.3,45.0],
+#             [80.2,35.4,50.0],
+#             [73.0,35.7,55.0],
+#             [66.9,36.2,60.0],
+#             [61.2,37.0,65.0],
+#             [55.9,38.0,70.0],
+#             [50.7,39.2,75.0],
+#             [45.6,40.8,80.0],
+#             [40.5,42.7,85.0],
+#             [35.3,45.0,90.0]])
 
 # g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
 
@@ -156,6 +67,8 @@ betaFiber =np.vstack([[35.3,45.0,0.0],
 # for g in tqdm(g_betaFiber):
     
 #     vf.append(MAUD_od.compVolume(g,10))
+
+# print(vf)
 
 # %%
 
@@ -424,102 +337,201 @@ betaFiber =np.vstack([[35.3,45.0,0.0],
 
 # %%
 
-import numpy as np
-from scipy.spatial.transform import Rotation as R
-from pyTex.orientation import symmetrise as symOri
-from pyTex.orientation import om2eu
-from pyTex.utils import genSymOps
-from pyTex import bunge
+# import numpy as np
+# from scipy.spatial.transform import Rotation as R
+# from pyTex.orientation import symmetrise as symOri
+# from pyTex.orientation import om2eu
+# from pyTex.utils import genSymOps
+# from pyTex import bunge
 
-## volume fraction 
+# ## volume fraction 
 
-cs = 'm-3m'
-ss = 'mmm'
+# cs = 'm-3m'
+# ss = 'mmm'
 
-od = bunge(np.deg2rad(5), cs, ss)
+# od = bunge(np.deg2rad(5), cs, ss)
 
-hkl = np.array([2, 1, 3])
-hkl = np.divide(hkl, np.linalg.norm(hkl))
+# hkl = np.array([2, 1, 3])
+# hkl = np.divide(hkl, np.linalg.norm(hkl))
 
-test = R.from_euler('ZXZ', betaFiber[2], degrees=True)
-testSym = symOri(test.as_matrix(),cs, ss)
+# test = R.from_euler('ZXZ', betaFiber[2], degrees=True)
+# testSym = symOri(test.as_matrix(),cs, ss)
 
-#try transpose
-testSym = testSym.transpose((0,2,1))
+# #try transpose
+# testSym = testSym.transpose((0,2,1))
 
-# convert to euler
-testSym_eu = om2eu(testSym)
+# # convert to euler
+# testSym_eu = om2eu(testSym)
 
-# pick fundamental zone
-fz = (testSym_eu[:,0] <= 2*np.pi) & (testSym_eu[:,1] <= np.pi/2) & (testSym_eu[:,2] <= np.pi/2)
-fz_idx = np.nonzero(fz)
-g_fz = testSym[fz_idx[0],:,:]
+# # pick fundamental zone
+# fz = (testSym_eu[:,0] <= 2*np.pi) & (testSym_eu[:,1] <= np.pi/2) & (testSym_eu[:,2] <= np.pi/2)
+# fz_idx = np.nonzero(fz)
+# g_fz = testSym[fz_idx[0],:,:]
 
-# generate crystal sym ops
-crysSymOps = genSymOps(cs)
-smplSymOps = genSymOps(ss)
+# # generate crystal sym ops
+# crysSymOps = genSymOps(cs)
+# smplSymOps = genSymOps(ss)
 
-# create Nx3 array of grid points
-eu_grid = np.array([od.phi1.flatten(),od.Phi.flatten(),od.phi2.flatten()]).T
-g_grid  = eu2om(eu_grid,out='mdarray_2')
-g_grid  = g_grid.transpose((2,0,1))
+# # create Nx3 array of grid points
+# eu_grid = np.array([od.phi1.flatten(),od.Phi.flatten(),od.phi2.flatten()]).T
+# g_grid  = eu2om(eu_grid,out='mdarray_2')
+# g_grid  = g_grid.transpose((2,0,1))
 
-trace = {}
-misori = {}
-mo_cell = []
+# trace = {}
+# misori = {}
+# mo_cell = []
 
-for gi,g in enumerate(g_fz):    
+# for gi,g in enumerate(g_fz):    
     
-    trace[gi] = []
-    misori[gi] = []
-    k = 0
+#     trace[gi] = []
+#     misori[gi] = []
+#     k = 0
     
-    for crys_op in crysSymOps:
+#     for crys_op in crysSymOps:
         
-        # for smpl_op in smplSymOps:
+#         # for smpl_op in smplSymOps:
     
-        temp = g @ g_grid
-        test = crys_op @ temp 
-        trace[gi].append( np.trace( test,axis1=1,axis2=2 ) )
+#         temp = g @ g_grid
+#         test = crys_op @ temp 
+#         trace[gi].append( np.trace( test,axis1=1,axis2=2 ) )
         
-        #calculate misorientation
-        mo = np.arccos( np.clip( (trace[gi][k] - 1)/2, -1, 1) )
+#         #calculate misorientation
+#         mo = np.arccos( np.clip( (trace[gi][k] - 1)/2, -1, 1) )
         
-        #criteria
-        crit = np.where(mo <= np.deg2rad(10))
-        # crit = np.argmin(mo)
+#         #criteria
+#         crit = np.where(mo <= np.deg2rad(10))
+#         # crit = np.argmin(mo)
         
-        #store cell id, misorientation angle for each sym equiv.
-        misori[gi].append( np.array( [crit[0], mo[crit]] ).T )
-        k+=1
+#         #store cell id, misorientation angle for each sym equiv.
+#         misori[gi].append( np.array( [crit[0], mo[crit]] ).T )
+#         k+=1
             
-    # concatenate, pull true min from sym equiv.
-    misori[gi] = np.vstack(misori[gi])
-    # mo_cell.append( misori[gi][ np.argmin(misori[gi][:,1]), 0 ].astype(int) )
-    mo_cell.append(np.unique(misori[gi],axis=0)[:,0].T)    
+#     # concatenate, pull true min from sym equiv.
+#     misori[gi] = np.vstack(misori[gi])
+#     # mo_cell.append( misori[gi][ np.argmin(misori[gi][:,1]), 0 ].astype(int) )
+#     mo_cell.append(np.unique(misori[gi],axis=0)[:,0].T)    
         
-    # misori.append(np.argmin(np.arccos((np.vstack(trace)-1)/2)))
-    # k+=1
+#     # misori.append(np.argmin(np.arccos((np.vstack(trace)-1)/2)))
+#     # k+=1
 
-mo_cell = np.unique(np.hstack(mo_cell).astype(int))
+# mo_cell = np.unique(np.hstack(mo_cell).astype(int))
 
-import mayavi.mlab as mlab
-from pyTex import bunge
+# import mayavi.mlab as mlab
+# from pyTex import bunge
 
-od = bunge(np.deg2rad(5), cs, ss)
+# od = bunge(np.deg2rad(5), cs, ss)
 
-mlab.figure(bgcolor=(1,1,1))
+# mlab.figure(bgcolor=(1,1,1))
 
-gd = mlab.points3d(od.phi2/od.res + 1,od.Phi/od.res + 1,od.phi1/od.res + 1,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
-gd.actor.property.render_points_as_spheres = True
-gd.actor.property.point_size = 2
+# gd = mlab.points3d(od.phi2/od.res + 1,od.Phi/od.res + 1,od.phi1/od.res + 1,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
+# gd.actor.property.render_points_as_spheres = True
+# gd.actor.property.point_size = 2
 
-pts = mlab.points3d(testSym_eu[fz_idx,2]/od.res + 1,testSym_eu[fz_idx,1]/od.res + 1,testSym_eu[fz_idx,0]/od.res + 1,mode='point',scale_factor=1,color=(0,1,0))
-pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 10
+# pts = mlab.points3d(testSym_eu[fz_idx,2]/od.res + 1,testSym_eu[fz_idx,1]/od.res + 1,testSym_eu[fz_idx,0]/od.res + 1,mode='point',scale_factor=1,color=(0,1,0))
+# pts.actor.property.render_points_as_spheres = True
+# pts.actor.property.point_size = 10
 
-pts = mlab.points3d(eu_grid[mo_cell,2]/od.res + 1,eu_grid[mo_cell,1]/od.res + 1,eu_grid[mo_cell,0]/od.res + 1,mode='point',scale_factor=1,color=(1,0,0))
-pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 6
+# pts = mlab.points3d(eu_grid[mo_cell,2]/od.res + 1,eu_grid[mo_cell,1]/od.res + 1,eu_grid[mo_cell,0]/od.res + 1,mode='point',scale_factor=1,color=(1,0,0))
+# pts.actor.property.render_points_as_spheres = True
+# pts.actor.property.point_size = 6
 
-MAUD_od.plot3d()
+# MAUD_od.plot3d()
+
+# %%
+
+## testing import routine
+
+# with open(od_file+sampleName,'r') as f:
+
+#     odf_data = []
+    
+#     #read in odf data
+#     odf_str = f.readlines()
+#     counter = [0,0]
+#     for n,line in enumerate(odf_str):
+#         if n < 3: 
+#             counter[0] += 1
+#             counter[1] += 1
+#         else:
+#             if line in ['\n']: #check for blank line
+#                 odf_data.append(np.genfromtxt(odf_str[counter[0]:counter[1]]))
+#                 # print(counter)
+#                 counter[0] = n+1
+#                 counter[1] += 1
+#             else: counter[1] += 1 
+                
+#     print('loaded ODF')
+#     print('header: "'+odf_str[0].strip('\n')+'"')
+#     file_sym = int(odf_str[1].split(' ')[0])
+
+# sym_beartex = {11: ['622'],
+#                 10: ['6'],
+#                 9: ['32'],
+#                 8: ['3'],
+#                 7: ['432','m-3m'],
+#                 6: ['23','m-3'],
+#                 5: ['422'],
+#                 4: ['4'],
+#                 3: ['222'],
+#                 2: ['2'],
+#                 1: ['1']}
+
+# file_sym = sym_beartex.get(file_sym, lambda: 'Unknown Laue group')
+# if any([crystalSym in sym for sym in file_sym]): pass
+# else: print('Supplied crystal sym does not match file sym')
+
+# # set boundary in Bunge space (not rigorous for cubic)
+# if sampleSym == '1': alphaMax = np.deg2rad(360)
+# elif sampleSym == 'm': alphaMax = np.deg2rad(180)
+# elif sampleSym == 'mmm': alphaMax = np.deg2rad(90)
+# else: raise ValueError('invalid sampleSym')
+
+# if crystalSym == 'm-3m' or crystalSym == '432': 
+#     betaMax = np.deg2rad(90)
+#     gammaMax = np.deg2rad(90)
+# elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
+# else: raise ValueError('invalid crystalSym, only cubic so far..')
+
+# gammaRange = np.arange(0,gammaMax+cellSize,cellSize)
+# betaRange  = np.arange(0,betaMax+cellSize,cellSize)
+# alphaRange = np.arange(0,alphaMax,cellSize)
+
+# gam, bet, alp = np.meshgrid(gammaRange,betaRange,alphaRange,indexing='ij')
+
+# weights = np.zeros_like(gam)
+
+# for gi,g in enumerate(gammaRange):
+#     for bi,b in enumerate(betaRange):
+#         for ai,a in enumerate(alphaRange):
+            
+#             weights[gi,bi,ai] = odf_data[gi][bi,ai]
+            
+# out = np.array([gam.flatten(),bet.flatten(),alp.flatten(),weights.flatten()]).T
+
+# ## shift back to phi1, Phi, phi2
+# new_phi1 = alp + np.pi/2
+# new_Phi  = np.copy(bet)
+# new_phi2 = -gam + np.pi/2
+# new_phi1 = np.where(new_phi1 > alphaMax, new_phi1 - alphaMax, new_phi1) #brnng back to 0 - 2pi
+# new_phi2 = np.where(new_phi2 > gammaMax, new_phi2 - gammaMax, new_phi2) #brnng back to 0 - 2pi
+
+# phi1_0 = np.argmax(new_phi1[0,0,:])
+
+# ## add duplicate slice (phi1=360) at phi1 = 0
+# new_phi1 = np.insert(new_phi1,0,np.zeros_like(new_phi1[:,:,phi1_0]),axis=2)
+# new_Phi  = np.insert(new_Phi,0,new_Phi[:,:,0],axis=2)
+# new_phi2 = np.insert(new_phi2,0,new_phi2[:,:,0],axis=2)
+# weights  = np.insert(weights,0,weights[:,:,phi1_0],axis=2)
+
+# out = np.array([new_phi1.flatten(),new_Phi.flatten(),new_phi2.flatten(),weights.flatten()]).T
+# out_sort = out[np.lexsort((out[:,0],out[:,1],out[:,2]))]
+
+# phi1 =  out_sort[:,0].reshape(new_phi1.shape)
+# Phi  =  out_sort[:,1].reshape(new_Phi.shape)
+# phi2 =  out_sort[:,2].reshape(new_phi2.shape)
+# weights = np.copy(out_sort[:,3])
+
+# g, bungeList = eu2om((phi1,Phi,phi2),out='mdarray')
+
+# # no edge correction
+# cellVolume = cellSize * cellSize * ( np.cos( Phi - ( cellSize/2 ) ) - np.cos( Phi + ( cellSize/2 ) ) )

@@ -28,7 +28,7 @@ dir_path = os.path.dirname(os.path.realpath('__file__'))
 P = 1
 
 #sample information
-sampleName = 'Al_NRSF2_2_5x6_vn'
+sampleName = 'Al_NRSF2_10it_5x8_vn'
 rad_type = 'nd'
 def_al = {'name': 'Al',
           'composition': [dict(ion='Al', pos=[0, 0, 0]),
@@ -45,7 +45,7 @@ cellSize = np.deg2rad(5)
 od = bunge(cellSize, crystalSym, sampleSym)
 
 #tube radius
-theta = np.deg2rad(6)
+theta = np.deg2rad(8)
 #tube exponent
 tube_exp = 1
 
@@ -116,7 +116,7 @@ recalc_pf[final_iter-1].plot(pfs=3,cmap='viridis_r',proj='none')
 
 #calculate texture index & entropy
 print(sampleName)
-print('iterations: '+str(final_iter-1))
+print('iterations: '+str(final_iter))
 print(calc_od[final_iter-1].index())
 print(calc_od[final_iter-1].entropy())
 
@@ -124,37 +124,38 @@ print(calc_od[final_iter-1].entropy())
 
 ## volume fractions
 
-# from tqdm import tqdm
+from tqdm import tqdm
 
-# betaFiber =np.vstack([[35.3,45.0,0.0],
-#             [33.6,47.7,5.0],
-#             [32.1,51.0,10.0],
-#             [31.1,54.7,15.0],
-#             [31.3,59.1,20.0],
-#             [35.2,64.2,25.0],
-#             [46.1,69.9,30.0],
-#             [49.5,76.2,35.0],          
-#             [51.8,83.0,40.0],
-#             [54.7,90.0,45.0],
-#             [90.0,35.3,45.0],
-#             [80.2,35.4,50.0],
-#             [73.0,35.7,55.0],
-#             [66.9,36.2,60.0],
-#             [61.2,37.0,65.0],
-#             [55.9,38.0,70.0],
-#             [50.7,39.2,75.0],
-#             [45.6,40.8,80.0],
-#             [40.5,42.7,85.0],
-#             [35.3,45.0,90.0]])
+betaFiber =np.vstack([[35.3,45.0,0.0],
+            [33.6,47.7,5.0],
+            [32.1,51.0,10.0],
+            [31.1,54.7,15.0],
+            [31.3,59.1,20.0],
+            [35.2,64.2,25.0],
+            [46.1,69.9,30.0],
+            [49.5,76.2,35.0],          
+            [51.8,83.0,40.0],
+            [54.7,90.0,45.0],
+            [90.0,35.3,45.0],
+            [80.2,35.4,50.0],
+            [73.0,35.7,55.0],
+            [66.9,36.2,60.0],
+            [61.2,37.0,65.0],
+            [55.9,38.0,70.0],
+            [50.7,39.2,75.0],
+            [45.6,40.8,80.0],
+            [40.5,42.7,85.0],
+            [35.3,45.0,90.0]])
 
-# g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
+g_betaFiber = R.from_euler('ZXZ', betaFiber,degrees=True).as_matrix()
 
-# vf = []
+vf = []
 
-# for g in tqdm(g_betaFiber):
+for g in tqdm(g_betaFiber):
     
-#     vf.append(calc_od[final_iter-1].compVolume(g,10))
+    vf.append(calc_od[final_iter-1].compVolume(g,15))
 
+print(vf)
 
 # print(calc_od[final_iter-1]._volume(copper.as_matrix(),10))
 
@@ -180,47 +181,47 @@ print(calc_od[final_iter-1].entropy())
 # hill = calc_od[final_iter-1].hill(elastic)
 
 ## export data
-calc_od[final_iter-1].export('/home/nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
+# calc_od[final_iter-1].export('/mnt/c/Users/np7ut/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/'+sampleName+'.odf',vol_norm=True)
 
 # recalc_pf[final_iter-1].export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 # recalc_pf_new.export('/mnt/c/Users/Nate/Dropbox/ORNL/EWIMVvsMTEX/EWIMV exports (abs corr)/',sampleName=sampleName)
 
 # %%
 
-## plot fiber tube
+# ## plot fiber tube
 
-pf_num = 0
-yi     = 700
+# pf_num = 0
+# yi     = 700
 
-bungeAngs = np.zeros(( np.product(od.phi1cen.shape), 3 ))
-for ii,i in enumerate(np.ndindex(od.phi1cen.shape)):    
-    bungeAngs[ii,:] = np.array((od.phi1cen[i],od.Phicen[i],od.phi2cen[i]))
+# bungeAngs = np.zeros(( np.product(od.phi1cen.shape), 3 ))
+# for ii,i in enumerate(np.ndindex(od.phi1cen.shape)):    
+#     bungeAngs[ii,:] = np.array((od.phi1cen[i],od.Phicen[i],od.phi2cen[i]))
 
-fibers = od.paths['arb']['euler path'][pf_num][yi]
+# fibers = od.paths['arb']['euler path'][pf_num][yi]
 
-import mayavi.mlab as mlab
+# import mayavi.mlab as mlab
 
-mlab.figure(bgcolor=(1,1,1))
+# mlab.figure(bgcolor=(1,1,1))
 
-gd = mlab.points3d(od.phi1,od.Phi,od.phi2,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
-gd.actor.property.render_points_as_spheres = True
-gd.actor.property.point_size = 2
+# gd = mlab.points3d(od.phi1,od.Phi,od.phi2,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
+# gd.actor.property.render_points_as_spheres = True
+# gd.actor.property.point_size = 2
 
-mlab.axes(color=(0,0,0),ranges=[0,2*np.pi,0,np.pi/2,0,np.pi/2])
+# mlab.axes(color=(0,0,0),ranges=[0,2*np.pi,0,np.pi/2,0,np.pi/2])
 
-od_cells = od.paths['arb']['grid points'][pf_num][yi].astype(int)
+# od_cells = od.paths['arb']['grid points'][pf_num][yi].astype(int)
 
-pts = mlab.points3d(bungeAngs[od_cells,0],bungeAngs[od_cells,1],bungeAngs[od_cells,2],mode='point',scale_factor=1,color=(0,1,0))
-pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 5
+# pts = mlab.points3d(bungeAngs[od_cells,0],bungeAngs[od_cells,1],bungeAngs[od_cells,2],mode='point',scale_factor=1,color=(0,1,0))
+# pts.actor.property.render_points_as_spheres = True
+# pts.actor.property.point_size = 5
 
-# pts2 = mlab.points3d(bungeAngs[od_cells_new,0],bungeAngs[od_cells_new,1],bungeAngs[od_cells_new,2],mode='point',scale_factor=1,color=(0,1,1))
-# pts2.actor.property.render_points_as_spheres = True
-# pts2.actor.property.point_size = 6
+# # pts2 = mlab.points3d(bungeAngs[od_cells_new,0],bungeAngs[od_cells_new,1],bungeAngs[od_cells_new,2],mode='point',scale_factor=1,color=(0,1,1))
+# # pts2.actor.property.render_points_as_spheres = True
+# # pts2.actor.property.point_size = 6
 
-centerTube = mlab.plot3d(fibers[:,0],fibers[:,1],fibers[:,2],tube_sides=36,opacity=0.25,tube_radius=theta,color=(0,0,1))
+# centerTube = mlab.plot3d(fibers[:,0],fibers[:,1],fibers[:,2],tube_sides=36,opacity=0.25,tube_radius=theta,color=(0,0,1))
 
-fiber = mlab.points3d(fibers[:,0],fibers[:,1],fibers[:,2],mode='point',scale_factor=1,color=(1,0,0)) 
-fiber.actor.property.render_points_as_spheres = True
-fiber.actor.property.point_size = 5
+# fiber = mlab.points3d(fibers[:,0],fibers[:,1],fibers[:,2],mode='point',scale_factor=1,color=(1,0,0)) 
+# fiber.actor.property.render_points_as_spheres = True
+# fiber.actor.property.point_size = 5
 
