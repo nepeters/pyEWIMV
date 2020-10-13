@@ -16,6 +16,7 @@ import copy as _copy
 import time as _time
 
 import numpy as _np 
+import pandas as _pd
 from scipy.interpolate import griddata as _griddata
 from scipy.spatial.transform import rotation as _R
 from sklearn.neighbors import KDTree as _KDTree
@@ -63,7 +64,7 @@ class poleFigure(object):
     pole figure constructor
     """
     
-    def __init__( self, files, hkls, cs, pf_type, subtype=None, names=None, resolution=None, arb_y=None, centered=False ):
+    def __init__( self, files, hkls, cs, pf_type, subtype=None, names=None, resolution=None, arb_y=None, centered=False, ss=None ):
         
         """
         list of file names
@@ -77,6 +78,7 @@ class poleFigure(object):
 
         #symmetry
         self.cs = cs
+        self.ss = ss
 
         #reflections
         if isinstance(hkls,list): self.hkls = _np.vstack(hkls)
@@ -549,6 +551,76 @@ class poleFigure(object):
                            delimiter='\t',
                            newline='\n')
 
+    def export_beartex( self, location, sampleName=None ):
+
+        """
+        export pfs in Beartex format
+
+        """
+        if not _os.path.exists(location): _os.mkdir(location)
+
+        if sampleName: fname = sampleName+'_pf_out.xpc'
+        else: fname = 'pf_out.jul'
+
+        with open(fname, 'w') as fout:
+
+            for hi,h in enumerate(self.hkls):
+            
+                if self.ss == None:
+                    ss = 1
+                elif self.ss == 'mmm':
+                    ss = 3
+
+                if self.cs == 'm3m' or self.cs == 'm-3m':
+                    cs = 7
+                else:
+                    raise ValueError('bad laue group')
+
+
+                hstr = ','.join([str(i) for i in h])
+                nameLen = len(sampleName)
+                gap     = 80 - nameLen ## how many spaces to add
+                header = [sampleName]
+                for i in range(gap):
+                    header.append(' ')
+                header[-1] = '#'
+                header.append('\r\n\r\n\r\n\r\n\r\n')
+                header = ''.join(header)
+                fout.write(header)
+                fout.write('{:>10.4f}{:>10.4f}{:>10.4f}{:>10.4f}{:>10.4f}{:>10.4f}{:>5d}{:>5d}\r\n'.format(1.0000,1.0000,1.0000,90.0,90.0,90.0,cs,ss))
+                fout.write(' {:>3d}{:>3d}{:>3d}{:>5.1f}{:>5.1f}{:>5.1f}{:>5.1f}{:>5.1f}{:>5.1f}{:>2d}{:>2d}\r\n'.format(h[0],
+                                                                                                                   h[1],
+                                                                                                                   h[2],
+                                                                                                                   0.0,
+                                                                                                                   90.0,
+                                                                                                                   5.0,
+                                                                                                                   0.0,
+                                                                                                                   360.0,
+                                                                                                                   5.0,
+                                                                                                                   1,
+                                                                                                                   1))
+
+                data = _np.ravel(self.data[hi])
+                # sort = _np.lexsort((_np.rad2deg(_np.ravel(self.alpha)),_np.rad2deg(_np.ravel(self.beta))))
+
+                # writeArr = _np.column_stack((_np.rad2deg(_np.ravel(self.alpha)),
+                #                             _np.rad2deg(_np.ravel(self.beta)),
+                #                             _np.ravel(self.data[hi])))
+                
+                data = data.reshape((76,18))
+
+                for ri in range(data.shape[0]):
+                    
+                    data_out = data[ri,:] * 100
+
+                    data_out = ['{:>4d}'.format(int(d)) for d in data_out]
+                    data_out = ''.join(data_out)
+                    fout.write(' {}\r\n'.format(data_out))
+
+                fout.write('\r\n')
+
+            fout.write('\r\n')
+
     @staticmethod                      
     def genGrid( res, radians=False, centered=False, ret_ab=False, ret_steps=False, ret_xyz=False, offset=False ):
         
@@ -654,7 +726,7 @@ class OD( object ):
         self.cs = crystSym
         self.ss = sampleSym
         
-class bunge( OD ):
+class euler( OD ):
     
     """
     Extends OD to Euler (Bunge) space
@@ -663,17 +735,9 @@ class bunge( OD ):
         cellSize: grid size (radians)
     """
 
-    def __init__( self, cellSize, crystalSym, sampleSym, weights=None, pointer=None, centered=True ):
+    def __init__( self, cellSize, crystalSym, sampleSym, weights=None, pointer=None, centered=True, convention='bunge' ):
         
         super().__init__( crystalSym, sampleSym )
-
-        self.res = cellSize
-        
-        # set boundary in Bunge space (not rigorous for cubic)
-        # if sampleSym == '1': self._phi1max = _np.deg2rad(360)
-        # elif sampleSym == 'm': self._phi1max = _np.deg2rad(180)
-        # elif sampleSym == 'mmm': self._phi1max = _np.deg2rad(360)
-        # else: raise ValueError('invalid sampleSym')
 
         if '1' != sampleSym: 
             tempOps = _genSymOps(sampleSym)
@@ -683,86 +747,121 @@ class bunge( OD ):
         else: 
             self.smpl_symOps = _quat.from_matrix(_np.identity(3))[None,:]
 
-        self._phi1max = _np.deg2rad(360)
-
-        if crystalSym == 'm-3m' or crystalSym == '432': 
-            self._Phimax = _np.deg2rad(90)
-            self._phi2max = _np.deg2rad(90)
-        elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
-        else: raise ValueError('invalid crystalSym, only cubic so far..')
-
         self.CS = crystalSym
         self.SS = sampleSym
 
-        # setup grid
-        self._phi1range = _np.arange(0,self._phi1max+cellSize,cellSize)
-        self._Phirange = _np.arange(0,self._Phimax+cellSize,cellSize)
-        self._phi2range = _np.arange(0,self._phi2max+cellSize,cellSize)
+        if convention == 'bunge':
 
-        # centroid grid
-        self._phi1cen_range = _np.arange( (cellSize/2),( self._phi1max-(cellSize/2) )+cellSize,cellSize )
-        self._Phicen_range = _np.arange( (cellSize/2),( self._Phimax-(cellSize/2) )+cellSize,cellSize )
-        self._phi2cen_range = _np.arange( (cellSize/2),( self._phi2max-(cellSize/2) )+cellSize,cellSize )
-
-        self.phi2, self.Phi, self.phi1 = _np.meshgrid(self._phi2range, self._Phirange, self._phi1range, indexing = 'ij')
-        self.phi2cen, self.Phicen, self.phi1cen = _np.meshgrid(self._phi2cen_range, self._Phicen_range, self._phi1cen_range, indexing = 'ij')
-
-        self.g, self.bungeList = _eu2om((self.phi1cen,self.Phicen,self.phi2cen),out='mdarray')
-        
-        ## vol integral of sin(Phi) dPhi dphi1 dphi2 
-        self.volume = (-_np.cos(self._Phimax) +_np.cos(0)) * self._phi1max * self._phi2max
-        #for centered grid
-        if centered: 
+            self.res = cellSize
             
-            self.cellVolume = self.res * self.res * ( _np.cos( self.Phicen - (self.res/2) ) - _np.cos( self.Phicen + (self.res/2) ) )
+            # set boundary in Bunge space (not rigorous for cubic)
+            # if sampleSym == '1': self._phi1max = _np.deg2rad(360)
+            # elif sampleSym == 'm': self._phi1max = _np.deg2rad(180)
+            # elif sampleSym == 'mmm': self._phi1max = _np.deg2rad(360)
+            # else: raise ValueError('invalid sampleSym')
+
+            self._phi1max = _np.deg2rad(360)
+
+            if crystalSym == 'm-3m' or crystalSym == '432': 
+                self._Phimax = _np.deg2rad(90)
+                self._phi2max = _np.deg2rad(90)
+            elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
+            else: raise ValueError('invalid crystalSym, only cubic so far..')
+
+            # setup grid
+            self._phi1range = _np.arange(0,self._phi1max+cellSize,cellSize)
+            self._Phirange = _np.arange(0,self._Phimax+cellSize,cellSize)
+            self._phi2range = _np.arange(0,self._phi2max+cellSize,cellSize)
+
+            # centroid grid
+            self._phi1cen_range = _np.arange( (cellSize/2),( self._phi1max-(cellSize/2) )+cellSize,cellSize )
+            self._Phicen_range = _np.arange( (cellSize/2),( self._Phimax-(cellSize/2) )+cellSize,cellSize )
+            self._phi2cen_range = _np.arange( (cellSize/2),( self._phi2max-(cellSize/2) )+cellSize,cellSize )
+
+            self.phi2, self.Phi, self.phi1 = _np.meshgrid(self._phi2range, self._Phirange, self._phi1range, indexing = 'ij')
+            self.phi2cen, self.Phicen, self.phi1cen = _np.meshgrid(self._phi2cen_range, self._Phicen_range, self._phi1cen_range, indexing = 'ij')
+
+            self.g, self.bungeList = _eu2om((self.phi1cen,self.Phicen,self.phi2cen),out='mdarray')
             
-            temp = _np.zeros(( _np.product(self.phi1cen.shape ) , 3))
-            # quaternion grid
-            for ang_i, md_i in enumerate(_np.ndindex(self.phi1cen.shape)):
-                temp[ang_i,:] = _np.array( ( self.phi1cen[md_i], self.Phicen[md_i], self.phi2cen[md_i] ) )
-            self.q_grid = _eu2quat(temp).T
+            ## vol integral of sin(Phi) dPhi dphi1 dphi2 
+            self.volume = (-_np.cos(self._Phimax) +_np.cos(0)) * self._phi1max * self._phi2max
+            #for centered grid
+            if centered: 
+                
+                self.cellVolume = self.res * self.res * ( _np.cos( self.Phicen - (self.res/2) ) - _np.cos( self.Phicen + (self.res/2) ) )
+                
+                temp = _np.zeros(( _np.product(self.phi1cen.shape ) , 3))
+                # quaternion grid
+                for ang_i, md_i in enumerate(_np.ndindex(self.phi1cen.shape)):
+                    temp[ang_i,:] = _np.array( ( self.phi1cen[md_i], self.Phicen[md_i], self.phi2cen[md_i] ) )
+                self.q_grid = _eu2quat(temp).T
+                
+                self.centered = True
+
+            else: #for uncentered grid
+
+                self.g, self.bungeList = _eu2om((self.phi1,self.Phi,self.phi2),out='mdarray')
+
+                Phi_zero = (self.Phi == 0)
+                Phi_max = (self.Phi == _np.max(self.Phi))
             
-            self.centered = True
+                phi1_zero = (self.phi1 == 0)
+                phi1_max = (self.phi1 == _np.max(self.phi1))
 
-        else: #for uncentered grid
+                phi2_zero = (self.phi2 == 0)
+                phi2_max = (self.phi2 == _np.max(self.phi2))
 
-            self.g, self.bungeList = _eu2om((self.phi1,self.Phi,self.phi2),out='mdarray')
+                dphi1_dphi2 = _np.ones_like(self.bungeList) * self.res * self.res
+                #phi1 edge cases - 0.5*Δφ1 + Δφ2
+                dphi1_dphi2[phi1_zero+phi1_max] = 1.5*self.res
+                #phi2 edge cases - Δφ1 + 0.5*Δφ2
+                dphi1_dphi2[phi2_zero+phi2_max] = 1.5*self.res
+                #phi1 and phi2 edge case - 0.5*Δφ1 + 0.5*Δφ2
+                dphi1_dphi2[(phi2_zero+phi2_max)*(phi1_zero+phi1_max)] = self.res  
 
-            Phi_zero = (self.Phi == 0)
-            Phi_max = (self.Phi == _np.max(self.Phi))
-        
-            phi1_zero = (self.phi1 == 0)
-            phi1_max = (self.phi1 == _np.max(self.phi1))
+                delta_Phi = _np.ones_like(self.bungeList) * ( _np.cos( self.Phi - (self.res/2) ) - _np.cos( self.Phi + (self.res/2) ) )
+                #Phi = 0
+                delta_Phi[Phi_zero] = ( _np.cos( self.Phi[Phi_zero] ) - _np.cos( self.Phi[Phi_zero] + (self.res/2) ) )
+                #Phi = max
+                delta_Phi[Phi_max] = ( _np.cos( self.Phi[Phi_zero] - (self.res/2) ) - _np.cos( self.Phi[Phi_zero] ) )
 
-            phi2_zero = (self.phi2 == 0)
-            phi2_max = (self.phi2 == _np.max(self.phi2))
+                self.cellVolume = dphi1_dphi2 * delta_Phi 
 
-            dphi1_dphi2 = _np.ones_like(self.bungeList) * self.res * self.res
-            #phi1 edge cases - 0.5*Δφ1 + Δφ2
-            dphi1_dphi2[phi1_zero+phi1_max] = 1.5*self.res
-            #phi2 edge cases - Δφ1 + 0.5*Δφ2
-            dphi1_dphi2[phi2_zero+phi2_max] = 1.5*self.res
-            #phi1 and phi2 edge case - 0.5*Δφ1 + 0.5*Δφ2
-            dphi1_dphi2[(phi2_zero+phi2_max)*(phi1_zero+phi1_max)] = self.res  
+                temp = _np.zeros(( _np.product(self.phi1.shape ) , 3))
+                # quaternion grid
+                for ang_i, md_i in enumerate(_np.ndindex(self.phi1.shape)):
+                    temp[ang_i,:] = _np.array( ( self.phi1[md_i], self.Phi[md_i], self.phi2[md_i] ) )
+                self.q_grid = _eu2quat(temp).T
 
-            delta_Phi = _np.ones_like(self.bungeList) * ( _np.cos( self.Phi - (self.res/2) ) - _np.cos( self.Phi + (self.res/2) ) )
-            #Phi = 0
-            delta_Phi[Phi_zero] = ( _np.cos( self.Phi[Phi_zero] ) - _np.cos( self.Phi[Phi_zero] + (self.res/2) ) )
-            #Phi = max
-            delta_Phi[Phi_max] = ( _np.cos( self.Phi[Phi_zero] - (self.res/2) ) - _np.cos( self.Phi[Phi_zero] ) )
+                self.centered = False
 
-            self.cellVolume = dphi1_dphi2 * delta_Phi 
+            if weights is None: self.weights = _np.zeros_like(self.bungeList)
+            else: self.weights = weights
 
-            temp = _np.zeros(( _np.product(self.phi1.shape ) , 3))
-            # quaternion grid
-            for ang_i, md_i in enumerate(_np.ndindex(self.phi1.shape)):
-                temp[ang_i,:] = _np.array( ( self.phi1[md_i], self.Phi[md_i], self.phi2[md_i] ) )
-            self.q_grid = _eu2quat(temp).T
+        elif convention == 'matthies':
 
-            self.centered = False
+            """
+            matthies angle convetion
 
-        if weights is None: self.weights = _np.zeros_like(self.bungeList)
-        else: self.weights = weights
+            alpha, beta, gamma
+
+            used in MAUD/Beartex
+            """
+
+            self._alphamax = _np.deg2rad(360)
+
+            if crystalSym == 'm-3m' or crystalSym == '432': 
+                self._betamax = _np.deg2rad(90)
+                self._gammamax = _np.deg2rad(90)
+            elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
+            else: raise ValueError('invalid crystalSym, only cubic so far..')
+
+            # setup grid
+            self._alphaRange = _np.arange(0,self._alphamax+cellSize,cellSize)
+            self._betaRange = _np.arange(0,self._betamax+cellSize,cellSize)
+            self._gammaRange = _np.arange(0,self._gammamax+cellSize,cellSize)
+
+            self.gamma, self.beta, self.alpha = _np.meshgrid(self._phi2range, self._Phirange, self._phi1range, indexing = 'ij')
 
     @staticmethod
     def _genGrid( res, _phi1max, _Phimax, _phi2max, centered=True, returnList=False ):
@@ -848,13 +947,14 @@ class bunge( OD ):
         not working - need to fix
         """
 
-        # phi1 →
-        # p
-        # h
-        # i  each 19 rows is new phi2 section
-        # ↓
+        # alpha →
+        # b
+        # e
+        # t  
+        # a
+        # ↓  every 19 rows is new gamma section
 
-        ## bunge
+        ## matthies
         with open(file,'r') as f:
 
             #read in odf data
@@ -864,30 +964,6 @@ class bunge( OD ):
             print('loaded ODF')
             print('header: "'+odf_str[0].strip('\n')+'"')
             file_sym = int(odf_str[1].split(' ')[0])        
-
-        ## matthies -- this doesn't match expected, maybe it doesn't use it?
-        # with open(file,'r') as f:
-
-        #     odf_data = []
-            
-        #     #read in odf data
-        #     odf_str = f.readlines()
-        #     counter = [0,0]
-        #     for n,line in enumerate(odf_str):
-        #         if n < 3: 
-        #             counter[0] += 1
-        #             counter[1] += 1
-        #         else:
-        #             if line in ['\n']: #check for blank line
-        #                 odf_data.append(_np.genfromtxt(odf_str[counter[0]:counter[1]]))
-        #                 # print(counter)
-        #                 counter[0] = n+1
-        #                 counter[1] += 1
-        #             else: counter[1] += 1 
-                        
-        #     print('loaded ODF')
-        #     print('header: "'+odf_str[0].strip('\n')+'"')
-        #     file_sym = int(odf_str[1].split(' ')[0])
 
         sym_beartex = {11: ['622'],
                        10: ['6'],
@@ -907,7 +983,7 @@ class bunge( OD ):
 
         # TODO: handle other than 5deg grid - has same number of values, but with duplicates
         ## this instance will have attributes overwritten
-        od = bunge(cellSize,crystalSym,sampleSym,centered=False)
+        od = euler(cellSize,crystalSym,sampleSym,centered=False,convention='bunge')
 
         ## bunge
         # override edge corrections
@@ -920,6 +996,10 @@ class bunge( OD ):
                 for k,p1 in enumerate(od._phi1range):
 
                     weights[i,j,k] = odf_txt[j+i*19,k]
+
+        # ## adjust for MAUD export
+        # od.phi2 += _np.pi/2
+        # od.phi1 -= _np.pi/2
 
         od.weights = _np.ravel(weights)
 
@@ -1907,6 +1987,6 @@ class rodrigues( OD ):
     def __init__( self, gridPtSize, crystalSym, sampleSym ):
                  
         super(rodrigues, self).__init__( crystalSym, sampleSym )
-        
+
 #default
 if __name__ == "__main__": pass

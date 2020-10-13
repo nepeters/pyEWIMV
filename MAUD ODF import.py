@@ -10,7 +10,7 @@ Created on Sun Jan 26 21:35:33 2020
 MAUD ODF import 
 """
 
-from pyTex import bunge
+from pyTex import euler
 from pyTex.utils import tensor2voigt, voigt2tensor
 from pyTex.orientation import eu2om
 import numpy as np
@@ -22,15 +22,20 @@ cellSize = np.deg2rad(5)
 
 # # NRSF2
 # od_file = '/mnt/c/Users/np7ut/Dropbox/ORNL/Texture/NRSF2/maud/exports/'
+# # sampleName = 'NRSF2_MAUD_etaTrun_odf'
 # sampleName = 'NRSF2_MAUD_detGroup_trun_eta_mmm_odf'
 
 ## NOMAD
 od_file = '/mnt/c/Users/np7ut/Dropbox/ORNL/Texture/NOMAD/MAUD_new/exports/'
-sampleName = 'NOMAD_Al_new_groupByTTH_mmm_odf'
+sampleName = 'NOMAD_Al_new_groupByTTH_13_mmm_odf'
 
-MAUD_od = bunge._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
+## NOMAD
+od_file = '/mnt/c/Users/np7ut/Desktop/'
+sampleName = 'Al_NRSF2_10it_5x7_vn_pf_odf'
 
-test = MAUD_od.export(od_file+'{}.odf'.format(sampleName.split('odf')[0]),vol_norm=True)
+MAUD_od = euler._loadMAUD(od_file+sampleName, cellSize, crystalSym, sampleSym)
+
+test = MAUD_od.export(od_file+'{}matthies.odf'.format(sampleName.split('odf')[0]),vol_norm=True)
 
 # %%
 

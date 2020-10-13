@@ -36,7 +36,7 @@ from sklearn.neighbors import KDTree as _KDTree
 
 from tqdm.auto import tqdm as _tqdm
 
-from pyTex.base import poleFigure as _poleFigure, bunge as _bunge
+from pyTex.base import poleFigure as _poleFigure, euler as _euler
 from pyTex.utils import XYZtoSPH as _XYZtoSPH, symmetrise as _symmetrise, normalize as _normalize
 from pyTex.orientation import quat2eu as _quat2eu
 from pyTex.diffrac import calc_NDreflWeights as _calc_NDreflWeights
@@ -116,7 +116,7 @@ def wimv( pfs, orient_dist, iterations=12 ):
                 
             calc_od[0] = _np.product(calc_od[0],axis=1)**(1/numPoles)
             #place into OD object
-            calc_od[0] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[0])
+            calc_od[0] = _euler(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[0])
             calc_od[0].normalize()
 
         """ recalculate pole figures """
@@ -189,7 +189,7 @@ def wimv( pfs, orient_dist, iterations=12 ):
         calc_od[i+1] = calc_od[i].weights * _np.power(_np.product(calc_od[i+1],axis=1),(0.8/numPoles))
         
         #place into OD object
-        calc_od[i+1] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[i+1])
+        calc_od[i+1] = _euler(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[i+1])
         calc_od[i+1].normalize()    
 
     return recalc_pf, calc_od    
@@ -316,7 +316,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
             
             calc_od[0] = _np.product(calc_od[0],axis=1)**(1/numPoles)
             #place into OD object
-            calc_od[0] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[0])
+            calc_od[0] = _euler(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[0])
             calc_od[0].normalize()
             
         """ recalculate poles """
@@ -423,7 +423,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
         calc_od[i+1] = calc_od[i].weights * _np.power(_np.product(calc_od[i+1],axis=1),(1/numPoles))
 
         #place into OD object
-        calc_od[i+1] = _bunge(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[i+1])
+        calc_od[i+1] = _euler(orient_dist.res, orient_dist.cs, orient_dist.ss, weights=calc_od[i+1])
         calc_od[i+1].normalize()
 
     if ret_origOD: return recalc_pf_full, calc_od, orient_dist

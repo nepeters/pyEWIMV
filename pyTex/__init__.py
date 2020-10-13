@@ -15,7 +15,7 @@ from . import inversion
 from . import orientation
 from . import utils
 
-from .base import poleFigure, inversePoleFigure, bunge, rodrigues
+from .base import poleFigure, inversePoleFigure, euler, rodrigues
 
 __version__ = '0.1'
 
