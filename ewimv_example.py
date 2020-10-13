@@ -20,8 +20,8 @@ import os,sys
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
-from pyTex import poleFigure, euler
-from pyTex.inversion import e_wimv
+from pyEWIMV import poleFigure, euler
+from pyEWIMV.inversion import e_wimv
 
 dir_path = os.path.dirname(os.path.realpath('__file__'))
 

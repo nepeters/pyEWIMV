@@ -7,7 +7,7 @@ Created on Wed Nov  6 13:28:24 2019
 """
 
 """
-pyTex
+pyEWIMV
 """
 
 from . import diffrac

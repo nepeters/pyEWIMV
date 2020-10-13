@@ -12,8 +12,8 @@ import numpy as np
 
 sys.path.insert(0,'/home/nate/wimv')
 
-from classes import poleFigure, bunge
-from inversion import wimv
+from pyTex import poleFigure, bunge
+from pyTex.inversion import wimv
 
 crystalSym = 'm-3m'
 sampleSym = '1'
@@ -78,11 +78,6 @@ pf_grid, alp, bet = pf.grid(full=True,ret_ab=True)
 
 recalc_pf, calc_od, pf_od, od_pf = wimv(pf, od, ret_pointer=True)
 
-
-# %%
-
-y = recalc_pf[11]
-
 # %%
             
 ### FIBER CALC ###
@@ -106,12 +101,12 @@ pf_xyz[:,2] = np.cos( sph[:,0] )
 
 pf_num = 0
 
-#omega = np.radians(np.arange(-90,90,5))
-omega = np.radians(np.array((-90,90)))
+omega = np.radians(np.arange(0,365,5))
+
 ro_y = {}
 yi = 0
 
-for v in tqdm(pf_xyz[72:]):
+for v in tqdm(pf_xyz):
     
     ro_h = {}
     
@@ -131,14 +126,6 @@ for v in tqdm(pf_xyz[72:]):
         for i,(qA,qB) in enumerate(zip(q0_n,q1_n)):
             
             qF = rowan.multiply(qA, qB)
-            
-            qFslerp = []
-            
-            #slerp
-            for t in np.linspace(0,1,36):
-                qFslerp.append(rowan.interpolate.slerp(qF[0,:],qF[1,:],t))
-                
-            qF = np.vstack(qFslerp)
             
             with np.errstate(divide='ignore'):
 
@@ -195,9 +182,9 @@ def anim():
             od_cells = np.array(pf_od[pf_num][pf_cell])      
             od_idx = np.unravel_index(od_cells.astype(int),od.bungeList.shape)
             
-            gd.mlab_source.reset( x = od.phi1[od_idx],
-                                   y = od.Phi[od_idx],
-                                   z = od.phi2[od_idx] )
+            gd.mlab_source.reset( x = od.phi1cen[od_idx],
+                                  y = od.Phicen[od_idx],
+                                  z = od.phi2cen[od_idx] )
             
              #limit to fund zone
             temp = ro_y[pf_cell][pf_num]
