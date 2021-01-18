@@ -36,10 +36,10 @@ from sklearn.neighbors import KDTree as _KDTree
 
 from tqdm.auto import tqdm as _tqdm
 
-from pyTex.base import poleFigure as _poleFigure, euler as _euler
-from pyTex.utils import XYZtoSPH as _XYZtoSPH, symmetrise as _symmetrise, normalize as _normalize
-from pyTex.orientation import quat2eu as _quat2eu
-from pyTex.diffrac import calc_NDreflWeights as _calc_NDreflWeights
+from pyEWIMV.base import poleFigure as _poleFigure, euler as _euler
+from pyEWIMV.utils import XYZtoSPH as _XYZtoSPH, symmetrise as _symmetrise, normalize as _normalize
+from pyEWIMV.orientation import quat2eu as _quat2eu
+from pyEWIMV.diffrac import calc_NDreflWeights as _calc_NDreflWeights
 
 
 __all__ = ['wimv',
@@ -205,7 +205,7 @@ def e_wimv( pfs, orient_dist, tube_rad, tube_exp, rad_type, crystal_dict, iterat
         exp_pfs      : poleFigure object
         orient_dist  : orientDist object
         rad_type     : xrd or nd
-        crystal_dict : dictionary defining variables for reflection weight calculators in pyTex.diffrac
+        crystal_dict : dictionary defining variables for reflection weight calculators in pyEWIMV.diffrac
         
     """
 

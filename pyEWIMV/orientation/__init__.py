@@ -11,7 +11,7 @@ orientation module
 
 import numpy as _np
 from numba import jit as _jit
-from pyTex.utils import genSymOps as _gensym
+from pyEWIMV.utils import genSymOps as _gensym
 
 __all__ = ['eu2om',
            'eu2quat',

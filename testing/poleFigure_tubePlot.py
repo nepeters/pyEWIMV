@@ -17,9 +17,9 @@ import rowan as quat
 
 import matplotlib.pyplot as plt
 
-from pyTex.utils import genSymOps, SPHtoXYZ, XYZtoSPH
-from pyTex.orientation import eu2quat, quat2eu, eu2om
-from pyTex.base import poleFigure, bunge
+from pyEWIMV.utils import genSymOps, SPHtoXYZ, XYZtoSPH
+from pyEWIMV.orientation import eu2quat, quat2eu, eu2om
+from pyEWIMV.base import poleFigure, bunge
 
 #load in nomad pole figures
 
@@ -424,48 +424,48 @@ fibers = fibre_e[pf_num][yi]
 
 """ tube plot """
 
-pf_num = 0
-yi     = 36
+# pf_num = 0
+# yi     = 36
 
-fibers = fibre_e[pf_num][yi]
+# fibers = fibre_e[pf_num][yi]
 
-import mayavi.mlab as mlab
+# import mayavi.mlab as mlab
 
-mlab.figure(bgcolor=(1,1,1))
+# mlab.figure(bgcolor=(1,1,1))
 
-gd = mlab.points3d(od.phi1,od.Phi,od.phi2,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
-gd.actor.property.render_points_as_spheres = True
-gd.actor.property.point_size = 2
+# gd = mlab.points3d(od.phi1,od.Phi,od.phi2,mode='point',scale_factor=1,color=(0.25,0.25,0.25))
+# gd.actor.property.render_points_as_spheres = True
+# gd.actor.property.point_size = 2
 
-mlab.axes(color=(0,0,0),ranges=[0,2*np.pi,0,np.pi/2,0,np.pi/2])
+# mlab.axes(color=(0,0,0),ranges=[0,2*np.pi,0,np.pi/2,0,np.pi/2])
 
-od_cells = nn_gridPts[pf_num][yi].astype(int)
+# od_cells = nn_gridPts[pf_num][yi].astype(int)
 
-pts = mlab.points3d(bungeAngs[od_cells,0],bungeAngs[od_cells,1],bungeAngs[od_cells,2],mode='point',scale_factor=1,color=(0,1,0))
-pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 10
+# pts = mlab.points3d(bungeAngs[od_cells,0],bungeAngs[od_cells,1],bungeAngs[od_cells,2],mode='point',scale_factor=1,color=(0,1,0))
+# pts.actor.property.render_points_as_spheres = True
+# pts.actor.property.point_size = 10
 
-# pth1 = mlab.points3d(fibers[1][:,0],fibers[1][:,1],fibers[1][:,2],mode='point',scale_factor=1,color=(0,1,0))
-# pth1.actor.property.render_points_as_spheres = True
-# pth1.actor.property.point_size = 5 
+# # pth1 = mlab.points3d(fibers[1][:,0],fibers[1][:,1],fibers[1][:,2],mode='point',scale_factor=1,color=(0,1,0))
+# # pth1.actor.property.render_points_as_spheres = True
+# # pth1.actor.property.point_size = 5 
 
-# pth2 = mlab.points3d(fibers[2][:,0],fibers[2][:,1],fibers[2][:,2],mode='point',scale_factor=1,color=(0,0,1))
-# pth2.actor.property.render_points_as_spheres = True
-# pth2.actor.property.point_size = 5 
+# # pth2 = mlab.points3d(fibers[2][:,0],fibers[2][:,1],fibers[2][:,2],mode='point',scale_factor=1,color=(0,0,1))
+# # pth2.actor.property.render_points_as_spheres = True
+# # pth2.actor.property.point_size = 5 
 
-# pth3 = mlab.points3d(fibers[3][:,0],fibers[3][:,1],fibers[3][:,2],mode='point',scale_factor=1,color=(1,1,0))
-# pth3.actor.property.render_points_as_spheres = True
-# pth3.actor.property.point_size = 5 
+# # pth3 = mlab.points3d(fibers[3][:,0],fibers[3][:,1],fibers[3][:,2],mode='point',scale_factor=1,color=(1,1,0))
+# # pth3.actor.property.render_points_as_spheres = True
+# # pth3.actor.property.point_size = 5 
 
-# pth4 = mlab.points3d(fibers[4][:,0],fibers[4][:,1],fibers[4][:,2],mode='point',scale_factor=1,color=(1,0,1))
-# pth4.actor.property.render_points_as_spheres = True
-# pth4.actor.property.point_size = 5 
+# # pth4 = mlab.points3d(fibers[4][:,0],fibers[4][:,1],fibers[4][:,2],mode='point',scale_factor=1,color=(1,0,1))
+# # pth4.actor.property.render_points_as_spheres = True
+# # pth4.actor.property.point_size = 5 
 
-centerTube = mlab.plot3d(fibers[0][:,0],fibers[0][:,1],fibers[0][:,2],tube_sides=36,opacity=0.25,tube_radius=theta,color=(0,0,1))
+# centerTube = mlab.plot3d(fibers[0][:,0],fibers[0][:,1],fibers[0][:,2],tube_sides=36,opacity=0.25,tube_radius=theta,color=(0,0,1))
 
-centerLine = mlab.plot3d(fibers[0][:,0],fibers[0][:,1],fibers[0][:,2],color=(1,0,0)) 
-# centerLine.actor.property.render_points_as_spheres = True
-# centerLine.actor.property.point_size = 8
+# centerLine = mlab.plot3d(fibers[0][:,0],fibers[0][:,1],fibers[0][:,2],color=(1,0,0)) 
+# # centerLine.actor.property.render_points_as_spheres = True
+# # centerLine.actor.property.point_size = 8
 
 
 
@@ -604,9 +604,9 @@ plt.savefig('test.png', dpi=600, transparent=True)
 
 # %%
         
-pts = mlab.points3d(xyz_tube[:,0],xyz_tube[:,1],xyz_tube[:,2],mode='point',scale_factor=1,color=(0,1,0))
-pts.actor.property.render_points_as_spheres = True
-pts.actor.property.point_size = 10
+# pts = mlab.points3d(xyz_tube[:,0],xyz_tube[:,1],xyz_tube[:,2],mode='point',scale_factor=1,color=(0,1,0))
+# pts.actor.property.render_points_as_spheres = True
+# pts.actor.property.point_size = 10
 
         
 """ tube plot """

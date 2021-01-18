@@ -752,91 +752,10 @@ class euler( OD ):
 
         if convention == 'bunge':
 
-            self.res = cellSize
-            
-            # set boundary in Bunge space (not rigorous for cubic)
-            # if sampleSym == '1': self._phi1max = _np.deg2rad(360)
-            # elif sampleSym == 'm': self._phi1max = _np.deg2rad(180)
-            # elif sampleSym == 'mmm': self._phi1max = _np.deg2rad(360)
-            # else: raise ValueError('invalid sampleSym')
-
-            self._phi1max = _np.deg2rad(360)
-
-            if crystalSym == 'm-3m' or crystalSym == '432': 
-                self._Phimax = _np.deg2rad(90)
-                self._phi2max = _np.deg2rad(90)
-            elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
-            else: raise ValueError('invalid crystalSym, only cubic so far..')
-
-            # setup grid
-            self._phi1range = _np.arange(0,self._phi1max+cellSize,cellSize)
-            self._Phirange = _np.arange(0,self._Phimax+cellSize,cellSize)
-            self._phi2range = _np.arange(0,self._phi2max+cellSize,cellSize)
-
-            # centroid grid
-            self._phi1cen_range = _np.arange( (cellSize/2),( self._phi1max-(cellSize/2) )+cellSize,cellSize )
-            self._Phicen_range = _np.arange( (cellSize/2),( self._Phimax-(cellSize/2) )+cellSize,cellSize )
-            self._phi2cen_range = _np.arange( (cellSize/2),( self._phi2max-(cellSize/2) )+cellSize,cellSize )
-
-            self.phi2, self.Phi, self.phi1 = _np.meshgrid(self._phi2range, self._Phirange, self._phi1range, indexing = 'ij')
-            self.phi2cen, self.Phicen, self.phi1cen = _np.meshgrid(self._phi2cen_range, self._Phicen_range, self._phi1cen_range, indexing = 'ij')
-
-            self.g, self.bungeList = _eu2om((self.phi1cen,self.Phicen,self.phi2cen),out='mdarray')
-            
-            ## vol integral of sin(Phi) dPhi dphi1 dphi2 
-            self.volume = (-_np.cos(self._Phimax) +_np.cos(0)) * self._phi1max * self._phi2max
-            #for centered grid
-            if centered: 
-                
-                self.cellVolume = self.res * self.res * ( _np.cos( self.Phicen - (self.res/2) ) - _np.cos( self.Phicen + (self.res/2) ) )
-                
-                temp = _np.zeros(( _np.product(self.phi1cen.shape ) , 3))
-                # quaternion grid
-                for ang_i, md_i in enumerate(_np.ndindex(self.phi1cen.shape)):
-                    temp[ang_i,:] = _np.array( ( self.phi1cen[md_i], self.Phicen[md_i], self.phi2cen[md_i] ) )
-                self.q_grid = _eu2quat(temp).T
-                
-                self.centered = True
-
-            else: #for uncentered grid
-
-                self.g, self.bungeList = _eu2om((self.phi1,self.Phi,self.phi2),out='mdarray')
-
-                Phi_zero = (self.Phi == 0)
-                Phi_max = (self.Phi == _np.max(self.Phi))
-            
-                phi1_zero = (self.phi1 == 0)
-                phi1_max = (self.phi1 == _np.max(self.phi1))
-
-                phi2_zero = (self.phi2 == 0)
-                phi2_max = (self.phi2 == _np.max(self.phi2))
-
-                dphi1_dphi2 = _np.ones_like(self.bungeList) * self.res * self.res
-                #phi1 edge cases - 0.5*Δφ1 + Δφ2
-                dphi1_dphi2[phi1_zero+phi1_max] = 1.5*self.res
-                #phi2 edge cases - Δφ1 + 0.5*Δφ2
-                dphi1_dphi2[phi2_zero+phi2_max] = 1.5*self.res
-                #phi1 and phi2 edge case - 0.5*Δφ1 + 0.5*Δφ2
-                dphi1_dphi2[(phi2_zero+phi2_max)*(phi1_zero+phi1_max)] = self.res  
-
-                delta_Phi = _np.ones_like(self.bungeList) * ( _np.cos( self.Phi - (self.res/2) ) - _np.cos( self.Phi + (self.res/2) ) )
-                #Phi = 0
-                delta_Phi[Phi_zero] = ( _np.cos( self.Phi[Phi_zero] ) - _np.cos( self.Phi[Phi_zero] + (self.res/2) ) )
-                #Phi = max
-                delta_Phi[Phi_max] = ( _np.cos( self.Phi[Phi_zero] - (self.res/2) ) - _np.cos( self.Phi[Phi_zero] ) )
-
-                self.cellVolume = dphi1_dphi2 * delta_Phi 
-
-                temp = _np.zeros(( _np.product(self.phi1.shape ) , 3))
-                # quaternion grid
-                for ang_i, md_i in enumerate(_np.ndindex(self.phi1.shape)):
-                    temp[ang_i,:] = _np.array( ( self.phi1[md_i], self.Phi[md_i], self.phi2[md_i] ) )
-                self.q_grid = _eu2quat(temp).T
-
-                self.centered = False
-
-            if weights is None: self.weights = _np.zeros_like(self.bungeList)
-            else: self.weights = weights
+            self._axesConvention = 'bunge'
+            self._axesNames     = {1: 'phi1',
+                                   2: 'Phi',
+                                   3: 'phi2'}
 
         elif convention == 'matthies':
 
@@ -848,103 +767,186 @@ class euler( OD ):
             used in MAUD/Beartex
             """
 
-            self._alphamax = _np.deg2rad(360)
+            self._axesConvention = 'matthies'
+            self._axesNames     = {1: 'alpha',
+                                   2: 'beta',
+                                   3: 'gamma'}
 
-            if crystalSym == 'm-3m' or crystalSym == '432': 
-                self._betamax = _np.deg2rad(90)
-                self._gammamax = _np.deg2rad(90)
-            elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
-            else: raise ValueError('invalid crystalSym, only cubic so far..')
+        """
+        this should be consistent for every convention
 
-            # setup grid
-            self._alphaRange = _np.arange(0,self._alphamax+cellSize,cellSize)
-            self._betaRange = _np.arange(0,self._betamax+cellSize,cellSize)
-            self._gammaRange = _np.arange(0,self._gammamax+cellSize,cellSize)
+        """
+        self.res = cellSize
+        
+        # set boundary in Bunge space (not rigorous for cubic)
+        # if sampleSym == '1': self._ax1max = _np.deg2rad(360)
+        # elif sampleSym == 'm': self._ax1max = _np.deg2rad(180)
+        # elif sampleSym == 'mmm': self._ax1max = _np.deg2rad(360)
+        # else: raise ValueError('invalid sampleSym')
 
-            self.gamma, self.beta, self.alpha = _np.meshgrid(self._phi2range, self._Phirange, self._phi1range, indexing = 'ij')
+        self._ax1max = _np.deg2rad(360)
+
+        if crystalSym == 'm-3m' or crystalSym == '432': 
+            self._ax2max = _np.deg2rad(90)
+            self._ax3max = _np.deg2rad(90)
+        elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
+        else: raise ValueError('invalid crystalSym, only cubic so far..')
+
+        # setup grid
+        self._ax1range = _np.arange(0,self._ax1max+cellSize,cellSize)
+        self._ax2range = _np.arange(0,self._ax2max+cellSize,cellSize)
+        self._ax3range = _np.arange(0,self._ax3max+cellSize,cellSize)
+
+        # centroid grid
+        self._ax1cen_range = _np.arange( (cellSize/2),( self._ax1max-(cellSize/2) )+cellSize,cellSize )
+        self._ax2cen_range = _np.arange( (cellSize/2),( self._ax2max-(cellSize/2) )+cellSize,cellSize )
+        self._ax3cen_range = _np.arange( (cellSize/2),( self._ax3max-(cellSize/2) )+cellSize,cellSize )
+
+        self.ax3, self.ax2, self.ax1 = _np.meshgrid(self._ax3range, self._ax2range, self._ax1range, indexing = 'ij')
+        self.ax3cen, self.ax2cen, self.ax1cen = _np.meshgrid(self._ax3cen_range, self._ax2cen_range, self._ax1cen_range, indexing = 'ij')
+
+        self.g, self.angList = _eu2om((self.ax1cen,self.ax2cen,self.ax3cen),out='mdarray')
+        
+        ## vol integral of sin(ax2) dax2 dax1 dax3 
+        self.volume = (-_np.cos(self._ax2max) +_np.cos(0)) * self._ax1max * self._ax3max
+        #for centered grid
+        if centered: 
+            
+            self.cellVolume = self.res * self.res * ( _np.cos( self.ax2cen - (self.res/2) ) - _np.cos( self.ax2cen + (self.res/2) ) )
+            
+            temp = _np.zeros(( _np.product(self.ax1cen.shape ) , 3))
+            # quaternion grid
+            for ang_i, md_i in enumerate(_np.ndindex(self.ax1cen.shape)):
+                temp[ang_i,:] = _np.array( ( self.ax1cen[md_i], self.ax2cen[md_i], self.ax3cen[md_i] ) )
+            self.q_grid = _eu2quat(temp).T
+            
+            self.centered = True
+
+        else: #for uncentered grid
+
+            self.g, self.angList = _eu2om((self.ax1,self.ax2,self.ax3),out='mdarray')
+
+            ax2_zero = (self.ax2 == 0)
+            ax2_max = (self.ax2 == _np.max(self.ax2))
+        
+            ax1_zero = (self.ax1 == 0)
+            ax1_max = (self.ax1 == _np.max(self.ax1))
+
+            ax3_zero = (self.ax3 == 0)
+            ax3_max = (self.ax3 == _np.max(self.ax3))
+
+            dax1_dax3 = _np.ones_like(self.angList) * self.res * self.res
+            #ax1 edge cases - 0.5*Δφ1 + Δφ2
+            dax1_dax3[ax1_zero+ax1_max] = 0.5*self.res * self.res
+            #ax3 edge cases - Δφ1 + 0.5*Δφ2
+            dax1_dax3[ax3_zero+ax3_max] = 0.5*self.res * self.res
+            #ax1 and ax3 edge case - 0.5*Δφ1 + 0.5*Δφ2
+            dax1_dax3[(ax3_zero+ax3_max)*(ax1_zero+ax1_max)] = 0.5*self.res * 0.5*self.res  
+
+            delta_ax2 = _np.ones_like(self.angList) * ( _np.cos( self.ax2 - (self.res/2) ) - _np.cos( self.ax2 + (self.res/2) ) )
+            #ax2 = 0
+            delta_ax2[ax2_zero] = ( _np.cos( self.ax2[ax2_zero] ) - _np.cos( self.ax2[ax2_zero] + (self.res/2) ) )
+            #ax2 = max
+            delta_ax2[ax2_max] = ( _np.cos( self.ax2[ax2_max] - (self.res/2) ) - _np.cos( self.ax2[ax2_max] ) )
+
+            self.cellVolume = dax1_dax3 * delta_ax2 
+
+            temp = _np.zeros(( _np.product(self.ax1.shape ) , 3))
+            # quaternion grid
+            for ang_i, md_i in enumerate(_np.ndindex(self.ax1.shape)):
+                temp[ang_i,:] = _np.array( ( self.ax1[md_i], self.ax2[md_i], self.ax3[md_i] ) )
+            self.q_grid = _eu2quat(temp).T
+
+            self.centered = False
+
+        if weights is None: self.weights = _np.zeros_like(self.angList)
+        else: self.weights = weights
 
     @staticmethod
-    def _genGrid( res, _phi1max, _Phimax, _phi2max, centered=True, returnList=False ):
+    def _genGrid( res, _ax1max, _ax2max, _ax3max, centered=True, returnList=False ):
 
         """
         generate grids
         """
 
         # setup grid
-        _phi1range = _np.arange(0,_phi1max+res,res)
-        _Phirange = _np.arange(0,_Phimax+res,res)
-        _phi2range = _np.arange(0,_phi2max+res,res)
+        _ax1range = _np.arange(0,_ax1max+res,res)
+        _ax2range = _np.arange(0,_ax2max+res,res)
+        _ax3range = _np.arange(0,_ax3max+res,res)
 
         # centroid grid
-        _phi1cen_range = _np.arange( (res/2),( _phi1max-(res/2) )+res,res )
-        _Phicen_range = _np.arange( (res/2),( _Phimax-(res/2) )+res,res )
-        _phi2cen_range = _np.arange( (res/2),( _phi2max-(res/2) )+res,res )
+        _ax1cen_range = _np.arange( (res/2),( _ax1max-(res/2) )+res,res )
+        _ax2cen_range = _np.arange( (res/2),( _ax2max-(res/2) )+res,res )
+        _ax3cen_range = _np.arange( (res/2),( _ax3max-(res/2) )+res,res )
 
-        phi2, Phi, phi1 = _np.meshgrid(_phi2range, _Phirange, _phi1range, indexing = 'ij')
-        phi2cen, Phicen, phi1cen = _np.meshgrid(_phi2cen_range, _Phicen_range, _phi1cen_range, indexing = 'ij')
+        ax3, ax2, ax1 = _np.meshgrid(_ax3range, _ax2range, _ax1range, indexing = 'ij')
+        ax3cen, ax2cen, ax1cen = _np.meshgrid(_ax3cen_range, _ax2cen_range, _ax1cen_range, indexing = 'ij')
 
-        g, bungeList = _eu2om((phi1cen,Phicen,phi2cen),out='mdarray')
+        g, angList = _eu2om((ax1cen,ax2cen,ax3cen),out='mdarray')
         
-        ## vol integral of sin(Phi) dPhi dphi1 dphi2 
-        volume = (-_np.cos(_Phimax) +_np.cos(0)) * _phi1max * _phi2max
+        ## vol integral of sin(ax2) dax2 dax1 dax3 
+        volume = (-_np.cos(_ax2max) +_np.cos(0)) * _ax1max * _ax3max
 
         #for centered grid
         if centered: 
             
-            cellVolume = res * res * ( _np.cos( Phicen - (res/2) ) - _np.cos( Phicen + (res/2) ) )
+            cellVolume = res * res * ( _np.cos( ax2cen - (res/2) ) - _np.cos( ax2cen + (res/2) ) )
             
-            temp = _np.zeros(( _np.product(phi1cen.shape ) , 3))
+            temp = _np.zeros(( _np.product(ax1cen.shape ) , 3))
             # quaternion grid
-            for ang_i, md_i in enumerate(_np.ndindex(phi1cen.shape)):
-                temp[ang_i,:] = _np.array( ( phi1cen[md_i], Phicen[md_i], phi2cen[md_i] ) )
+            for ang_i, md_i in enumerate(_np.ndindex(ax1cen.shape)):
+                temp[ang_i,:] = _np.array( ( ax1cen[md_i], ax2cen[md_i], ax3cen[md_i] ) )
             q_grid = _eu2quat(temp).T
 
         else: #for uncentered grid
 
-            g, bungeList = _eu2om((phi1,Phi,phi2),out='mdarray')
+            g, angList = _eu2om((ax1,ax2,ax3),out='mdarray')
 
-            Phi_zero = (Phi == 0)
-            Phi_max = (Phi == _np.max(Phi))
+            ax2_zero = (ax2 == 0)
+            ax2_max = (ax2 == _np.max(ax2))
         
-            phi1_zero = (phi1 == 0)
-            phi1_max = (phi1 == _np.max(phi1))
+            ax1_zero = (ax1 == 0)
+            ax1_max = (ax1 == _np.max(ax1))
 
-            phi2_zero = (phi2 == 0)
-            phi2_max = (phi2 == _np.max(phi2))
+            ax3_zero = (ax3 == 0)
+            ax3_max = (ax3 == _np.max(ax3))
 
-            dphi1_dphi2 = _np.ones_like(bungeList) * res * res
-            #phi1 edge cases - 0.5*Δφ1 + Δφ2
-            dphi1_dphi2[phi1_zero+phi1_max] = 1.5*res
-            #phi2 edge cases - Δφ1 + 0.5*Δφ2
-            dphi1_dphi2[phi2_zero+phi2_max] = 1.5*res
-            #phi1 and phi2 edge case - 0.5*Δφ1 + 0.5*Δφ2
-            dphi1_dphi2[(phi2_zero+phi2_max)*(phi1_zero+phi1_max)] = res  
+            dax1_dax3 = _np.ones_like(angList) * res * res
+            #ax1 edge cases - 0.5*Δφ1 + Δφ2
+            dax1_dax3[ax1_zero+ax1_max] = 1.5*res
+            #ax3 edge cases - Δφ1 + 0.5*Δφ2
+            dax1_dax3[ax3_zero+ax3_max] = 1.5*res
+            #ax1 and ax3 edge case - 0.5*Δφ1 + 0.5*Δφ2
+            dax1_dax3[(ax3_zero+ax3_max)*(ax1_zero+ax1_max)] = res  
 
-            delta_Phi = _np.ones_like(bungeList) * ( _np.cos( Phi - (res/2) ) - _np.cos( Phi + (res/2) ) )
-            #Phi = 0
-            delta_Phi[Phi_zero] = ( _np.cos( Phi[Phi_zero] ) - _np.cos( Phi[Phi_zero] + (res/2) ) )
-            #Phi = max
-            delta_Phi[Phi_max] = ( _np.cos( Phi[Phi_zero] - (res/2) ) - _np.cos( Phi[Phi_zero] ) )
+            delta_ax2 = _np.ones_like(angList) * ( _np.cos( ax2 - (res/2) ) - _np.cos( ax2 + (res/2) ) )
+            #ax2 = 0
+            delta_ax2[ax2_zero] = ( _np.cos( ax2[ax2_zero] ) - _np.cos( ax2[ax2_zero] + (res/2) ) )
+            #ax2 = max
+            delta_ax2[ax2_max] = ( _np.cos( ax2[ax2_zero] - (res/2) ) - _np.cos( ax2[ax2_zero] ) )
 
-            cellVolume = dphi1_dphi2 * delta_Phi 
+            cellVolume = dax1_dax3 * delta_ax2 
 
-            temp = _np.zeros(( _np.product(phi1.shape ) , 3))
+            temp = _np.zeros(( _np.product(ax1.shape ) , 3))
             # quaternion grid
-            for ang_i, md_i in enumerate(_np.ndindex(phi1.shape)):
-                temp[ang_i,:] = _np.array( ( phi1[md_i], Phi[md_i], phi2[md_i] ) )
+            for ang_i, md_i in enumerate(_np.ndindex(ax1.shape)):
+                temp[ang_i,:] = _np.array( ( ax1[md_i], ax2[md_i], ax3[md_i] ) )
             q_grid = _eu2quat(temp).T
        
 
-        if returnList: return bungeList
-        else: return phi1, Phi, phi2
+        if returnList: return angList
+        else: return ax1, ax2, ax3
 
     @classmethod
-    def _loadMAUD( cls, file, cellSize, crystalSym, sampleSym ):
+    def loadMAUD( cls, file ):
 
         """
         load in Beartex ODF exported from MAUD
 
-        not working - need to fix
+        should have crystal symmetry in file
+        assumed triclinic symmetry - if it did have higher symmetry enforced that will be expressed in the coefficients
+        also gives it in a 5x5x5 grid, even if larger cell size was used
+
         """
 
         # alpha →
@@ -978,89 +980,20 @@ class euler( OD ):
                        1: ['1']}
 
         file_sym = sym_beartex.get(file_sym, lambda: 'Unknown Laue group')
-        if any([crystalSym in sym for sym in file_sym]): pass
-        else: print('Supplied crystal sym does not match file sym')
 
-        # TODO: handle other than 5deg grid - has same number of values, but with duplicates
-        ## this instance will have attributes overwritten
-        od = euler(cellSize,crystalSym,sampleSym,centered=False,convention='bunge')
+        # this instance will have attributes overwritten
+        od = euler(_np.deg2rad(5),file_sym[-1],'1',centered=False,convention='matthies')
 
-        ## bunge
-        # override edge corrections
-        od.cellVolume = od.res * od.res * ( _np.cos( od.Phi - ( od.res/2 ) ) - _np.cos( od.Phi + ( od.res/2 ) ) )
+        ## this is in matthies
+        weights = _np.zeros_like(od.ax1)
 
-        weights = _np.zeros_like(od.phi1)
-
-        for i,p2 in enumerate(od._phi2range):
-            for j,p in enumerate(od._Phirange):
-                for k,p1 in enumerate(od._phi1range):
+        for i,p2 in enumerate(od._ax3range):
+            for j,p in enumerate(od._ax2range):
+                for k,p1 in enumerate(od._ax1range):
 
                     weights[i,j,k] = odf_txt[j+i*19,k]
 
-        # ## adjust for MAUD export
-        # od.phi2 += _np.pi/2
-        # od.phi1 -= _np.pi/2
-
         od.weights = _np.ravel(weights)
-
-        ## matthies -- this doesn't match expected, maybe it doesn't use it?
-
-        # # set boundary in Matthies space (not rigorous for cubic)
-        # if sampleSym == '1': alphaMax = _np.deg2rad(360)
-        # elif sampleSym == 'm': alphaMax = _np.deg2rad(180)
-        # elif sampleSym == 'mmm': alphaMax = _np.deg2rad(90)
-        # else: raise ValueError('invalid sampleSym')
-
-        # if crystalSym == 'm-3m' or crystalSym == '432': 
-        #     betaMax = _np.deg2rad(90)
-        #     gammaMax = _np.deg2rad(90)
-        # elif crystalSym == 'm-3' or crystalSym == '23': raise NotImplementedError('coming soon..')
-        # else: raise ValueError('invalid crystalSym, only cubic so far..')
-
-        # gammaRange = _np.arange(0,gammaMax+cellSize,cellSize)
-        # betaRange  = _np.arange(0,betaMax+cellSize,cellSize)
-        # alphaRange = _np.arange(0,alphaMax+cellSize,cellSize)
-
-        # gam, bet, alp = _np.meshgrid(gammaRange,betaRange,alphaRange,indexing='ij')
-
-        # weights = _np.zeros_like(gam)
-
-        # for gi,g in enumerate(gammaRange):
-        #     for bi,b in enumerate(betaRange):
-        #         for ai,a in enumerate(alphaRange):
-                    
-        #             weights[gi,bi,ai] = odf_data[gi][bi,ai]
-
-        # # out = _np.array([gam.flatten(),bet.flatten(),alp.flatten(),weights.flatten()]).T
-
-        # ## shift back to phi1, Phi, phi2
-        # phi1 = alp + _np.pi/2
-        # Phi  = _np.copy(bet)
-        # phi2 = -gam + _np.pi/2
-        # phi1 = _np.where(phi1 > alphaMax, phi1 - alphaMax, phi1) #brnng back to 0 - 2pi
-        # phi2 = _np.where(phi2 > gammaMax, phi2 - gammaMax, phi2) #brnng back to 0 - 2pi
-
-        # ## phi1_360 index - where to insert new slice
-        # phi1_0 = _np.argmax(phi1[0,0,:])
-
-        # ## add duplicate slice (phi1=360) at phi1 = 0
-        # phi1 = _np.insert(phi1,0,_np.zeros_like(phi1[:,:,phi1_0]),axis=2)
-        # Phi  = _np.insert(Phi,0,Phi[:,:,0],axis=2)
-        # phi2 = _np.insert(phi2,0,phi2[:,:,0],axis=2)
-        # weights  = _np.insert(weights,0,weights[:,:,phi1_0],axis=2)
-
-        # ## clunky
-        # out = _np.array([phi1.flatten(),Phi.flatten(),phi2.flatten(),weights.flatten()]).T
-        # out_sort = out[_np.lexsort((out[:,0],out[:,1],out[:,2]))]
-
-        # od.phi1 =  out_sort[:,0].reshape(phi1.shape)
-        # od.Phi  =  out_sort[:,1].reshape(Phi.shape)
-        # od.phi2 =  out_sort[:,2].reshape(phi2.shape)
-        # od.weights = _np.copy(out_sort[:,3])
-
-        # od.g, od.bungeList = _eu2om((od.phi1,od.Phi,od.phi2),out='mdarray')
-
-        # od.cellVolume = cellSize * cellSize * ( _np.cos( Phi - ( cellSize/2 ) ) - _np.cos( Phi + ( cellSize/2 ) ) )
 
         return od
 
@@ -1081,14 +1014,14 @@ class euler( OD ):
     def export( self, fname, vol_norm ):
         
         if self.centered:            
-            if vol_norm is True: out = _np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights*self.cellVolume.flatten())).T
-            elif vol_norm is False: out = _np.array((self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten(),self.weights)).T
+            if vol_norm is True: out = _np.array((self.ax1cen.flatten(),self.ax2cen.flatten(),self.ax3cen.flatten(),self.weights*self.cellVolume.flatten())).T
+            elif vol_norm is False: out = _np.array((self.ax1cen.flatten(),self.ax2cen.flatten(),self.ax3cen.flatten(),self.weights)).T
         elif self.centered is False:
-            if vol_norm is True: out = _np.array((self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten(),self.weights*self.cellVolume.flatten())).T
-            elif vol_norm is False: out = _np.array((self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten(),self.weights)).T            
+            if vol_norm is True: out = _np.array((self.ax1.flatten(),self.ax2.flatten(),self.ax3.flatten(),self.weights*self.cellVolume.flatten())).T
+            elif vol_norm is False: out = _np.array((self.ax1.flatten(),self.ax2.flatten(),self.ax3.flatten(),self.weights)).T            
         
         with open(fname, 'w') as file:
-            file.write('#phi1\tPhi\tphi2\tweight\n')
+            file.write('#ax1\tax2\tax3\tweight\n')
             _np.savetxt(file,
                         out,
                         fmt=('%.5f','%.5f','%.5f','%.10f'),
@@ -1154,7 +1087,7 @@ class euler( OD ):
             eu_sym = _om2eu(g_sym)
 
             # pick fundamental zone
-            fz = (eu_sym[:,0] <= self._phi1max) & (eu_sym[:,1] <= self._Phimax) & (eu_sym[:,2] <= self._phi2max)
+            fz = (eu_sym[:,0] <= self._ax1max) & (eu_sym[:,1] <= self._ax2max) & (eu_sym[:,2] <= self._ax3max)
             fz_idx = _np.nonzero(fz)
             g_fz = g_sym[fz_idx[0],:,:]
 
@@ -1163,8 +1096,8 @@ class euler( OD ):
             smplSymOps = _genSymOps(self.SS)
 
             # create Nx3 array of grid points
-            if self.centered: eu_grid = _np.array([self.phi1cen.flatten(),self.Phicen.flatten(),self.phi2cen.flatten()]).T
-            else: eu_grid = _np.array([self.phi1.flatten(),self.Phi.flatten(),self.phi2.flatten()]).T
+            if self.centered: eu_grid = _np.array([self.ax1cen.flatten(),self.ax2cen.flatten(),self.ax3cen.flatten()]).T
+            else: eu_grid = _np.array([self.ax1.flatten(),self.ax2.flatten(),self.ax3.flatten()]).T
 
             g_grid  = _eu2om(eu_grid,out='mdarray_2')
             g_grid  = g_grid.transpose((2,0,1))
@@ -1392,17 +1325,17 @@ class euler( OD ):
                     qfib = qfib.transpose((1,0,2))
                     
                     #convert to bunge euler
-                    phi1, Phi, phi2 = _quat2eu(qfib)
+                    ax1, ax2, ax3 = _quat2eu(qfib)
                     
-                    phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #brnng back to 0 - 2pi
-                    Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #brnng back to 0 - pi
-                    phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #brnng back to 0 - 2pi
+                    ax1 = _np.where(ax1 < 0, ax1 + 2*_np.pi, ax1) #brnng back to 0 - 2pi
+                    ax2 = _np.where(ax2 < 0, ax2 + _np.pi, ax2) #brnng back to 0 - pi
+                    ax3 = _np.where(ax3 < 0, ax3 + 2*_np.pi, ax3) #brnng back to 0 - 2pi
                     
                     #fundamental zone calc (not true!)
-                    eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
+                    eu_fib = _np.stack( (ax1, ax2, ax3), axis=2 )
                     eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
             
-                    fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
+                    fz = (eu_fib[:,0] <= self._ax1max) & (eu_fib[:,1] <= self._ax2max) & (eu_fib[:,2] <= self._ax3max)
                     fz_idx = _np.nonzero(fz)
                     
                     #pull only unique points? - not sure why there are repeated points, something with symmetry for certain hkls
@@ -1504,16 +1437,16 @@ class euler( OD ):
                             
                     #         qfib[qi,hi,:] = qf[hi][qi,:]
                     
-                    # phi1, Phi, phi2 = _quat2eu(qfib)
+                    # ax1, ax2, ax3 = _quat2eu(qfib)
                     
-                    # phi1 = _np.where(phi1 < 0, phi1 + 2*_np.pi, phi1) #bring back to 0 - 2pi
-                    # Phi = _np.where(Phi < 0, Phi + _np.pi, Phi) #bring back to 0 - pi
-                    # phi2 = _np.where(phi2 < 0, phi2 + 2*_np.pi, phi2) #bring back to 0 - 2pi
+                    # ax1 = _np.where(ax1 < 0, ax1 + 2*_np.pi, ax1) #bring back to 0 - 2pi
+                    # ax2 = _np.where(ax2 < 0, ax2 + _np.pi, ax2) #bring back to 0 - pi
+                    # ax3 = _np.where(ax3 < 0, ax3 + 2*_np.pi, ax3) #bring back to 0 - 2pi
                     
-                    # eu_fib = _np.stack( (phi1, Phi, phi2), axis=2 )
+                    # eu_fib = _np.stack( (ax1, ax2, ax3), axis=2 )
                     # eu_fib = _np.reshape( eu_fib, (eu_fib.shape[0]*eu_fib.shape[1], eu_fib.shape[2]) ) #new method       
             
-                    # fz = (eu_fib[:,0] <= self._phi1max) & (eu_fib[:,1] <= self._Phimax) & (eu_fib[:,2] <= self._phi2max)
+                    # fz = (eu_fib[:,0] <= self._ax1max) & (eu_fib[:,1] <= self._ax2max) & (eu_fib[:,2] <= self._ax3max)
                     # fz_idx = _np.nonzero(fz)
                     
                     # path_e[fi][yi] = eu_fib[fz]    
@@ -1648,7 +1581,7 @@ class euler( OD ):
             for p_type, p in self.paths.items():
 
                 pf_od = {}
-                odwgts_tot = _np.zeros( ( len(pfs.hkls), self.bungeList.shape[0]*self.bungeList.shape[1]*self.bungeList.shape[2] ) )
+                odwgts_tot = _np.zeros( ( len(pfs.hkls), self.angList.shape[0]*self.angList.shape[1]*self.angList.shape[2] ) )
 
                 test = []
 
@@ -1710,7 +1643,7 @@ class euler( OD ):
                 od_pf[fi] = {}
                 pf_od[fi] = {}
                 
-                for od_cell in _np.ravel(self.bungeList):
+                for od_cell in _np.ravel(self.angList):
                     
                     ai = _np.searchsorted(a_bins, sph[fi][:,1,int(od_cell)], side='left')
                     bi = _np.searchsorted(b_bins, sph[fi][:,0,int(od_cell)], side='left')
@@ -1840,8 +1773,6 @@ class euler( OD ):
 
         pass
 
-
-
     @staticmethod
     def calcDiff( orient_dist1, orient_dist2, type='L1' ):
 
@@ -1858,7 +1789,7 @@ class euler( OD ):
         if type == 'RP': #TODO: check this? 
             diff = 0.5 * _np.sum( _np.abs( orient_dist1.weights - orient_dist2.weights) ) 
 
-        return bunge(orient_dist1.cellSize,orient_dist1.cs,orient_dist1.ss,weights=diff)
+        return euler(orient_dist1.cellSize,orient_dist1.cs,orient_dist1.ss,weights=diff)
 
     """ plotting """
 
@@ -1870,28 +1801,38 @@ class euler( OD ):
             
         for n,ax in enumerate(axes):   
             
-            if sectionAxis == 'phi1': pass
-            elif sectionAxis == 'phi': pass
-            elif sectionAxis == 'phi2':
+            if self._axesConvention == 'bunge':
+                assert sectionAxis.lower() in ['phi1', 'phi', 'phi2']
+            elif self._axesConvention == 'matthies':
+                assert sectionAxis.lower() in ['alpha', 'beta', 'gamma']
+
+            # get axis number
+            for k,v in self._axesNames.items():
+                if v.lower() == sectionAxis.lower():
+                    axn = k
+
+            if axn == 1: raise NotImplementedError('only phi2/gamma sections..')
+            elif axn == 2: raise NotImplementedError('only phi2/gamma sections..')
+            elif axn == 3: 
                 
-                if sectionVal in self._phi2range: section_id = _np.where(self._phi2range == sectionVal)[0] - 1
+                if sectionVal in self._ax3range: section_id = _np.where(self._ax3range == sectionVal)[0] - 1
                 else: raise ValueError('section must be in discrete grid')
         
                 try: #see if centered
-                    pltX, pltY = _np.rad2deg(self.phi1cen[section_id,:,:]), _np.rad2deg(self.Phicen[section_id,:,:])
+                    pltX, pltY = _np.rad2deg(self.ax1cen[section_id,:,:]), _np.rad2deg(self.ax2cen[section_id,:,:])
                     pltX = pltX.reshape(pltX.shape[1:])
                     pltY = pltY.reshape(pltY.shape[1:])
                     pltWgt = _np.copy(self.weights)
-                    pltWgt = pltWgt.reshape(self.Phicen.shape)
+                    pltWgt = pltWgt.reshape(self.ax2cen.shape)
                     pltWgt = pltWgt[section_id,:,:]
                     pltWgt = pltWgt.reshape(pltWgt.shape[1:])
 
                 except:
-                    pltX, pltY = _np.rad2deg(self.phi1[section_id,:,:]), _np.rad2deg(self.Phi[section_id,:,:])
+                    pltX, pltY = _np.rad2deg(self.ax1[section_id,:,:]), _np.rad2deg(self.ax2[section_id,:,:])
                     pltX = pltX.reshape(pltX.shape[1:])
                     pltY = pltY.reshape(pltY.shape[1:])                    
                     pltWgt = _np.copy(self.weights)
-                    pltWgt = pltWgt.reshape(self.Phi.shape)
+                    pltWgt = pltWgt.reshape(self.ax2.shape)
                     pltWgt = pltWgt[section_id,:,:]
                     pltWgt = pltWgt.reshape(pltWgt.shape[1:])
 
@@ -1908,8 +1849,8 @@ class euler( OD ):
         # fig = _mlab.figure(bgcolor=(0.75,0.75,0.75))
 
         #reshape pts
-        if self.centered: data = _np.copy(self.weights.reshape(self.phi1cen.shape))
-        else: data = _np.copy(self.weights.reshape(self.phi1.shape))
+        if self.centered: data = _np.copy(self.weights.reshape(self.ax1cen.shape))
+        else: data = _np.copy(self.weights.reshape(self.ax1.shape))
         
         #round small values (<1E-5)
         # data[data < 1E-5] = 0
@@ -1931,12 +1872,12 @@ class euler( OD ):
                               1, data.shape[2]])
 
         ax = _mlab.axes(color=(0,0,0),
-                        xlabel='phi2',
-                        ylabel='Phi',
-                        zlabel='phi1',
-                        ranges=[0, _np.rad2deg(self._phi2max),
-                                0, _np.rad2deg(self._Phimax),
-                                0, _np.rad2deg(self._phi1max)])  
+                        xlabel=self._axesNames[3],
+                        ylabel=self._axesNames[2],
+                        zlabel=self._axesNames[1],
+                        ranges=[0, _np.rad2deg(self._ax3max),
+                                0, _np.rad2deg(self._ax2max),
+                                0, _np.rad2deg(self._ax1max)])  
 
         ax.axes.number_of_labels = 5
         ax.axes.corner_offset = 0.04
